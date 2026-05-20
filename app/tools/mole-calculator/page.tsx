@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Mole Calculator",
-  description: "Convert mass, moles, and particles with ChemLab AI.",
+  description: "Convert mass, moles, and particles with Chemlab.",
 };
 
 export default function MoleCalculatorPage() {

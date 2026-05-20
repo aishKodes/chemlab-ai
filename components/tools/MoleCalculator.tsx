@@ -35,13 +35,13 @@ export function MoleCalculator() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-      <Card>
-        <h2 className="text-2xl font-semibold text-white">Mole calculator</h2>
-        <p className="mt-3 text-sm leading-6 text-slate-300">
+      <Card className="bg-gradient-to-br from-lime-100 via-white to-cyan-100">
+        <h2 className="text-3xl font-black text-slate-950">Mole calculator</h2>
+        <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
           Convert laboratory quantities using molar mass and Avogadro&apos;s number.
         </p>
         <fieldset className="mt-6">
-          <legend className="text-sm font-medium text-slate-200">Conversion mode</legend>
+          <legend className="text-sm font-black text-slate-700">Conversion mode</legend>
           <div className="mt-2 grid gap-2 sm:grid-cols-2">
             {modes.map((item) => (
               <button
@@ -49,7 +49,7 @@ export function MoleCalculator() {
                 className={`focus-ring rounded-lg border px-3 py-2 text-sm transition ${
                   mode === item.value
                     ? "border-cyan-200 bg-cyan-300 text-slate-950"
-                    : "border-white/12 bg-white/8 text-slate-200 hover:bg-white/12"
+                    : "border-blue-100 bg-white/80 text-slate-700 hover:bg-white"
                 }`}
                 onClick={() => setMode(item.value)}
               >
@@ -59,24 +59,24 @@ export function MoleCalculator() {
           </div>
         </fieldset>
         <label className="mt-5 block">
-          <span className="text-sm font-medium text-slate-200">Input value</span>
+          <span className="text-sm font-black text-slate-700">Input value</span>
           <input
             type="number"
             min="0"
             value={value}
             onChange={(event) => setValue(Number(event.target.value))}
-            className="focus-ring mt-2 h-11 w-full rounded-lg border border-white/12 bg-slate-950/70 px-3 text-white"
+            className="focus-ring mt-2 h-11 w-full rounded-2xl border border-blue-100 bg-white/90 px-3 font-bold text-slate-800"
           />
         </label>
         {(mode === "mass-to-moles" || mode === "moles-to-mass") && (
           <label className="mt-5 block">
-            <span className="text-sm font-medium text-slate-200">Molar mass in g/mol</span>
+            <span className="text-sm font-black text-slate-700">Molar mass in g/mol</span>
             <input
               type="number"
               min="0.001"
               value={molarMass}
               onChange={(event) => setMolarMass(Number(event.target.value))}
-              className="focus-ring mt-2 h-11 w-full rounded-lg border border-white/12 bg-slate-950/70 px-3 text-white"
+              className="focus-ring mt-2 h-11 w-full rounded-2xl border border-blue-100 bg-white/90 px-3 font-bold text-slate-800"
             />
           </label>
         )}
@@ -98,8 +98,8 @@ export function MoleCalculator() {
             ["Particles to moles", "n = N / NA"],
           ].map(([title, formula]) => (
             <Card key={title}>
-              <p className="font-semibold text-white">{title}</p>
-              <p className="mt-2 font-mono text-sm text-cyan-100">{formula}</p>
+              <p className="font-black text-slate-950">{title}</p>
+              <p className="mt-2 font-mono text-sm font-black text-blue-700">{formula}</p>
             </Card>
           ))}
         </div>

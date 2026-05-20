@@ -19,8 +19,8 @@ export function EmptyState({
           {icon}
         </div>
       ) : null}
-      <h3 className="text-lg font-semibold text-white">{title}</h3>
-      <p className="mt-2 max-w-lg text-sm leading-6 text-slate-300">{description}</p>
+      <h3 className="text-lg font-black text-slate-950">{title}</h3>
+      <p className="mt-2 max-w-lg text-sm font-medium leading-6 text-slate-600">{description}</p>
       {action ? <div className="mt-6">{action}</div> : null}
     </Card>
   );

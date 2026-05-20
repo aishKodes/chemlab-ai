@@ -10,9 +10,9 @@ export function Card({ children, className, interactive, ...props }: CardProps) 
   return (
     <div
       className={cn(
-        "glass-panel rounded-lg p-5",
+        "glass-panel rounded-[1.5rem] p-5",
         interactive &&
-          "transition duration-200 hover:-translate-y-0.5 hover:border-cyan-200/35 hover:bg-white/[0.09]",
+          "transition duration-200 hover:-translate-y-1 hover:rotate-[0.2deg] hover:border-blue-300/45",
         className,
       )}
       {...props}

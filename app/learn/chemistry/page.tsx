@@ -1,28 +1,23 @@
 import type { Metadata } from "next";
-import { chemistryModules } from "@/data/chemistry-modules";
-import { ModuleCard } from "@/components/chemistry/ModuleCard";
+import { QuestMap } from "@/components/gamification/QuestMap";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
-  title: "Chemistry Curriculum",
-  description: "Structured chemistry modules for ChemLab AI simulations, quizzes, and tools.",
+  title: "Chemistry Worlds",
+  description: "Choose colourful Chemlab chapter worlds with simulations, Master Alchem guidance, boss quizzes, and mistake objects.",
 };
 
 export default function ChemistryCurriculumPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Chemistry curriculum"
-        title="A concept map for atoms, bonds, moles, and reactions."
-        description="Each module includes outcomes, prerequisites, visual notes, related simulations, tools, quizzes, and AI tutor context."
+        eyebrow="Learn"
+        title="Chemistry Worlds"
+        description="Every chapter is a world. Every quest connects simulations, Master Alchem guidance, boss quizzes, and mistake objects."
       />
       <Container className="pb-16">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {chemistryModules.map((module) => (
-            <ModuleCard key={module.slug} module={module} />
-          ))}
-        </div>
+        <QuestMap />
       </Container>
     </>
   );

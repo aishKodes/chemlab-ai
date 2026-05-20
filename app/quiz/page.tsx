@@ -1,43 +1,49 @@
 import type { Metadata } from "next";
 import { ClipboardCheck } from "lucide-react";
-import Link from "next/link";
 import { chemistryModules } from "@/data/chemistry-modules";
+import { BossBattleCard } from "@/components/gamification/BossBattleCard";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { Badge } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/Card";
+import { MasterAlchemBubble } from "@/components/master-alchem/MasterAlchemBubble";
 import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
-  title: "Quizzes",
-  description: "Mastery quizzes for ChemLab AI chemistry chapters.",
+  title: "Battle Arena",
+  description: "Boss battle chemistry quizzes with XP, explanations, streaks, and mastery feedback.",
 };
 
 export default function QuizIndexPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Mastery quizzes"
-        title="Check understanding with chemistry-focused feedback."
-        description="Each quiz uses local sample questions for the MVP and can save attempts when Supabase auth is connected."
+        eyebrow="Battle Arena"
+        title="Battle Arena"
+        description="Every boss battle checks real understanding, explains every answer, and turns weak concepts into monsters you can defeat."
       />
       <Container className="pb-16">
+        <MasterAlchemBubble
+          compact
+          mood="excited"
+          eyebrow="Battle briefing"
+          message="A boss battle is not a judgment. It is a signal. Win XP for what you know, then send weak spots to the Mistake Lab."
+          actionLabel="Warm up with a hint"
+          actionHref="/ai-tutor"
+          className="mb-6"
+        />
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {chemistryModules.map((module) => (
-            <Link key={module.slug} href={`/quiz/${module.quizSlug}`} className="focus-ring rounded-lg">
-              <Card interactive className="h-full">
-                <div className="flex items-start justify-between gap-4">
-                  <ClipboardCheck className="h-6 w-6 text-cyan-200" aria-hidden="true" />
-                  <Badge tone={module.difficulty === "Foundation" ? "green" : "amber"}>
-                    {module.difficulty}
-                  </Badge>
-                </div>
-                <h2 className="mt-5 text-xl font-semibold text-white">{module.title}</h2>
-                <p className="mt-3 text-sm leading-6 text-slate-300">
-                  Practice questions with immediate explanations and a mastery signal.
-                </p>
-              </Card>
-            </Link>
+          {chemistryModules.map((module, index) => (
+            <BossBattleCard
+              key={module.slug}
+              title={`${module.title} Boss`}
+              chapter={module.title}
+              hp={[78, 63, 71, 82, 88][index] ?? 70}
+              xp={[160, 180, 220, 240, 260][index] ?? 180}
+              href={`/quiz/${module.quizSlug}`}
+            />
           ))}
+        </div>
+        <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-sm font-black text-blue-700 shadow">
+          <ClipboardCheck className="h-4 w-4" aria-hidden="true" />
+          Pick a battle, answer carefully, and send weak spots to the Mistake Lab.
         </div>
       </Container>
     </>

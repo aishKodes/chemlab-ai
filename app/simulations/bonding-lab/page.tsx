@@ -12,9 +12,9 @@ export default function BondingLabPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Simulation"
+        eyebrow="Virtual Lab"
         title="Chemical Bonding Lab"
-        description="Compare electron transfer and sharing in sodium chloride, water, carbon dioxide, and methane."
+        description="Enter the bonding playground: combine atom cards, compare ionic and covalent rules, and let Master Alchem point out the valence pattern."
       />
       <Container className="pb-16">
         <BondingLab />

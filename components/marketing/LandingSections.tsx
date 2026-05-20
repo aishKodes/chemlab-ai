@@ -1,199 +1,364 @@
 import {
-  BarChart3,
-  BookOpen,
+  Atom,
+  Beaker,
   BrainCircuit,
-  Calculator,
-  ClipboardCheck,
+  CheckCircle2,
+  Compass,
+  Crown,
+  Flame,
+  Ghost,
   GraduationCap,
+  MessageCircle,
+  Microscope,
+  Rocket,
+  Shield,
+  Trophy,
+  WandSparkles,
+  Waves,
 } from "lucide-react";
-import { chemistryModules, simulations } from "@/data/chemistry-modules";
-import { tools } from "@/components/chemistry/ToolCard";
-import { ModuleCard } from "@/components/chemistry/ModuleCard";
-import { SimulationCard } from "@/components/chemistry/SimulationCard";
-import { ToolCard } from "@/components/chemistry/ToolCard";
+import { BossBattleCard } from "@/components/gamification/BossBattleCard";
+import { DailyQuestCard } from "@/components/gamification/DailyQuestCard";
+import { LevelBadge } from "@/components/gamification/LevelBadge";
+import { MistakeMonsterCard } from "@/components/gamification/MistakeMonsterCard";
+import { QuestMap } from "@/components/gamification/QuestMap";
+import { XpBar } from "@/components/gamification/XpBar";
+import { MasterAlchemDock } from "@/components/master-alchem/MasterAlchemDock";
+import { MasterAlchemPointer } from "@/components/master-alchem/MasterAlchemPointer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
-import { FeatureCard } from "@/components/ui/FeatureCard";
+import { Progress } from "@/components/ui/Progress";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+
+const differentiators = [
+  {
+    title: "Cinematic chemistry worlds",
+    description: "Concepts unfold as places to explore, not pages to memorize.",
+    icon: <Compass className="h-6 w-6 text-blue-600" aria-hidden="true" />,
+  },
+  {
+    title: "Master Alchem guidance",
+    description: "Hints, lab thinking, feedback, and confidence repair from a warm AI mentor.",
+    icon: <WandSparkles className="h-6 w-6 text-violet-600" aria-hidden="true" />,
+  },
+  {
+    title: "Touch-first simulations",
+    description: "Students change variables and see atoms, charge, moles, and reactions respond.",
+    icon: <Microscope className="h-6 w-6 text-cyan-600" aria-hidden="true" />,
+  },
+  {
+    title: "Mastery loops",
+    description: "XP, quests, boss battles, and mistake repair reward real understanding.",
+    icon: <Trophy className="h-6 w-6 text-amber-600" aria-hidden="true" />,
+  },
+];
+
+const storySteps = [
+  ["Scene dialogue", "A practical begins with a mystery and Master Alchem's briefing."],
+  ["Lab action", "Students choose variables, tools, observations, and predictions."],
+  ["Evidence check", "Chemlab connects the visual result to the chemistry principle."],
+  ["Boss moment", "A short challenge locks in the concept before the next scene."],
+];
+
+const featuredLabs = [
+  {
+    title: "Neutralization Studio",
+    description: "Mix acid and base, find pH 7, then reveal salt crystals.",
+    href: "/labs/neutralization-studio",
+    icon: <Waves className="h-6 w-6 text-cyan-700" aria-hidden="true" />,
+  },
+  {
+    title: "Molecule Explorer",
+    description: "Rotate real 3D molecules and understand shape by seeing it.",
+    href: "/simulations/molecule-explorer",
+    icon: <Atom className="h-6 w-6 text-violet-700" aria-hidden="true" />,
+  },
+  {
+    title: "Atomic Builder",
+    description: "Build atoms and see identity, mass, and charge respond.",
+    href: "/simulations/atomic-builder",
+    icon: <Beaker className="h-6 w-6 text-amber-700" aria-hidden="true" />,
+  },
+];
 
 export function LandingSections() {
   return (
     <>
-      <section className="py-14">
+      <section className="py-12">
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow="Interactive simulations"
-              title="Particle-level models that make abstract chemistry inspectable."
-              description="Start with focused simulations that explain what changes, what stays conserved, and how symbolic chemistry maps to atoms and molecules."
+              eyebrow="Why Chemlab is different"
+              title="A learning universe, not a worksheet with buttons."
+              description="Chemlab blends curiosity loops, guided discovery, instant feedback, and identity-based motivation so students feel like they are becoming chemists."
             />
           </Reveal>
-          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {simulations.slice(0, 3).map((simulation, index) => (
-              <Reveal key={simulation.slug} delay={index * 0.04}>
-                <SimulationCard simulation={simulation} />
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {differentiators.map((item, index) => (
+              <Reveal key={item.title} delay={index * 0.04}>
+                <Card className="h-full bg-white/82">
+                  <span className="grid h-14 w-14 place-items-center rounded-3xl bg-gradient-to-br from-white to-cyan-100 shadow-lg">
+                    {item.icon}
+                  </span>
+                  <h3 className="mt-5 text-xl font-black text-slate-950">{item.title}</h3>
+                  <p className="mt-2 text-sm font-semibold leading-6 text-slate-700">{item.description}</p>
+                </Card>
               </Reveal>
             ))}
           </div>
         </Container>
       </section>
 
-      <section className="py-14">
+      <section className="py-12">
+        <Container>
+          <Reveal>
+            <SectionHeading
+              eyebrow="Virtual Labs"
+              title="Start with labs that feel alive."
+              description="Predict, change something, watch the result, then explain what happened with Master Alchem beside you."
+            />
+          </Reveal>
+          <div className="mt-8 grid gap-5 lg:grid-cols-3">
+            {featuredLabs.map((lab, index) => (
+              <Reveal key={lab.title} delay={index * 0.04}>
+                <Card interactive className="h-full bg-gradient-to-br from-white via-cyan-50 to-lime-50">
+                  <span className="grid h-14 w-14 place-items-center rounded-3xl border-2 border-white bg-white shadow-lg">
+                    {lab.icon}
+                  </span>
+                  <h3 className="mt-5 text-2xl font-black text-slate-950">{lab.title}</h3>
+                  <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">{lab.description}</p>
+                  <Button href={lab.href} className="mt-5" size="sm">
+                    Open lab
+                  </Button>
+                </Card>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-12">
+        <Container>
+          <Reveal>
+            <MasterAlchemDock
+              mood="speaking"
+              title="Meet Master Alchem, your magical chemistry mentor."
+              message="He explains without judgment, gives hints before answers, guides safe lab thinking, and celebrates the exact moment a concept clicks."
+            />
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="py-12">
+        <Container>
+          <Reveal>
+            <SectionHeading
+              eyebrow="Chemistry Worlds"
+              title="Every chapter is a world. Every concept is alive."
+              description="Choose a world, enter a mission, run a simulation, ask Master Alchem, fight a boss quiz, and unlock the next level."
+            />
+          </Reveal>
+          <Reveal delay={0.08} className="mt-8">
+            <QuestMap />
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="py-12">
+        <Container>
+          <Reveal>
+            <SectionHeading
+              eyebrow="Battle Arena"
+              title="Quizzes become boss battles students want to beat."
+              description="Health bars, streaks, XP, badges, and explanations turn practice into a motivating mastery loop."
+            />
+          </Reveal>
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            <BossBattleCard title="Atomic Identity Boss" chapter="Atom Island" hp={78} xp={180} href="/quiz/atomic-structure" />
+            <BossBattleCard title="Valency Gatekeeper" chapter="Bonding Forest" hp={64} xp={220} href="/quiz/chemical-bonding" />
+            <BossBattleCard title="Reaction Arena Champion" chapter="Reaction Arena" hp={86} xp={260} href="/quiz/chemical-reactions" />
+          </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {[
+              ["Streak", "4 days glowing", <Flame key="flame" className="h-5 w-5 text-orange-500" />],
+              ["Badges", "12 unlocked", <Trophy key="trophy" className="h-5 w-5 text-amber-500" />],
+              ["Shield", "Hints used wisely", <Shield key="shield" className="h-5 w-5 text-blue-500" />],
+            ].map(([label, value, icon]) => (
+              <Card key={String(label)} className="bg-white/80">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white shadow">{icon}</span>
+                  <div>
+                    <p className="text-sm font-black text-slate-500">{label}</p>
+                    <p className="text-lg font-black text-slate-950">{value}</p>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-12">
+        <Container>
+          <Reveal>
+            <SectionHeading
+              eyebrow="Story Practicals"
+              title="Labs become scenes with choices, evidence, and consequences."
+              description="Each practical begins with a mystery, lets students act safely, then asks them to explain the evidence."
+            />
+          </Reveal>
+          <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_1.1fr]">
+            <Reveal>
+              <MasterAlchemPointer
+                mood="thinking"
+                title="The Color Shift practical"
+                message="Predict the endpoint, add reagent slowly, and explain why the indicator changed."
+                href="/labs"
+                cta="Open Story Labs"
+              />
+            </Reveal>
+            <Reveal delay={0.08}>
+              <Card className="bg-gradient-to-br from-white via-amber-50 to-cyan-100">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {storySteps.map(([title, description]) => (
+                    <div key={title} className="rounded-3xl bg-white/75 p-4 shadow-sm">
+                      <div className="flex items-center gap-2 text-sm font-black text-blue-700">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                        {title}
+                      </div>
+                      <p className="mt-2 text-sm font-semibold leading-6 text-slate-700">{description}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </Reveal>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-12">
+        <Container>
+          <Reveal>
+            <SectionHeading
+              eyebrow="Mistake Lab"
+              title="Wrong answers become targeted review objects."
+              description="Mistakes get names, weaknesses, retry prompts, and Master Alchem rescue guidance so students improve without shame."
+            />
+          </Reveal>
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            <MistakeMonsterCard name="Mass Number Goblin" concept="Atomic structure" weakness="Protons + neutrons, not electrons." hp={35} tone="lime" icon={<Ghost className="h-10 w-10 text-lime-600" aria-hidden="true" />} />
+            <MistakeMonsterCard name="Mole Ratio Phantom" concept="Mole concept" weakness="Convert grams to moles before coefficients." hp={52} tone="cyan" icon={<BrainCircuit className="h-10 w-10 text-cyan-600" aria-hidden="true" />} />
+            <MistakeMonsterCard name="Valency Dragon" concept="Chemical bonding" weakness="Total ionic charge must be zero." hp={68} tone="coral" icon={<Flame className="h-10 w-10 text-orange-600" aria-hidden="true" />} />
+            <MistakeMonsterCard name="Equilibrium Trickster" concept="Future world" weakness="Track stress and shift direction." hp={80} tone="violet" icon={<Crown className="h-10 w-10 text-violet-600" aria-hidden="true" />} />
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-12">
         <Container>
           <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
             <Reveal>
-              <Card className="glass-panel-strong">
-                <Badge tone="green">AI tutor</Badge>
-                <h2 className="mt-4 text-3xl font-semibold leading-tight text-white">
-                  A chemistry tutor that teaches reasoning before answers.
-                </h2>
-                <p className="mt-4 text-base leading-7 text-slate-300">
-                  The server-side AI adapter supports mock, Gemini, and OpenAI-compatible
-                  providers. Students can request hints, step-by-step work, quiz prompts,
-                  answer checks, or exam-mode explanations.
-                </p>
-                <Button
-                  href="/ai-tutor"
-                  className="mt-6"
-                  icon={<BrainCircuit className="h-4 w-4" aria-hidden="true" />}
-                >
-                  Open AI tutor
-                </Button>
-              </Card>
+              <DailyQuestCard />
             </Reveal>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                ["Known values", "Formula", "Substitution", "Final unit"],
-                ["Analogy", "Scientific explanation", "Common mistake", "Next step"],
-              ].map((items, index) => (
-                <Reveal key={items.join("-")} delay={index * 0.06}>
-                  <Card className="h-full">
-                    <p className="text-sm font-semibold text-cyan-100">
-                      {index === 0 ? "Numerical reasoning" : "Conceptual doubts"}
+            <Reveal delay={0.08}>
+              <Card className="bg-gradient-to-br from-white via-sky-50 to-violet-100">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <Badge tone="blue">Progress and mastery</Badge>
+                    <h2 className="mt-4 text-3xl font-black text-slate-950">Progress Galaxy</h2>
+                    <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-slate-700">
+                      Daily quest, XP, streak, chapter mastery, labs completed, mistake objects,
+                      and Master Alchem activity all live in one cheerful command center.
                     </p>
-                    <ul className="mt-4 space-y-3 text-sm text-slate-300">
-                      {items.map((item) => (
-                        <li key={item} className="flex items-center gap-2">
-                          <span className="h-1.5 w-1.5 rounded-full bg-cyan-200" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </Card>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-14">
-        <Container>
-          <Reveal>
-            <SectionHeading
-              eyebrow="Featured modules"
-              title="A curriculum spine built around chemistry concepts, not generic course pages."
-              description="Each chapter joins outcomes, prerequisites, visual notes, simulations, tools, quizzes, and AI tutor prompts."
-            />
-          </Reveal>
-          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {chemistryModules.slice(0, 3).map((module, index) => (
-              <Reveal key={module.slug} delay={index * 0.04}>
-                <ModuleCard module={module} />
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-14">
-        <Container>
-          <div className="grid gap-4 lg:grid-cols-3">
-            {[
-              {
-                title: "Chemistry tools",
-                description:
-                  "Molar mass, mole conversion, and atom-count checking help students audit every symbolic step.",
-                icon: <Calculator className="h-6 w-6" aria-hidden="true" />,
-              },
-              {
-                title: "Mastery quizzes",
-                description:
-                  "Local sample quizzes work immediately, with Supabase-backed attempts ready for authenticated users.",
-                icon: <ClipboardCheck className="h-6 w-6" aria-hidden="true" />,
-              },
-              {
-                title: "Student dashboard",
-                description:
-                  "Progress cards, mistake notebook previews, AI usage signals, and recommended next actions.",
-                icon: <BarChart3 className="h-6 w-6" aria-hidden="true" />,
-              },
-            ].map((feature, index) => (
-              <Reveal key={feature.title} delay={index * 0.05}>
-                <FeatureCard {...feature} />
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-14">
-        <Container>
-          <Reveal>
-            <SectionHeading
-              eyebrow="Tools preview"
-              title="Precise utilities for the calculations students repeat constantly."
-              description="Every tool is designed to expose the method, not just output a number."
-            />
-          </Reveal>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {tools.map((tool, index) => (
-              <Reveal key={tool.slug} delay={index * 0.04}>
-                <ToolCard tool={tool} />
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-14">
-        <Container>
-          <Reveal>
-            <Card className="glass-panel-strong overflow-hidden p-8 sm:p-10">
-              <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr]">
-                <div>
-                  <Badge tone="blue">Academic mission</Badge>
-                  <h2 className="mt-4 text-3xl font-semibold leading-tight text-white">
-                    Build the habits of a careful chemist.
-                  </h2>
-                  <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
-                    ChemLab AI treats simulations, explanations, quizzes, and
-                    notes as one learning system. The aim is not to gamify away
-                    rigor, but to make rigorous chemistry easier to see and practice.
-                  </p>
-                  <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                    <Button href="/learn/chemistry" icon={<BookOpen className="h-4 w-4" aria-hidden="true" />}>
-                      Start learning
-                    </Button>
-                    <Button href="/about" variant="secondary" icon={<GraduationCap className="h-4 w-4" aria-hidden="true" />}>
-                      Read mission
-                    </Button>
+                  </div>
+                  <LevelBadge level={4} title="Reaction Rookie" />
+                </div>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  <XpBar xp={740} nextLevelXp={1000} />
+                  <div className="rounded-[1.5rem] bg-white/80 p-4 shadow">
+                    <div className="flex items-center gap-3">
+                      <MessageCircle className="h-7 w-7 text-violet-600" aria-hidden="true" />
+                      <div>
+                        <p className="text-sm font-black text-slate-500">Master Alchem activity</p>
+                        <p className="text-2xl font-black text-slate-950">18 hints</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="grid content-center gap-3">
+                <div className="mt-6 grid gap-4 md:grid-cols-3">
+                  <Progress value={72} label="Atom Island" />
+                  <Progress value={58} label="Periodic Kingdom" />
+                  <Progress value={41} label="Bonding Forest" />
+                </div>
+              </Card>
+            </Reveal>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-12">
+        <Container>
+          <Reveal>
+            <Card className="relative overflow-hidden bg-gradient-to-br from-violet-100 via-white to-cyan-100 p-8 sm:p-10">
+              <div className="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-cyan-300/50 blur-3xl" />
+              <div className="relative grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+                <div>
+                  <Badge tone="cyan">Future of learning</Badge>
+                  <h2 className="mt-5 text-4xl font-black text-slate-950">
+                    Chemlab is built for the moment learning becomes immersive.
+                  </h2>
+                  <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-slate-700">
+                    The foundation supports adaptive practice, teacher dashboards, richer story labs,
+                    generated character assets, and deeper simulation engines while keeping the student
+                    experience joyful and academically serious.
+                  </p>
+                </div>
+                <div className="grid gap-3">
                   {[
-                    ["Simulate", "Atoms, bonds, equations, and mole-scale quantities"],
-                    ["Practice", "Quizzes with explanations and mistakes surfaced"],
-                    ["Reflect", "Visual notes, progress, and AI tutor follow-up"],
-                  ].map(([title, text]) => (
-                    <div key={title} className="rounded-lg border border-white/10 bg-white/[0.05] p-4">
-                      <p className="font-semibold text-white">{title}</p>
-                      <p className="mt-1 text-sm leading-6 text-slate-300">{text}</p>
+                    ["Adaptive paths", <Rocket key="rocket" className="h-5 w-5 text-blue-600" />],
+                    ["Teacher cohorts", <GraduationCap key="grad" className="h-5 w-5 text-emerald-600" />],
+                    ["Cinematic labs", <Beaker key="beaker" className="h-5 w-5 text-violet-600" />],
+                  ].map(([label, icon]) => (
+                    <div key={String(label)} className="flex items-center gap-3 rounded-3xl bg-white/75 p-4 font-black text-slate-800 shadow-sm">
+                      {icon}
+                      {label}
                     </div>
                   ))}
+                </div>
+              </div>
+            </Card>
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="py-14">
+        <Container>
+          <Reveal>
+            <Card className="space-lab relative overflow-hidden p-8 text-white sm:p-10">
+              <div className="absolute right-8 top-8 h-28 w-28 rounded-full bg-white/20 blur-2xl" />
+              <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+                <div>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-black">
+                    <Atom className="h-4 w-4" aria-hidden="true" />
+                    Ready to enter Chemlab?
+                  </div>
+                  <h2 className="mt-5 text-4xl font-black text-white">
+                    Start a quest. Meet Master Alchem. Make chemistry visible.
+                  </h2>
+                  <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-blue-50">
+                    Chemlab turns chemistry into a colourful interactive world where students learn by
+                    playing, simulating, experimenting, explaining, and trying again.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+                  <Button href="/learn/chemistry" variant="secondary">
+                    Start Learning
+                  </Button>
+                  <Button href="/ai-tutor" variant="secondary">
+                    Meet Master Alchem
+                  </Button>
                 </div>
               </div>
             </Card>

@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Progress",
-  description: "ChemLab AI progress tracking page.",
+  description: "Chemlab progress tracking page.",
 };
 
 export default function ProgressPage() {
@@ -14,7 +14,7 @@ export default function ProgressPage() {
       <PageHeader
         eyebrow="Progress"
         title="Chapter mastery and study momentum."
-        description="The current MVP displays sample progress; the API route is ready for Supabase-backed records."
+        description="See which worlds are growing stronger, which quests need attention, and where to practice next."
       />
       <Container className="pb-16">
         <DashboardOverview />

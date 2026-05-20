@@ -8,7 +8,7 @@ import { FeatureCard } from "@/components/ui/FeatureCard";
 
 export const metadata: Metadata = {
   title: "Learn",
-  description: "Browse ChemLab AI learning paths and chemistry curriculum modules.",
+  description: "Browse Chemlab learning paths and chemistry curriculum modules.",
 };
 
 export default function LearnPage() {
@@ -16,8 +16,8 @@ export default function LearnPage() {
     <>
       <PageHeader
         eyebrow="Learning index"
-        title="Choose a structured chemistry learning path."
-        description="ChemLab AI begins with chemistry and is designed to expand into teacher-guided cohorts, visual notes, and adaptive practice."
+        title="Choose your next chemistry world."
+        description="Pick a world, enter a quest, run a lab, and let Master Alchem guide the tricky parts."
       />
       <Container className="pb-16">
         <div className="grid gap-4 lg:grid-cols-3">
@@ -35,17 +35,16 @@ export default function LearnPage() {
           />
           <FeatureCard
             title="Mastery tracking"
-            description="Dashboard foundations show progress, mistakes, AI usage, and the next concept to repair."
+            description="See your XP, badges, mistakes to repair, and the next mission waiting for you."
             icon={<GraduationCap className="h-6 w-6" aria-hidden="true" />}
             action={<Button href="/dashboard" variant="secondary">View dashboard</Button>}
           />
         </div>
         <Card className="mt-6">
-          <h2 className="text-xl font-semibold text-white">Future learning areas</h2>
-          <p className="mt-3 text-sm leading-6 text-slate-300">
-            Physics and biology can be added later, but the current product stays
-            chemistry-first so the tools, prompts, data model, and simulations
-            are academically coherent from day one.
+          <h2 className="text-xl font-black text-slate-950">Chemistry first</h2>
+          <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
+            Chemlab starts with chemistry so atoms, reactions, moles, bonding,
+            and lab evidence all connect inside one learning adventure.
           </p>
         </Card>
       </Container>

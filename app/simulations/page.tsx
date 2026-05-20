@@ -1,29 +1,114 @@
 import type { Metadata } from "next";
+import { Atom, FlaskConical, Hexagon, Waves } from "lucide-react";
 import { simulations } from "@/data/chemistry-modules";
 import { SimulationCard } from "@/components/chemistry/SimulationCard";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { MasterAlchemBubble } from "@/components/master-alchem/MasterAlchemBubble";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
-  title: "Simulations",
-  description: "Interactive chemistry simulations for atoms, periodic trends, moles, bonding, and equations.",
+  title: "Virtual Labs",
+  description:
+    "Chemlab virtual labs where students mix reactions, explore molecules, build atoms, and learn by doing.",
 };
+
+const featuredLabs = [
+  {
+    title: "Neutralization Studio",
+    description:
+      "Mix acid and base, watch pH change, find the neutral point, evaporate water, and reveal salt.",
+    href: "/labs/neutralization-studio",
+    icon: <Waves className="h-7 w-7" aria-hidden="true" />,
+    badge: "Flagship",
+    gradient: "from-cyan-100 via-white to-lime-100",
+  },
+  {
+    title: "Molecule Explorer",
+    description:
+      "Rotate real 3D molecules and see how geometry explains bonding, polarity, and structure.",
+    href: "/simulations/molecule-explorer",
+    icon: <Hexagon className="h-7 w-7" aria-hidden="true" />,
+    badge: "3D viewer",
+    gradient: "from-violet-100 via-white to-cyan-100",
+  },
+  {
+    title: "Atomic Builder",
+    description:
+      "Change protons, neutrons, and electrons to discover identity, isotope, and charge.",
+    href: "/simulations/atomic-builder",
+    icon: <Atom className="h-7 w-7" aria-hidden="true" />,
+    badge: "Interactive",
+    gradient: "from-amber-100 via-white to-sky-100",
+  },
+];
 
 export default function SimulationsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Simulation lab"
-        title="Explore chemistry by changing variables and watching the model respond."
-        description="The first ChemLab AI simulations are focused v1 learning tools, built for clarity and future expansion."
+        eyebrow="Virtual Labs"
+        title="Enter a lab. Touch the chemistry."
+        description="Choose a featured experience first. Master Alchem will guide you from prediction to observation to explanation."
       />
-      <Container className="pb-16">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {simulations.map((simulation) => (
-            <SimulationCard key={simulation.slug} simulation={simulation} />
-          ))}
-        </div>
+      <Container className="space-y-10 pb-16">
+        <MasterAlchemBubble
+          mood="labGuide"
+          message="Start with Neutralization Studio if you want a real experiment flow, or Molecule Explorer if you want to see shape in 3D."
+          actionLabel="Start the flagship lab"
+          actionHref="/labs/neutralization-studio"
+        />
+
+        <section aria-labelledby="featured-labs">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <Badge tone="green">Featured Labs</Badge>
+              <h2 id="featured-labs" className="mt-3 text-3xl font-black text-slate-950">
+                Best places to start
+              </h2>
+            </div>
+          </div>
+          <div className="mt-5 grid gap-5 lg:grid-cols-3">
+            {featuredLabs.map((lab) => (
+              <Card key={lab.title} interactive className={`h-full bg-gradient-to-br ${lab.gradient}`}>
+                <div className="flex items-start justify-between gap-4">
+                  <span className="grid h-14 w-14 place-items-center rounded-3xl border-2 border-white bg-blue-600 text-white shadow-lg">
+                    {lab.icon}
+                  </span>
+                  <Badge tone="blue">{lab.badge}</Badge>
+                </div>
+                <h3 className="mt-5 text-2xl font-black text-slate-950">{lab.title}</h3>
+                <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">{lab.description}</p>
+                <Button href={lab.href} className="mt-5" icon={<FlaskConical className="h-4 w-4" aria-hidden="true" />}>
+                  Open lab
+                </Button>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="prototype-labs">
+          <div>
+            <Badge tone="amber">Prototype Labs</Badge>
+            <h2 id="prototype-labs" className="mt-3 text-3xl font-black text-slate-950">
+              More experiments to try
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-700">
+              These labs are still useful for practice, but they are not the flagship Chemlab experience yet.
+            </p>
+          </div>
+          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {simulations
+              .filter((simulation) => simulation.slug !== "atomic-builder")
+              .map((simulation) => (
+                <SimulationCard key={simulation.slug} simulation={simulation} />
+              ))}
+          </div>
+        </section>
       </Container>
     </>
   );
 }
+

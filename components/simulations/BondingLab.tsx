@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { MasterAlchemPointer } from "@/components/master-alchem/MasterAlchemPointer";
 
 const bondingExamples = [
   {
@@ -51,10 +52,10 @@ export function BondingLab() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-      <Card>
+      <Card className="bg-gradient-to-br from-emerald-100 via-white to-violet-100">
         <Badge tone="blue">Prototype</Badge>
-        <h2 className="mt-4 text-2xl font-semibold text-white">Chemical bonding lab</h2>
-        <p className="mt-3 text-sm leading-6 text-slate-300">
+        <h2 className="mt-4 text-3xl font-black text-slate-950">Bonding playground</h2>
+        <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
           Choose a compound to compare electron transfer, electron sharing, and
           valence-shell reasoning. Drag-and-drop bonding is reserved for a later build.
         </p>
@@ -76,16 +77,16 @@ export function BondingLab() {
         <Card className="glass-panel-strong">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-sm text-slate-400">{selected.name}</p>
-              <h2 className="mt-1 text-4xl font-semibold text-white">{selected.formula}</h2>
+              <p className="text-sm font-bold text-slate-500">{selected.name}</p>
+              <h2 className="mt-1 text-5xl font-black text-slate-950">{selected.formula}</h2>
             </div>
             <Badge tone={selected.type === "Ionic" ? "amber" : "cyan"}>{selected.type} bonding</Badge>
           </div>
 
-          <div className="mt-8 flex min-h-44 flex-wrap items-center justify-center gap-4 rounded-lg border border-white/10 bg-slate-950/50 p-6">
+          <div className="mt-8 flex min-h-44 flex-wrap items-center justify-center gap-4 rounded-[2rem] border-4 border-white bg-gradient-to-br from-lime-100 via-white to-cyan-100 p-6 shadow-inner">
             {selected.atoms.map((atom, index) => (
               <div key={`${atom}-${index}`} className="flex items-center gap-4">
-                <div className="grid h-20 w-20 place-items-center rounded-full border border-cyan-200/25 bg-cyan-300/10 text-2xl font-semibold text-white">
+                <div className="grid h-20 w-20 place-items-center rounded-[1.6rem] border-4 border-white bg-gradient-to-br from-blue-500 to-violet-500 text-2xl font-black text-white shadow-lg">
                   {atom}
                 </div>
                 {index < selected.atoms.length - 1 ? (
@@ -99,7 +100,7 @@ export function BondingLab() {
             ))}
           </div>
 
-          <p className="mt-6 text-sm leading-6 text-slate-300">{selected.explanation}</p>
+          <p className="mt-6 text-sm font-medium leading-6 text-slate-600">{selected.explanation}</p>
         </Card>
 
         <div className="grid gap-4 md:grid-cols-2">
@@ -107,11 +108,18 @@ export function BondingLab() {
             <Card key={note}>
               <div className="flex items-center gap-3">
                 <Zap className="h-5 w-5 text-cyan-200" aria-hidden="true" />
-                <p className="font-semibold text-white">{note}</p>
+                <p className="font-black text-slate-950">{note}</p>
               </div>
             </Card>
           ))}
         </div>
+        <MasterAlchemPointer
+          mood="excited"
+          title="Master Alchem's bonding lens"
+          message="Ask: are electrons transferred or shared? Then connect that answer to formula, charge, structure, and properties."
+          href="/ai-tutor"
+          cta="Ask for bonding guidance"
+        />
       </div>
     </div>
   );

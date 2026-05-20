@@ -25,7 +25,7 @@ export function QuizCard({
           {question.difficulty}
         </Badge>
       </div>
-      <h2 className="mt-5 text-xl font-semibold leading-8 text-white">{question.questionText}</h2>
+      <h2 className="mt-5 text-xl font-black leading-8 text-slate-950">{question.questionText}</h2>
 
       {question.type === "multiple_choice" && question.options ? (
         <fieldset className="mt-5 space-y-3">
@@ -33,7 +33,7 @@ export function QuizCard({
           {question.options.map((option) => (
             <label
               key={option}
-              className="flex cursor-pointer items-start gap-3 rounded-lg border border-white/10 bg-white/[0.04] p-3 text-sm text-slate-200 transition hover:bg-white/[0.08]"
+              className="flex cursor-pointer items-start gap-3 rounded-2xl border border-blue-100 bg-white/75 p-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white"
             >
               <input
                 type="radio"
@@ -53,7 +53,7 @@ export function QuizCard({
           {["true", "false"].map((option) => (
             <label
               key={option}
-              className="flex cursor-pointer items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3 text-sm capitalize text-slate-200"
+            className="flex cursor-pointer items-center gap-2 rounded-2xl border border-blue-100 bg-white/75 px-4 py-3 text-sm font-semibold capitalize text-slate-700"
             >
               <input
                 type="radio"
@@ -69,12 +69,12 @@ export function QuizCard({
         </fieldset>
       ) : (
         <label className="mt-5 block">
-          <span className="text-sm font-medium text-slate-200">Numerical answer</span>
+          <span className="text-sm font-black text-slate-700">Numerical answer</span>
           <input
             value={value}
             onChange={(event) => onChange(event.target.value)}
             inputMode="decimal"
-            className="focus-ring mt-2 h-11 w-full rounded-lg border border-white/12 bg-slate-950/70 px-3 text-white"
+            className="focus-ring mt-2 h-11 w-full rounded-2xl border border-blue-100 bg-white/90 px-3 font-bold text-slate-800"
           />
         </label>
       )}

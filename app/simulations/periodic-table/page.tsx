@@ -12,9 +12,9 @@ export default function PeriodicTableSimulationPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Simulation"
+        eyebrow="Virtual Lab"
         title="Periodic Table Explorer"
-        description="Search, filter, and inspect element families, shell configurations, oxidation states, and early periodic trends."
+        description="Click colourful element cards, discover families, compare trends, and ask Master Alchem why each element behaves the way it does."
       />
       <Container className="pb-16">
         <PeriodicTableExplorer />

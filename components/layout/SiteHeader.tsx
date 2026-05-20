@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 const navigation = [
   { href: "/learn", label: "Learn" },
   { href: "/simulations", label: "Simulations" },
+  { href: "/labs", label: "Labs" },
   { href: "/tools", label: "Tools" },
   { href: "/quiz", label: "Quiz" },
   { href: "/dashboard", label: "Dashboard" },
@@ -13,15 +14,15 @@ const navigation = [
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#050713]/82 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-blue-100/70 bg-white/78 backdrop-blur-xl">
       <Container className="flex h-16 items-center justify-between gap-4">
         <Link href="/" className="focus-ring flex items-center gap-3 rounded-lg">
-          <span className="grid h-10 w-10 place-items-center rounded-lg border border-cyan-200/30 bg-cyan-300/10 text-cyan-100">
+          <span className="grid h-10 w-10 place-items-center rounded-2xl border-2 border-white bg-gradient-to-br from-blue-500 to-cyan-400 text-white shadow-md">
             <Atom className="h-5 w-5" aria-hidden="true" />
           </span>
           <span>
-            <span className="block text-base font-semibold text-white">ChemLab AI</span>
-            <span className="hidden text-xs text-slate-400 sm:block">Interactive chemistry lab</span>
+            <span className="block text-base font-black text-slate-950">Chemlab</span>
+            <span className="hidden text-xs font-bold text-blue-600 sm:block">Colourful chemistry universe</span>
           </span>
         </Link>
 
@@ -30,7 +31,7 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="focus-ring rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/8 hover:text-white"
+              className="focus-ring rounded-2xl px-3 py-2 text-sm font-extrabold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700"
             >
               {item.label}
             </Link>
@@ -45,7 +46,7 @@ export function SiteHeader() {
             icon={<MessageSquareText className="h-4 w-4" aria-hidden="true" />}
             className="hidden sm:inline-flex"
           >
-            AI Tutor
+            Master Alchem
           </Button>
           <Button
             href="/simulations"
@@ -57,7 +58,7 @@ export function SiteHeader() {
           </Button>
           <Link
             href="/dashboard"
-            className="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/12 bg-white/8 text-slate-200 transition hover:bg-white/12 lg:hidden"
+            className="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-blue-100 bg-white/80 text-blue-700 shadow-sm transition hover:bg-blue-50 lg:hidden"
             aria-label="Open dashboard"
           >
             <LayoutDashboard className="h-5 w-5" aria-hidden="true" />

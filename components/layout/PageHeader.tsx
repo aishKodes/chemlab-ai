@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/Container";
+import { FloatingMoleculeBackground } from "@/components/ui/FloatingMoleculeBackground";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export function PageHeader({
@@ -11,8 +12,9 @@ export function PageHeader({
   description?: string;
 }) {
   return (
-    <section className="py-12 sm:py-16">
-      <Container>
+    <section className="relative overflow-hidden py-12 sm:py-16">
+      <FloatingMoleculeBackground />
+      <Container className="relative">
         <SectionHeading eyebrow={eyebrow} title={title} description={description} />
       </Container>
     </section>

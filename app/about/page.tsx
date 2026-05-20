@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { GraduationCap, Microscope, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { MasterAlchemBubble } from "@/components/master-alchem/MasterAlchemBubble";
 import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 
 export const metadata: Metadata = {
   title: "Academic Mission",
-  description: "The academic mission behind ChemLab AI.",
+  description: "The academic mission behind Chemlab.",
 };
 
 export default function AboutPage() {
@@ -15,8 +16,8 @@ export default function AboutPage() {
     <>
       <PageHeader
         eyebrow="Academic mission"
-        title="ChemLab AI is built for rigorous understanding."
-        description="The platform treats chemistry as a system of models, quantities, evidence, and careful reasoning. The design is serious because the subject deserves it."
+        title="Delightful chemistry can still be rigorous."
+        description="Chemlab turns models, quantities, evidence, and careful reasoning into a colourful world students want to explore."
       />
       <Container className="pb-16">
         <div className="grid gap-4 lg:grid-cols-3">
@@ -31,19 +32,23 @@ export default function AboutPage() {
             icon={<GraduationCap className="h-6 w-6" aria-hidden="true" />}
           />
           <FeatureCard
-            title="Safe AI foundation"
-            description="The tutor is server-routed, rate-limited, chemistry-focused, and instructed to refuse unsafe real-world chemistry requests."
+            title="Safe guidance"
+            description="Master Alchem keeps chemistry focused on learning, evidence, and safe theory instead of risky real-world instructions."
             icon={<ShieldCheck className="h-6 w-6" aria-hidden="true" />}
           />
         </div>
+        <MasterAlchemBubble
+          mood="idle"
+          eyebrow="Mentor philosophy"
+          message="Master Alchem is designed to feel warm and magical, but his teaching style stays precise: evidence first, safe theory, clear steps, and no shame when students are wrong."
+          className="mt-6"
+        />
         <Card className="mt-6">
-          <h2 className="text-2xl font-semibold text-white">Why start with free infrastructure?</h2>
-          <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-300">
-            Vercel Free, Supabase Free, and fetch-based AI adapters make the MVP
-            deployable without paid platform commitments. The architecture still
-            respects production boundaries: private keys stay on the server,
-            role-based content management has schema support, and the app works
-            with mock data when external services are absent.
+          <h2 className="text-2xl font-black text-slate-950">Built for access</h2>
+          <p className="mt-4 max-w-3xl text-sm font-medium leading-6 text-slate-600">
+            Chemlab is designed to be useful before a school buys anything:
+            students can explore worlds, run labs, practice quizzes, and ask for
+            guidance as the learning universe grows.
           </p>
         </Card>
       </Container>

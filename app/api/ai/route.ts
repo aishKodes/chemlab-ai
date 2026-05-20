@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { buildSystemPrompt } from "@/lib/ai/prompts";
-import { generateAiTutorResponse } from "@/lib/ai/provider";
-import type { AiTutorMode } from "@/lib/ai/types";
-import { checkRateLimit } from "@/lib/rate-limit/basic";
+import { generateAiMentorResponse } from "@/lib/ai/provider";
+import type { AiMentorMode } from "@/lib/ai/types";
+import { checkRateLimit, isDevelopmentAiUnlimited } from "@/lib/rate-limit/basic";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +10,15 @@ export const dynamic = "force-dynamic";
 const aiRequestSchema = z.object({
   message: z.string().min(1).max(4000),
   mode: z
-    .enum(["explain", "hint", "step_by_step", "quiz_me", "check_my_answer", "exam_mode"])
+    .enum([
+      "explain",
+      "hint",
+      "step_by_step",
+      "quiz_me",
+      "check_my_answer",
+      "exam_mode",
+      "lab_guide_mode",
+    ])
     .default("explain"),
   chapterSlug: z.string().optional(),
   conversationId: z.string().uuid().optional(),
@@ -22,7 +30,7 @@ export async function POST(request: Request) {
 
   if (!parsedBody.success) {
     return Response.json(
-      { error: "Invalid AI tutor request.", details: parsedBody.error.flatten().fieldErrors },
+      { error: "Invalid Master Alchem request.", details: parsedBody.error.flatten().fieldErrors },
       { status: 400 },
     );
   }
@@ -30,12 +38,13 @@ export async function POST(request: Request) {
   const { message, mode, chapterSlug, conversationId, anonymousId } = parsedBody.data;
   const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   const rateLimitKey = anonymousId ?? forwardedFor ?? "anonymous";
-  const limit = checkRateLimit(`ai:${rateLimitKey}`, false);
+  const devUnlimited = isDevelopmentAiUnlimited(request);
+  const limit = checkRateLimit(`ai:${rateLimitKey}`, false, { unlimited: devUnlimited });
 
   if (!limit.allowed) {
     return Response.json(
       {
-        error: "Daily AI tutor limit reached.",
+        error: "Daily Master Alchem limit reached.",
         limit: limit.limit,
         remaining: limit.remaining,
       },
@@ -43,10 +52,10 @@ export async function POST(request: Request) {
     );
   }
 
-  const systemPrompt = buildSystemPrompt(mode as AiTutorMode, chapterSlug);
+  const systemPrompt = buildSystemPrompt(mode as AiMentorMode, chapterSlug);
 
   try {
-    const aiResponse = await generateAiTutorResponse({
+    const aiResponse = await generateAiMentorResponse({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: message },
@@ -78,11 +87,12 @@ export async function POST(request: Request) {
       model: aiResponse.model,
       mock: aiResponse.mock ?? false,
       remaining: limit.remaining,
+      unlimited: limit.unlimited ?? false,
     });
   } catch (error) {
     return Response.json(
       {
-        error: "ChemLab AI could not reach the tutor provider.",
+        error: "Master Alchem could not reach the AI provider.",
         detail: error instanceof Error ? error.message : "Unknown provider error.",
       },
       { status: 502 },

@@ -3,6 +3,14 @@ type RateRecord = {
   count: number;
 };
 
+export type RateLimitResult = {
+  allowed: boolean;
+  limit: number | null;
+  remaining: number | null;
+  reset: string;
+  unlimited?: boolean;
+};
+
 const usage = new Map<string, RateRecord>();
 
 function todayKey() {
@@ -18,8 +26,41 @@ export function getDailyLimit(isAuthenticated: boolean) {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
-export function checkRateLimit(key: string, isAuthenticated = false) {
+function isLocalHostName(hostname: string | null | undefined) {
+  return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
+}
+
+export function isDevelopmentAiUnlimited(request?: Request) {
+  const explicitServerFlag = process.env.DEV_UNLIMITED_AI === "true";
+  const explicitPublicFlag = process.env.NEXT_PUBLIC_DEV_MODE === "true";
+  const isDevelopmentRuntime = process.env.NODE_ENV !== "production";
+
+  let isLocalhost = false;
+  if (request) {
+    const urlHost = new URL(request.url).hostname;
+    const headerHost = request.headers.get("host")?.split(":")[0];
+    isLocalhost = isLocalHostName(urlHost) || isLocalHostName(headerHost);
+  }
+
+  return explicitServerFlag || explicitPublicFlag || isDevelopmentRuntime || isLocalhost;
+}
+
+export function checkRateLimit(
+  key: string,
+  isAuthenticated = false,
+  options: { unlimited?: boolean } = {},
+): RateLimitResult {
   const date = todayKey();
+  if (options.unlimited) {
+    return {
+      allowed: true,
+      limit: null,
+      remaining: null,
+      reset: date,
+      unlimited: true,
+    };
+  }
+
   const limit = getDailyLimit(isAuthenticated);
   const current = usage.get(key);
   const nextRecord = current?.date === date ? current : { date, count: 0 };

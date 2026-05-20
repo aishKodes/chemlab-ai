@@ -5,16 +5,16 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Atomic Builder",
-  description: "Build atoms with protons, neutrons, and electrons in ChemLab AI.",
+  description: "Build atoms with protons, neutrons, and electrons in Chemlab.",
 };
 
 export default function AtomicBuilderPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Simulation"
+        eyebrow="Virtual Lab"
         title="Atomic Builder"
-        description="Adjust subatomic particles to inspect element identity, isotope mass, ionic charge, and shell configuration."
+        description="Touch the atom. Change the charge. Watch identity, isotope, and ion logic respond while Master Alchem keeps the model grounded."
       />
       <Container className="pb-16">
         <AtomicBuilder />

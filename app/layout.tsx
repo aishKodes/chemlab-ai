@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { MasterAlchemProvider } from "@/components/master-alchem/MasterAlchemProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,30 +15,30 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://chemlab-ai.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://chemlab.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "ChemLab AI | Interactive Chemistry Learning Lab",
-    template: "%s | ChemLab AI",
+    default: "Chemlab | Chemistry, but Alive",
+    template: "%s | Chemlab",
   },
   description:
-    "A chemistry-first academic platform with interactive simulations, mastery quizzes, visual tools, and an AI tutor for deep understanding.",
-  applicationName: "ChemLab AI",
+    "A colourful interactive chemistry learning universe where students build atoms, run virtual labs, and learn with Master Alchem.",
+  applicationName: "Chemlab",
   openGraph: {
-    title: "ChemLab AI",
+    title: "Chemlab",
     description:
-      "See chemistry, simulate chemistry, and master chemistry through serious interactive learning.",
+      "Chemistry, but alive: quests, simulations, boss quizzes, mistake monsters, and Master Alchem.",
     url: siteUrl,
-    siteName: "ChemLab AI",
+    siteName: "Chemlab",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ChemLab AI",
+    title: "Chemlab",
     description:
-      "Interactive simulations, AI tutoring, quizzes, and chemistry tools for rigorous learning.",
+      "Build atoms, battle misconceptions, run virtual labs, and master reactions through play.",
   },
 };
 
@@ -49,12 +50,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
+        <MasterAlchemProvider>
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <SiteFooter />
+        </MasterAlchemProvider>
       </body>
     </html>
   );

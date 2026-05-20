@@ -17,7 +17,7 @@ function estimateTokens(text: string) {
   return Math.ceil(text.length / 4);
 }
 
-function mockResponse(messages: AiMessage[], model = "mock-chemistry-tutor"): AiResponse {
+function mockResponse(messages: AiMessage[], model = "mock-master-alchem"): AiResponse {
   const lastUserMessage = [...messages].reverse().find((message) => message.role === "user")?.content;
   return {
     provider: "mock",
@@ -25,15 +25,16 @@ function mockResponse(messages: AiMessage[], model = "mock-chemistry-tutor"): Ai
     mock: true,
     inputTokens: estimateTokens(messages.map((message) => message.content).join("\n")),
     outputTokens: 90,
-    content: `I can help with that. Since the live AI key is not configured, here is the ChemLab AI mock tutor response:
+    content: `Ah, young chemist — I can guide you. I am in practice mode until the full mind-orb is connected, but I can still help you explore the idea step by step.
 
-Start by identifying the chemistry idea in your question: ${lastUserMessage ?? "the concept you are studying"}.
+Your current question is: ${lastUserMessage ?? "the concept you want to explore"}.
 
-1. Write the known values or particles involved.
-2. Choose the rule: conservation of atoms, charge balance, mole conversion, or periodic trend.
-3. Apply the rule carefully and check units or atom counts.
+1. Name the concept: atoms, bonding, moles, equations, pH, or periodic trends.
+2. Write the evidence you already have: numbers, particles, formula, colour change, or observation.
+3. Choose the rule: conservation of atoms, charge balance, mole conversion, or structure-property trend.
+4. Try one next step, and I will check it calmly.
 
-Try one next step yourself, and I can check it when the server AI provider is connected.`,
+Try one next step, and I will respond like a calm lab mentor.`,
   };
 }
 
@@ -132,16 +133,16 @@ async function callGemini({
   };
 }
 
-export async function generateAiTutorResponse({
+export async function generateAiMentorResponse({
   messages,
   provider: providerInput,
   model: modelInput,
 }: ProviderRequest): Promise<AiResponse> {
-  const provider = resolveProvider(providerInput ?? process.env.AI_PROVIDER);
+  const provider = resolveProvider(providerInput || process.env.AI_PROVIDER);
   const apiKey = process.env.AI_API_KEY;
   const model =
-    modelInput ??
-    process.env.AI_MODEL ??
+    modelInput ||
+    process.env.AI_MODEL ||
     (provider === "gemini" ? "gemini-1.5-flash" : "gpt-4o-mini");
 
   if (!apiKey || provider === "mock") {

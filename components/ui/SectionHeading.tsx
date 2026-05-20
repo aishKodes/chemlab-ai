@@ -25,11 +25,11 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? <Badge tone="blue">{eyebrow}</Badge> : null}
-      <h2 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-4xl">
+      <h2 className="mt-4 text-3xl font-black leading-tight text-slate-950 sm:text-4xl">
         {title}
       </h2>
       {description ? (
-        <p className="mt-4 text-base leading-7 text-slate-300 sm:text-lg">{description}</p>
+        <p className="mt-4 text-base font-medium leading-7 text-slate-700 sm:text-lg">{description}</p>
       ) : null}
     </div>
   );

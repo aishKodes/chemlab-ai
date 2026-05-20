@@ -1,10 +1,13 @@
 export { Badge } from "./Badge";
 export { Button } from "./Button";
 export { Card } from "./Card";
+export { ColourfulGradientBlob } from "./ColourfulGradientBlob";
 export { Container } from "./Container";
 export { EmptyState } from "./EmptyState";
 export { FeatureCard } from "./FeatureCard";
+export { FloatingMoleculeBackground } from "./FloatingMoleculeBackground";
 export { LoadingState } from "./LoadingState";
+export { Progress } from "./Progress";
 export { Reveal } from "./Reveal";
 export { SectionHeading } from "./SectionHeading";
 export { StatCard } from "./StatCard";

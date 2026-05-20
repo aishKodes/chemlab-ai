@@ -12,9 +12,9 @@ export default function EquationBalancerSimulationPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Simulation"
+        eyebrow="Virtual Lab"
         title="Equation Balance Checker"
-        description="Count atoms on reactant and product sides to make conservation of mass visible."
+        description="Balance reactions like a puzzle game. Match every atom, clear the challenge, and let Master Alchem explain the conservation clue."
       />
       <Container className="pb-16">
         <EquationBalancer />

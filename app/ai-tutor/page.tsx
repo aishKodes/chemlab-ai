@@ -1,23 +1,30 @@
 import type { Metadata } from "next";
-import { AiTutorChat } from "@/components/ai/AiTutorChat";
+import { MasterAlchemChat } from "@/components/ai/MasterAlchemChat";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { MasterAlchemDock } from "@/components/master-alchem/MasterAlchemDock";
 import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
-  title: "AI Tutor",
-  description: "Ask ChemLab AI chemistry questions with explain, hint, quiz, and exam modes.",
+  title: "Master Alchem",
+  description: "Meet Master Alchem, Chemlab's magical AI mentor for chemistry explanations, hints, lab guide mode, quizzes, and answer checking.",
 };
 
-export default function AiTutorPage() {
+export default function MasterAlchemPage() {
   return (
     <>
       <PageHeader
-        eyebrow="AI chemistry tutor"
-        title="Ask for hints, reasoning, checks, or exam-mode explanations."
-        description="The browser talks only to /api/ai. Provider keys and usage logging stay on the server."
+        eyebrow="AI Mentor"
+        title="Master Alchem"
+        description="A warm alchemical mentor who explains chemistry with hints, questions, lab thinking, and no-shame mistake repair."
       />
       <Container className="pb-16">
-        <AiTutorChat />
+        <MasterAlchemDock
+          mood="idle"
+          title="Master Alchem is your guide through the chemistry universe."
+          message="Choose Explain, Hint, Step-by-Step, Quiz Me, Check My Answer, Exam Mode, or Lab Guide Mode. Ask in your own words, and Master Alchem will guide the next step."
+          className="mb-6"
+        />
+        <MasterAlchemChat />
       </Container>
     </>
   );

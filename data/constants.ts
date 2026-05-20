@@ -13,11 +13,12 @@ export const LAB_SKILLS = [
   "Practice with feedback until conceptual errors become visible",
 ];
 
-export const AI_TUTOR_MODES = [
+export const AI_MENTOR_MODES = [
   "explain",
   "hint",
   "step_by_step",
   "quiz_me",
   "check_my_answer",
   "exam_mode",
+  "lab_guide_mode",
 ] as const;

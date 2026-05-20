@@ -7,7 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 
 export const metadata: Metadata = {
   title: "Question Manager",
-  description: "ChemLab AI admin question manager placeholder.",
+  description: "Chemlab admin question manager placeholder.",
 };
 
 export default function AdminQuestionsPage() {
@@ -16,12 +16,12 @@ export default function AdminQuestionsPage() {
       <PageHeader
         eyebrow="Admin"
         title="Question manager"
-        description="Schema and seed data are ready; the authenticated editorial workflow can be layered here."
+        description="Prepare boss battles, warm-up questions, and mistake-repair prompts."
       />
       <Container className="pb-16">
         <EmptyState
           title="Question editor coming next"
-          description="This placeholder protects the route contract while the MVP uses local sample questions and Supabase seed data."
+          description="Question tools will help turn practice into clearer feedback for students."
           icon={<FileQuestion className="h-5 w-5" aria-hidden="true" />}
           action={<Button icon={<Plus className="h-4 w-4" aria-hidden="true" />}>Draft question</Button>}
         />

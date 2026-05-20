@@ -12,9 +12,9 @@ export default function MoleVisualizerPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Simulation"
+        eyebrow="Virtual Lab"
         title="Mole Concept Visualizer"
-        description="Connect measurable grams to moles and the enormous particle counts behind chemical quantities."
+        description="Watch mass become moles, then particle clouds, while Master Alchem turns Avogadro's number into a scale story."
       />
       <Container className="pb-16">
         <MoleVisualizer />

@@ -28,15 +28,15 @@ export const tools: ToolMeta[] = [
 
 export function ToolCard({ tool }: { tool: ToolMeta }) {
   return (
-    <Card interactive className="h-full">
-      <div className="rounded-lg border border-blue-200/20 bg-blue-300/10 p-3 text-blue-100">
+    <Card interactive className="h-full bg-gradient-to-br from-white via-amber-50 to-pink-50">
+      <div className="rounded-2xl border-2 border-white bg-gradient-to-br from-amber-300 to-orange-400 p-3 text-white shadow-lg">
         <Calculator className="h-5 w-5" aria-hidden="true" />
       </div>
-      <h3 className="mt-5 text-xl font-semibold text-white">{tool.title}</h3>
-      <p className="mt-3 text-sm leading-6 text-slate-300">{tool.description}</p>
+      <h3 className="mt-5 text-xl font-black text-slate-950">{tool.title}</h3>
+      <p className="mt-3 text-sm font-medium leading-6 text-slate-600">{tool.description}</p>
       <Link
         href={`/tools/${tool.slug}`}
-        className="focus-ring mt-5 inline-flex items-center gap-2 rounded-lg text-sm font-semibold text-cyan-100 transition hover:text-white"
+        className="focus-ring mt-5 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-sm font-black text-orange-700 shadow transition hover:-translate-y-0.5 hover:bg-white"
       >
         Open tool
         <ArrowRight className="h-4 w-4" aria-hidden="true" />

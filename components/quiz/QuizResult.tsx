@@ -11,10 +11,10 @@ export function QuizResult({ result }: { result: QuizScore }) {
     <div className="space-y-5">
       <Card className="glass-panel-strong">
         <Badge tone={result.percentage >= 70 ? "green" : "amber"}>Quiz complete</Badge>
-        <h2 className="mt-4 text-3xl font-semibold text-white">
+        <h2 className="mt-4 text-3xl font-black text-slate-950">
           {result.score}/{result.total} correct
         </h2>
-        <p className="mt-2 text-slate-300">{result.percentage}% mastery signal for this attempt.</p>
+        <p className="mt-2 font-semibold text-slate-600">{result.percentage}% mastery signal for this attempt.</p>
       </Card>
       {result.results.map((item, index) => (
         <Card key={item.question.id}>
@@ -25,13 +25,13 @@ export function QuizResult({ result }: { result: QuizScore }) {
               <XCircle className="mt-1 h-5 w-5 text-rose-300" aria-hidden="true" />
             )}
             <div>
-              <p className="text-sm text-slate-400">Question {index + 1}</p>
-              <h3 className="mt-1 font-semibold text-white">{item.question.questionText}</h3>
-              <p className="mt-2 text-sm text-slate-300">
-                Your answer: <span className="text-white">{item.answer || "No answer"}</span>
+              <p className="text-sm font-bold text-slate-500">Question {index + 1}</p>
+              <h3 className="mt-1 font-black text-slate-950">{item.question.questionText}</h3>
+              <p className="mt-2 text-sm font-medium text-slate-600">
+                Your answer: <span className="font-black text-slate-950">{item.answer || "No answer"}</span>
               </p>
-              <p className="mt-1 text-sm text-slate-300">
-                Correct answer: <span className="text-white">{String(item.question.correctAnswer)}</span>
+              <p className="mt-1 text-sm font-medium text-slate-600">
+                Correct answer: <span className="font-black text-slate-950">{String(item.question.correctAnswer)}</span>
               </p>
             </div>
           </div>
