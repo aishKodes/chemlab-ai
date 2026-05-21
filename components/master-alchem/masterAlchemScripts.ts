@@ -39,12 +39,21 @@ const scripts: MasterAlchemRouteScript[] = [
     explainPrompt: "Explain how to learn from a chemistry simulation.",
   },
   {
+    route: "/labs/daniell-cell-studio",
+    label: "Daniell Cell Studio",
+    mood: "explaining",
+    message: "Let's build a cell. Watch where the electrons go.",
+    nextLabel: "Open the lab",
+    nextHref: "/labs/daniell-cell-studio",
+    explainPrompt: "Guide me through the Daniell cell step by step.",
+  },
+  {
     route: "/labs",
     label: "Lab Guide",
     mood: "labGuide",
     message: "Virtual labs are safe places to experiment. Let's learn by doing.",
-    nextLabel: "Open the shell demo",
-    nextHref: "/labs/demo-cinematic-shell",
+    nextLabel: "Open Daniell Cell Studio",
+    nextHref: "/labs/daniell-cell-studio",
     explainPrompt: "Explain how Chemlab labs help me learn by doing.",
   },
   {

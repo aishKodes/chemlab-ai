@@ -26,6 +26,10 @@ export function LabStage({
   }, [active, label, phase]);
 
   useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    const hostElement = host;
+
     let app: Application | null = null;
     let graphics: Graphics | null = null;
     let titleText: Text | null = null;
@@ -33,29 +37,26 @@ export function LabStage({
     let elapsed = 0;
 
     async function start() {
-      const host = hostRef.current;
-      if (!host) return;
-
       try {
         const { Application, Graphics, Text } = await import("pixi.js");
-        if (disposed || !hostRef.current) return;
+        if (disposed) return;
 
         app = new Application();
         await app.init({
-          resizeTo: host,
+          resizeTo: hostElement,
           backgroundAlpha: 0,
           antialias: true,
           autoDensity: true,
           resolution: Math.min(window.devicePixelRatio || 1, 2),
         });
 
-        if (disposed || !hostRef.current) {
+        if (disposed) {
           app.destroy(true);
           return;
         }
 
         app.canvas.className = "h-full w-full";
-        host.appendChild(app.canvas);
+        hostElement.appendChild(app.canvas);
         graphics = new Graphics();
         titleText = new Text({
           text: "",
@@ -93,7 +94,7 @@ export function LabStage({
     return () => {
       disposed = true;
       if (app) app.destroy(true);
-      if (hostRef.current) hostRef.current.replaceChildren();
+      hostElement.replaceChildren();
     };
   }, []);
 

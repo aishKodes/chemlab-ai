@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import type { TargetAndTransition } from "framer-motion";
 import { FlaskConical, Sparkles } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
 import type { MasterAlchemMood } from "@/components/master-alchem/MasterAlchemMood";
 import { masterAlchemMoodLabels } from "@/components/master-alchem/MasterAlchemMood";
 import { resolveMasterAlchemAsset } from "@/components/master-alchem/masterAlchemAssets";
@@ -22,16 +22,17 @@ type MasterAlchemProps = {
 };
 
 const sizeClasses = {
-  xs: "h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20",
-  sm: "h-24 w-24 sm:h-28 sm:w-28",
-  md: "h-36 w-36 sm:h-40 sm:w-40",
-  lg: "h-56 w-56 sm:h-64 sm:w-64",
-  hero: "h-[min(72vw,20rem)] w-[min(72vw,20rem)] sm:h-[24rem] sm:w-[24rem] lg:h-[28rem] lg:w-[28rem]",
+  xs: "h-12 w-12",
+  sm: "h-[4.5rem] w-[4.5rem]",
+  md: "h-24 w-24",
+  lg: "h-32 w-32",
+  hero: "h-[min(68vw,13.75rem)] w-[min(68vw,13.75rem)] lg:h-80 lg:w-80",
 };
 
 const motionByMood: Record<MasterAlchemMood, TargetAndTransition> = {
   avatar: { y: [0, -5, 0] },
   celebrating: { y: [0, -16, 0], rotate: [-1.5, 1.5, -1.5], scale: [1, 1.025, 1] },
+  explaining: { y: [0, -9, 0], x: [0, 4, 0], scale: [1, 1.01, 1] },
   guide: { y: [0, -9, 0], x: [0, 5, 0] },
   hero: { y: [0, -18, 0], rotate: [-1, 1, -1] },
   idle: { y: [0, -10, 0] },
@@ -43,6 +44,7 @@ const motionByMood: Record<MasterAlchemMood, TargetAndTransition> = {
 const moodAura: Record<MasterAlchemMood, string> = {
   avatar: "from-cyan-300 via-blue-300 to-violet-300",
   celebrating: "from-amber-200 via-cyan-200 to-fuchsia-300",
+  explaining: "from-cyan-200 via-blue-300 to-emerald-200",
   guide: "from-teal-300 via-sky-300 to-violet-300",
   hero: "from-cyan-300 via-violet-300 to-amber-200",
   idle: "from-cyan-300 via-blue-300 to-violet-300",
@@ -56,7 +58,7 @@ function FallbackMasterAlchem({ mood }: { mood: MasterAlchemMood }) {
   const faceId = `alchemFace-${mood}-${rawId}`;
   const robeId = `alchemRobe-${mood}-${rawId}`;
   const mistId = `alchemMist-${mood}-${rawId}`;
-  const isSpeaking = mood === "guide" || mood === "labGuide" || mood === "hero";
+  const isSpeaking = mood === "guide" || mood === "labGuide" || mood === "hero" || mood === "explaining";
 
   return (
     <svg viewBox="0 0 360 420" role="img" aria-hidden="true" className="relative h-full w-full drop-shadow-2xl">
@@ -119,14 +121,12 @@ export function MasterAlchem({
   label,
 }: MasterAlchemProps) {
   const reduced = useReducedMotion();
-  const [imageFailed, setImageFailed] = useState(false);
+  const [failedAssetSrc, setFailedAssetSrc] = useState<string | null>(null);
   const accessibleLabel = label ?? `Master Alchem, ${masterAlchemMoodLabels[mood].toLowerCase()}`;
   const isAvatar = size === "xs" || mood === "avatar";
   const asset = resolveMasterAlchemAsset(mood);
 
-  useEffect(() => {
-    setImageFailed(false);
-  }, [asset?.src]);
+  const canUseAsset = Boolean(asset && failedAssetSrc !== asset.src);
 
   return (
     <motion.figure
@@ -160,7 +160,7 @@ export function MasterAlchem({
         </motion.div>
       ) : null}
 
-      {mood === "labGuide" || mood === "guide" ? (
+      {mood === "labGuide" || mood === "guide" || mood === "explaining" ? (
         <motion.div
           className="absolute left-1 top-12 grid h-10 w-10 place-items-center rounded-2xl border-2 border-white bg-cyan-200 text-blue-700 shadow-lg"
           animate={reduced ? undefined : { x: [0, 8, 0], y: [0, -6, 0] }}
@@ -177,7 +177,7 @@ export function MasterAlchem({
           fit === "contain" ? "p-1" : "p-0",
         )}
       >
-        {asset && !imageFailed ? (
+        {asset && canUseAsset ? (
           <Image
             src={asset.src}
             alt={asset.alt}
@@ -185,7 +185,7 @@ export function MasterAlchem({
             sizes="(max-width: 640px) 96px, 180px"
             className="object-contain"
             draggable={false}
-            onError={() => setImageFailed(true)}
+            onError={() => setFailedAssetSrc(asset.src)}
           />
         ) : (
           <FallbackMasterAlchem mood={mood} />

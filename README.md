@@ -5,6 +5,9 @@ the product foundation: chemistry worlds, Master Alchem guidance, asset safety,
 AI mock mode, gamified learning surfaces, and a reusable cinematic simulation
 shell for future high-quality labs.
 
+Phase 3 adds the reusable lab engine foundation used to keep future labs
+single-screen, guided, and game-like instead of turning into disconnected pages.
+
 Master Alchem is Chemlab's signature mentor character: a warm floating alchemical
 science guide who gives hints, lab guidance, safe explanations, and step-by-step
 chemistry reasoning without making mistakes feel shameful.
@@ -29,6 +32,10 @@ chemistry reasoning without making mistakes feel shameful.
   achievements, and cinematic learning sections
 - Chemistry Worlds quest map with chapter worlds and dynamic chapter routes
 - Story Labs route with Featured, Prototype, and Coming Soon sections
+- Daniell Cell Studio flagship lab for Class 12 electrochemistry
+- Lab Engine components for single-screen guided experiments
+- Lab catalog for Featured, Prototype, and Coming Soon experiences
+- Local lab-progress utilities for started/completed labs and badges
 - Reusable cinematic simulation shell with story, experiment, challenge, and reward scenes
 - `/labs/demo-cinematic-shell` Phase 1 shell demo
 - Site-wide Master Alchem guide with route-specific student guidance
@@ -49,6 +56,94 @@ chemistry reasoning without making mistakes feel shameful.
 - Student dashboard shell
 - Admin/content/question manager foundations
 - Supabase schema and seed data with RLS policies
+
+## Phase 2 Flagship Lab
+
+`/labs/daniell-cell-studio` is the first full Chemlab flagship simulation. It
+uses a client-only PixiJS stage for the animated lab bench and React/Framer
+Motion overlays for the HUD, Master Alchem dialogue, step controls, challenge
+questions, and reward state.
+
+The lab teaches:
+
+- Daniell cell / galvanic cell setup
+- zinc anode and copper cathode
+- oxidation and reduction half-reactions
+- electron flow through the external wire
+- ion movement through the salt bridge
+- approximate 1.10 V cell voltage
+- overall reaction and cell notation
+
+The core files live in:
+
+```text
+app/labs/daniell-cell-studio/page.tsx
+components/labs/daniell-cell/
+```
+
+## Phase 3 Lab Engine
+
+The reusable lab engine lives in `components/lab-engine/`:
+
+```text
+LabShell.tsx
+CinematicIntro.tsx
+LabStage.tsx
+LabHUD.tsx
+StepActionBar.tsx
+MasterAlchemLabGuide.tsx
+ChallengePanel.tsx
+RewardScene.tsx
+EquationOverlay.tsx
+ParticleLayer.tsx
+labTypes.ts
+labStateMachine.ts
+```
+
+`LabShell` is the main layout primitive for future high-quality labs. It keeps
+the top HUD, central stage, Master Alchem lab guide, challenge/reward panels,
+and bottom action bar in predictable safe zones so controls remain visible.
+
+Daniell Cell Studio now uses this shell for the experiment phase while keeping
+its PixiJS animated cell scene.
+
+## Lab Catalog
+
+Labs are listed in `data/labs/labCatalog.ts`. Each entry contains:
+
+- slug and route
+- title and student-facing description
+- class level and topic
+- status: `featured`, `prototype`, or `comingSoon`
+- XP, difficulty, estimated time, concepts, and thumbnail type
+
+The `/labs` and `/simulations` pages use this catalog so future labs can be
+added one by one without rewriting page layouts.
+
+## Local Lab Progress
+
+`lib/progress/labProgress.ts` stores lightweight local progress in
+`localStorage`:
+
+- `markLabStarted(labSlug)`
+- `markLabCompleted(labSlug, xp)`
+- `getLocalLabProgress()`
+- `awardLocalBadge(badgeId)`
+
+This is intentionally client-only and can later sync to Supabase.
+
+## Molecule Explorer
+
+The Molecule Explorer lives at `/simulations/molecule-explorer` and uses 3Dmol.js
+with embedded molecule data in:
+
+```text
+components/simulations/molecule-explorer/
+```
+
+It includes water, methane, carbon dioxide, ammonia, and a sodium chloride ionic
+lattice concept model. Students can rotate/zoom, compare molecular geometry,
+read bond-angle notes, and complete a short shape challenge.
 
 ## Setup
 
@@ -240,12 +335,16 @@ assets/             Clean generated scene backgrounds used at runtime
 components/          UI, layout, chemistry, simulations, tools, AI, quiz, dashboard, admin
 components/master-alchem/
                      Master Alchem character, route scripts, provider, and guide
-components/labs/     Story-lab preview, asset mapping, and Neutralization Studio
+components/labs/     Story labs, Daniell Cell Studio, asset mapping, and prototypes
+components/lab-engine/
+                     Reusable LabShell, HUD, action bar, guide, challenge, reward
 components/simulation-engine/
                      Reusable cinematic story/lab/challenge/reward shell
 data/                Periodic table, curriculum modules, sample questions, constants
+data/labs/           Lab catalog for featured, prototype, and future labs
 docs/                Asset inventory and implementation notes
 lib/                 Supabase, AI, chemistry utilities, quiz scoring, rate limiting
+lib/progress/        Client-side lab progress helpers
 public/              Future public assets plus quarantined bad assets
 public/_source-assets/
                      Non-destructive copies of discovered artwork
@@ -260,14 +359,15 @@ content/chemistry/   Future markdown/content source
 1. Add shared chemistry logic in `lib/chemistry/` when the rule can be reused.
 2. Build the interactive experience as a focused component in
    `components/simulations/` or `components/labs/`. For story-driven labs,
-   start from `components/simulation-engine/`.
+   start from `components/lab-engine/LabShell.tsx`.
 3. Add a route under `app/simulations/` or `app/labs/`.
 4. Put polished, student-facing copy in the page. Keep implementation details in
    docs, not in the learning surface.
-5. Add Master Alchem route guidance if the lab needs a dedicated message.
-6. Add the new experience to `/labs` or `/simulations` as Featured, Practice,
+5. Add a `data/labs/labCatalog.ts` entry when it belongs in the lab catalog.
+6. Add Master Alchem route guidance if the lab needs a dedicated message.
+7. Add the new experience to `/labs` or `/simulations` as Featured, Practice,
    Prototype, or Coming Soon.
-7. Run `npm run lint` and `npm run build`.
+8. Run `npm run lint` and `npm run build`.
 
 ## Roadmap
 
@@ -277,7 +377,8 @@ content/chemistry/   Future markdown/content source
 - Admin CRUD for chapters, lessons, questions, and simulations
 - Visual note editor and spaced mistake review
 - Regenerate Master Alchem and lab props with true transparency
-- Build Daniell Cell Studio on top of the cinematic shell
+- Deepen Daniell Cell Studio with drag positioning, richer ion choices, and optional sound
+- Add the next LabShell-based flagship practical: Titration Studio or Electrolysis Studio
 - Acid-base titration and salt-identification story labs with richer assessment
 - Expanded periodic table and thermochemistry tools
 - Richer simulations with drag-and-drop bonding and stoichiometry labs

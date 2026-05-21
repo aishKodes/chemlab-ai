@@ -1,5 +1,7 @@
-import { Beaker, CheckCircle2, FlaskConical, MessageCircle, Sparkles, WandSparkles } from "lucide-react";
+import { BatteryCharging, Beaker, CheckCircle2, FlaskConical, MessageCircle, Sparkles, WandSparkles } from "lucide-react";
 import Image from "next/image";
+import type { LabCatalogEntry } from "@/data/labs/labCatalog";
+import { getLabsByStatus } from "@/data/labs/labCatalog";
 import { labSceneAssets } from "@/components/labs/labAssets";
 import { MasterAlchemBubble } from "@/components/master-alchem/MasterAlchemBubble";
 import { Badge } from "@/components/ui/Badge";
@@ -7,57 +9,9 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Progress } from "@/components/ui/Progress";
 
-const featuredLabs = [
-  {
-    title: "Cinematic Lab Shell",
-    status: "Phase 1 demo",
-    progress: 100,
-    scenes: ["story intro", "lab stage", "challenge check", "reward loop"],
-    reward: "+80 XP",
-    href: "/labs/demo-cinematic-shell",
-    image: labSceneAssets.magicalLabBackground,
-    icon: <WandSparkles className="h-7 w-7" aria-hidden="true" />,
-  },
-  {
-    title: "Neutralization Studio",
-    status: "Featured prototype",
-    progress: 62,
-    scenes: ["acid added", "indicator clue", "base added", "salt reveal"],
-    reward: "+160 XP",
-    href: "/labs/neutralization-studio",
-    image: labSceneAssets.virtualLabBench,
-    icon: <FlaskConical className="h-7 w-7" aria-hidden="true" />,
-  },
-];
-
-const prototypeLabs = [
-  {
-    title: "Cinematic Salt Lab",
-    status: "Prototype",
-    progress: 35,
-    scenes: ["safe mixing", "pH clue", "evaporation", "salt crystal reveal"],
-    reward: "+120 XP",
-    href: "/labs/cinematic-salt-lab",
-    image: labSceneAssets.magicalLabBackground,
-    icon: <FlaskConical className="h-7 w-7" aria-hidden="true" />,
-  },
-  {
-    title: "Reaction Rescue: Balance the Lab Door",
-    status: "Practice",
-    progress: 15,
-    scenes: ["locked lab", "atom inventory", "coefficient puzzle", "conservation reveal", "escape quiz"],
-    reward: "+180 XP",
-    href: "/simulations/equation-balancer",
-    image: labSceneAssets.classroom,
-    icon: <FlaskConical className="h-7 w-7" aria-hidden="true" />,
-  },
-];
-
-const comingSoon = [
-  "Daniell Cell Studio",
-  "Acid-Base Titration Studio",
-  "Qualitative Analysis Quest",
-];
+const featuredLabs = getLabsByStatus("featured");
+const prototypeLabs = getLabsByStatus("prototype");
+const comingSoon = getLabsByStatus("comingSoon");
 
 export function StoryLabPreview() {
   return (
@@ -65,9 +19,9 @@ export function StoryLabPreview() {
       <MasterAlchemBubble
         mood="celebrating"
         eyebrow="Story Lab Academy"
-        message="A story lab is not just a worksheet. You enter a scene, make predictions, take lab actions, collect evidence, and explain what happened like a scientist."
-        actionLabel="Open the shell demo"
-        actionHref="/labs/demo-cinematic-shell"
+        message="Start with Daniell Cell Studio. Build the cell, watch electrons move, and see how a reaction creates voltage."
+        actionLabel="Open Daniell Cell Studio"
+        actionHref="/labs/daniell-cell-studio"
       />
 
       <LabSection title="Featured Labs" labs={featuredLabs} />
@@ -79,11 +33,11 @@ export function StoryLabPreview() {
 
       <Card className="bg-gradient-to-br from-white via-violet-50 to-blue-100">
         <Badge tone="slate">Coming Soon</Badge>
-        <h2 className="mt-3 text-2xl font-black text-slate-950">Next labs to build in Phase 2</h2>
+        <h2 className="mt-3 text-2xl font-black text-slate-950">Next labs to unlock</h2>
         <div className="mt-4 grid gap-3 md:grid-cols-3">
           {comingSoon.map((lab) => (
-            <div key={lab} className="rounded-3xl border border-white bg-white/75 p-4 text-sm font-black text-slate-700 shadow-sm">
-              {lab}
+            <div key={lab.slug} className="rounded-3xl border border-white bg-white/75 p-4 text-sm font-black text-slate-700 shadow-sm">
+              {lab.title}
             </div>
           ))}
         </div>
@@ -116,7 +70,7 @@ function LabSection({
 }: {
   title: string;
   description?: string;
-  labs: typeof featuredLabs;
+  labs: LabCatalogEntry[];
 }) {
   return (
     <section aria-labelledby={title.toLowerCase().replaceAll(" ", "-")}>
@@ -129,7 +83,7 @@ function LabSection({
           <Card key={lab.title} className="relative overflow-hidden bg-gradient-to-br from-white via-cyan-50 to-amber-50 p-0">
             <div className="relative h-44 overflow-hidden">
               <Image
-                src={lab.image}
+                src={lab.thumbnailType === "acid-base" ? labSceneAssets.virtualLabBench : lab.thumbnailType === "practice" ? labSceneAssets.classroom : labSceneAssets.magicalLabBackground}
                 alt=""
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
@@ -137,35 +91,35 @@ function LabSection({
               />
               <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
               <span className="absolute left-4 top-4 grid h-14 w-14 place-items-center rounded-3xl border-2 border-white bg-gradient-to-br from-cyan-400 to-blue-500 text-white shadow-lg">
-                {lab.icon}
+                {getLabIcon(lab)}
               </span>
               <Badge tone="amber" className="absolute right-4 top-4">
-                {lab.status}
+                {lab.status === "featured" ? "Featured" : lab.status === "prototype" ? "Prototype" : "Coming soon"}
               </Badge>
             </div>
             <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-cyan-300/35 blur-2xl" />
             <div className="relative p-5">
               <h3 className="text-2xl font-black text-slate-950">{lab.title}</h3>
               <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">
-                Guided practical with dialogue, lab actions, visible evidence, a success scene, and a short boss check.
+                {lab.description}
               </p>
               <div className="mt-5">
-                <Progress value={lab.progress} label="Build depth" />
+                <Progress value={lab.status === "featured" ? 100 : lab.status === "prototype" ? 45 : 0} label="Lab readiness" />
               </div>
               <div className="mt-5 space-y-2">
-                {lab.scenes.map((scene) => (
-                  <div key={scene} className="flex items-center gap-2 rounded-2xl bg-white/75 px-3 py-2 text-sm font-bold text-slate-700 shadow-sm">
+                {lab.concepts.slice(0, 4).map((concept) => (
+                  <div key={concept} className="flex items-center gap-2 rounded-2xl bg-white/75 px-3 py-2 text-sm font-bold text-slate-700 shadow-sm">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
-                    {scene}
+                    {concept}
                   </div>
                 ))}
               </div>
               <div className="mt-5 flex items-center justify-between gap-3">
                 <span className="inline-flex items-center gap-1 rounded-full bg-lime-100 px-3 py-1 text-xs font-black text-lime-800">
                   <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-                  {lab.reward}
+                  +{lab.xp} XP
                 </span>
-                <Button href={lab.href} size="sm" variant="ghost" icon={<Beaker className="h-4 w-4" aria-hidden="true" />}>
+                <Button href={lab.route} size="sm" variant="ghost" icon={<Beaker className="h-4 w-4" aria-hidden="true" />}>
                   Open
                 </Button>
               </div>
@@ -175,4 +129,10 @@ function LabSection({
       </div>
     </section>
   );
+}
+
+function getLabIcon(lab: LabCatalogEntry) {
+  if (lab.thumbnailType === "electrochem") return <BatteryCharging className="h-7 w-7" aria-hidden="true" />;
+  if (lab.thumbnailType === "future") return <WandSparkles className="h-7 w-7" aria-hidden="true" />;
+  return <FlaskConical className="h-7 w-7" aria-hidden="true" />;
 }

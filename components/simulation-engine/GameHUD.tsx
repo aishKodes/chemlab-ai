@@ -25,7 +25,7 @@ export function GameHUD({
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <Badge tone="blue">{badge}</Badge>
-            <Badge tone="green">Phase 1 shell</Badge>
+            <Badge tone="green">Lab flow</Badge>
           </div>
           <h2 className="mt-3 text-2xl font-black text-slate-950">{title}</h2>
           <div className="mt-3">

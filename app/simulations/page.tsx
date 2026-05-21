@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { Atom, FlaskConical, Hexagon, Waves } from "lucide-react";
+import { Atom, BatteryCharging, FlaskConical, Hexagon, Waves } from "lucide-react";
+import type { LabCatalogEntry } from "@/data/labs/labCatalog";
+import { getLabsByStatus } from "@/data/labs/labCatalog";
 import { simulations } from "@/data/chemistry-modules";
 import { SimulationCard } from "@/components/chemistry/SimulationCard";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -15,35 +17,7 @@ export const metadata: Metadata = {
     "Chemlab virtual labs where students mix reactions, explore molecules, build atoms, and learn by doing.",
 };
 
-const featuredLabs = [
-  {
-    title: "Neutralization Studio",
-    description:
-      "Mix acid and base, watch pH change, find the neutral point, evaporate water, and reveal salt.",
-    href: "/labs/neutralization-studio",
-    icon: <Waves className="h-7 w-7" aria-hidden="true" />,
-    badge: "Flagship",
-    gradient: "from-cyan-100 via-white to-lime-100",
-  },
-  {
-    title: "Molecule Explorer",
-    description:
-      "Rotate real 3D molecules and see how geometry explains bonding, polarity, and structure.",
-    href: "/simulations/molecule-explorer",
-    icon: <Hexagon className="h-7 w-7" aria-hidden="true" />,
-    badge: "3D viewer",
-    gradient: "from-violet-100 via-white to-cyan-100",
-  },
-  {
-    title: "Atomic Builder",
-    description:
-      "Change protons, neutrons, and electrons to discover identity, isotope, and charge.",
-    href: "/simulations/atomic-builder",
-    icon: <Atom className="h-7 w-7" aria-hidden="true" />,
-    badge: "Interactive",
-    gradient: "from-amber-100 via-white to-sky-100",
-  },
-];
+const featuredLabs = getLabsByStatus("featured");
 
 export default function SimulationsPage() {
   return (
@@ -56,9 +30,9 @@ export default function SimulationsPage() {
       <Container className="space-y-10 pb-16">
         <MasterAlchemBubble
           mood="labGuide"
-          message="Start with the cinematic shell demo to understand the future lab flow, then practice smaller concepts in the prototype zone."
-          actionLabel="Open the lab shell demo"
-          actionHref="/labs/demo-cinematic-shell"
+          message="Start with Daniell Cell Studio. Build the cell step by step, then follow the electrons through the wire."
+          actionLabel="Open Daniell Cell Studio"
+          actionHref="/labs/daniell-cell-studio"
         />
 
         <section aria-labelledby="featured-experiences">
@@ -72,16 +46,16 @@ export default function SimulationsPage() {
           </div>
           <div className="mt-5 grid gap-5 lg:grid-cols-3">
             {featuredLabs.map((lab) => (
-              <Card key={lab.title} interactive className={`h-full bg-gradient-to-br ${lab.gradient}`}>
+              <Card key={lab.title} interactive className={`h-full bg-gradient-to-br ${getLabGradient(lab)}`}>
                 <div className="flex items-start justify-between gap-4">
                   <span className="grid h-14 w-14 place-items-center rounded-3xl border-2 border-white bg-blue-600 text-white shadow-lg">
-                    {lab.icon}
+                    {getLabIcon(lab)}
                   </span>
-                  <Badge tone="blue">{lab.badge}</Badge>
+                  <Badge tone="blue">{lab.topic}</Badge>
                 </div>
                 <h3 className="mt-5 text-2xl font-black text-slate-950">{lab.title}</h3>
                 <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">{lab.description}</p>
-                <Button href={lab.href} className="mt-5" icon={<FlaskConical className="h-4 w-4" aria-hidden="true" />}>
+                <Button href={lab.route} className="mt-5" icon={<FlaskConical className="h-4 w-4" aria-hidden="true" />}>
                   Open lab
                 </Button>
               </Card>
@@ -129,4 +103,17 @@ export default function SimulationsPage() {
       </Container>
     </>
   );
+}
+
+function getLabIcon(lab: LabCatalogEntry) {
+  if (lab.thumbnailType === "electrochem") return <BatteryCharging className="h-7 w-7" aria-hidden="true" />;
+  if (lab.thumbnailType === "molecule") return <Hexagon className="h-7 w-7" aria-hidden="true" />;
+  if (lab.thumbnailType === "acid-base") return <Waves className="h-7 w-7" aria-hidden="true" />;
+  return <Atom className="h-7 w-7" aria-hidden="true" />;
+}
+
+function getLabGradient(lab: LabCatalogEntry) {
+  if (lab.thumbnailType === "electrochem") return "from-cyan-100 via-white to-amber-100";
+  if (lab.thumbnailType === "molecule") return "from-violet-100 via-white to-cyan-100";
+  return "from-amber-100 via-white to-sky-100";
 }

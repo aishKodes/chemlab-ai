@@ -6,7 +6,6 @@ import { DialogPanel } from "@/components/simulation-engine/DialogPanel";
 import { LabStage } from "@/components/simulation-engine/LabStage";
 import type { CinematicSceneConfig, SimulationChallenge } from "@/components/simulation-engine/simulationTypes";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
 

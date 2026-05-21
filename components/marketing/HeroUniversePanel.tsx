@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { CheckCircle2, FlaskConical, Trophy, Zap } from "lucide-react";
+import { BatteryCharging, CheckCircle2, Trophy, Zap } from "lucide-react";
 import Image from "next/image";
 import { AchievementBadge } from "@/components/gamification/AchievementBadge";
 import { LevelBadge } from "@/components/gamification/LevelBadge";
@@ -44,18 +44,20 @@ export function HeroUniversePanel() {
         </motion.div>
       ))}
 
-      <div className="relative mx-auto mt-4 grid h-80 w-80 place-items-center sm:h-96 sm:w-96">
+      <div className="relative mx-auto mt-4 grid h-72 w-72 place-items-center sm:h-80 sm:w-80">
         <motion.div
-          className="absolute h-72 w-72 rounded-full border-4 border-dashed border-blue-300 sm:h-80 sm:w-80"
+          className="absolute h-64 w-64 rounded-full border-4 border-dashed border-blue-300 sm:h-72 sm:w-72"
           animate={reduced ? undefined : { rotate: 360 }}
           transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
         />
         <motion.div
-          className="absolute h-52 w-52 rounded-full border-4 border-dashed border-violet-300 sm:h-60 sm:w-60"
+          className="absolute h-44 w-44 rounded-full border-4 border-dashed border-violet-300 sm:h-52 sm:w-52"
           animate={reduced ? undefined : { rotate: -360 }}
           transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
         />
-        <MasterAlchem mood="hero" size="hero" className="z-10" />
+        <div className="z-10 grid h-44 w-44 place-items-center rounded-[2rem] border-4 border-white bg-white/80 shadow-2xl backdrop-blur-sm sm:h-52 sm:w-52">
+          <BatteryCharging className="h-20 w-20 text-blue-600" aria-hidden="true" />
+        </div>
         <div className="absolute right-4 top-16 h-5 w-5 rounded-full bg-blue-500 shadow-lg" />
         <div className="absolute bottom-12 left-8 h-4 w-4 rounded-full bg-fuchsia-500 shadow-lg" />
         <div className="absolute left-12 top-8 h-3.5 w-3.5 rounded-full bg-lime-500 shadow-lg" />
@@ -64,9 +66,7 @@ export function HeroUniversePanel() {
       <div className="relative mt-2 grid gap-4 md:grid-cols-[1fr_0.9fr]">
         <div className="rounded-[1.5rem] border-2 border-white bg-white/85 p-4 shadow-lg">
           <div className="flex items-center gap-3">
-            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-blue-500 text-white">
-              <FlaskConical className="h-7 w-7" aria-hidden="true" />
-            </span>
+            <MasterAlchem mood="guide" size="xs" showGlow={false} className="shrink-0" />
             <div>
               <p className="text-sm font-black text-violet-700">Master Alchem</p>
               <p className="text-sm font-bold text-slate-700">

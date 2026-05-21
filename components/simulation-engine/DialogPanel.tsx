@@ -32,7 +32,7 @@ export function DialogPanel({
             key={message}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-3 text-sm font-black leading-6 text-slate-750"
+            className="mt-3 text-sm font-black leading-6 text-slate-700"
           >
             {message}
           </motion.p>

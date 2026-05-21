@@ -5,18 +5,18 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
-  title: "Cinematic Lab Shell Demo",
+  title: "Lab Flow Preview",
   description:
-    "A Phase 1 Chemlab shell demo showing the story, experiment, challenge, and reward structure for future labs.",
+    "A Chemlab preview showing the story, experiment, challenge, and reward rhythm for future labs.",
 };
 
 const demoConfig: CinematicLessonConfig = {
-  title: "Cinematic Lab Shell Demo",
+  title: "Lab Flow Preview",
   subtitle: "A polished structure preview for future Chemlab labs.",
-  badge: "Structure Demo",
+  badge: "Lab Preview",
   rewardTitle: "Lab Flow Builder",
   rewardDetail:
-    "You completed the Phase 1 flow: story first, experiment second, challenge third, reward last.",
+    "You completed the flow: story first, experiment second, challenge third, reward last.",
   xpReward: 80,
   steps: [
     {
@@ -117,9 +117,9 @@ export default function DemoCinematicShellPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Phase 1 Demo"
-        title="Cinematic Lab Shell"
-        description="A reusable story-to-lab-to-challenge structure for future Chemlab simulations. This is a shell demo, not a final chemistry practical."
+        eyebrow="Lab Preview"
+        title="Chemlab Lab Flow"
+        description="A short preview of how Chemlab labs move from mission to experiment to challenge to reward."
       />
       <Container className="pb-16">
         <CinematicLessonShell config={demoConfig} />

@@ -83,14 +83,13 @@ const worlds = [
   {
     title: "Electrochem City",
     description: "Follow electrons through cells, electrodes, bridges, and voltage clues.",
-    progress: 0,
+    progress: 12,
     missions: 6,
-    status: "Phase 2",
+    status: "Featured lab",
     xp: 820,
-    href: "/learn/chemistry",
+    href: "/labs/daniell-cell-studio",
     icon: <BatteryCharging className="h-8 w-8" aria-hidden="true" />,
     gradient: "bg-gradient-to-br from-blue-200 via-cyan-100 to-amber-100",
-    locked: true,
   },
   {
     title: "Equilibrium Galaxy",

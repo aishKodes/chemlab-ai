@@ -1,5 +1,6 @@
 import {
   Atom,
+  BatteryCharging,
   Beaker,
   BrainCircuit,
   CheckCircle2,
@@ -63,6 +64,12 @@ const storySteps = [
 ];
 
 const featuredLabs = [
+  {
+    title: "Daniell Cell Studio",
+    description: "Build a galvanic cell and watch a reaction become electricity.",
+    href: "/labs/daniell-cell-studio",
+    icon: <BatteryCharging className="h-6 w-6 text-cyan-700" aria-hidden="true" />,
+  },
   {
     title: "Neutralization Studio",
     description: "Mix acid and base, find pH 7, then reveal salt crystals.",
