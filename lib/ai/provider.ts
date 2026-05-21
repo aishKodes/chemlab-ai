@@ -25,7 +25,7 @@ function mockResponse(messages: AiMessage[], model = "mock-master-alchem"): AiRe
     mock: true,
     inputTokens: estimateTokens(messages.map((message) => message.content).join("\n")),
     outputTokens: 90,
-    content: `Ah, young chemist — I can guide you. I am in practice mode until the full mind-orb is connected, but I can still help you explore the idea step by step.
+    content: `Ah, young chemist — I'm in practice mode until the full mind-orb is connected. Tell me the concept you want to explore, and I'll guide you step by step.
 
 Your current question is: ${lastUserMessage ?? "the concept you want to explore"}.
 

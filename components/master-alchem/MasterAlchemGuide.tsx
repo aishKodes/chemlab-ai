@@ -15,6 +15,10 @@ export function MasterAlchemGuide() {
   const script = getMasterAlchemScript(pathname);
   const explainHref = `/ai-tutor?prompt=${encodeURIComponent(script.explainPrompt)}`;
 
+  if (pathname.startsWith("/admin") || pathname.startsWith("/dev")) {
+    return null;
+  }
+
   return (
     <aside
       aria-label="Master Alchem page guide"
@@ -88,4 +92,3 @@ export function MasterAlchemGuide() {
     </aside>
   );
 }
-

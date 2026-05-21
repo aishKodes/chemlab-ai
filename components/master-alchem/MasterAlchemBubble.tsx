@@ -19,7 +19,7 @@ type MasterAlchemBubbleProps = {
 };
 
 export function MasterAlchemBubble({
-  mood = "speaking",
+  mood = "guide",
   eyebrow,
   message,
   actionLabel,

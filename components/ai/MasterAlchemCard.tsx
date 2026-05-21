@@ -10,7 +10,7 @@ export function MasterAlchemCard() {
     <Card className="relative overflow-hidden bg-gradient-to-br from-sky-100 via-white to-violet-100">
       <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-fuchsia-200/55 blur-2xl" />
       <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center">
-        <MasterAlchem mood="speaking" size="lg" className="shrink-0" />
+        <MasterAlchem mood="guide" size="md" className="shrink-0" />
         <div className="flex-1">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-black text-violet-700 shadow-sm">
             <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />

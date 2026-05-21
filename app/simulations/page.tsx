@@ -56,16 +56,16 @@ export default function SimulationsPage() {
       <Container className="space-y-10 pb-16">
         <MasterAlchemBubble
           mood="labGuide"
-          message="Start with Neutralization Studio if you want a real experiment flow, or Molecule Explorer if you want to see shape in 3D."
-          actionLabel="Start the flagship lab"
-          actionHref="/labs/neutralization-studio"
+          message="Start with the cinematic shell demo to understand the future lab flow, then practice smaller concepts in the prototype zone."
+          actionLabel="Open the lab shell demo"
+          actionHref="/labs/demo-cinematic-shell"
         />
 
-        <section aria-labelledby="featured-labs">
+        <section aria-labelledby="featured-experiences">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <Badge tone="green">Featured Labs</Badge>
-              <h2 id="featured-labs" className="mt-3 text-3xl font-black text-slate-950">
+              <Badge tone="green">Featured Experiences</Badge>
+              <h2 id="featured-experiences" className="mt-3 text-3xl font-black text-slate-950">
                 Best places to start
               </h2>
             </div>
@@ -89,19 +89,38 @@ export default function SimulationsPage() {
           </div>
         </section>
 
-        <section aria-labelledby="prototype-labs">
+        <section aria-labelledby="practice-simulations">
           <div>
-            <Badge tone="amber">Prototype Labs</Badge>
-            <h2 id="prototype-labs" className="mt-3 text-3xl font-black text-slate-950">
-              More experiments to try
+            <Badge tone="blue">Practice Simulations</Badge>
+            <h2 id="practice-simulations" className="mt-3 text-3xl font-black text-slate-950">
+              Quick concept practice
             </h2>
             <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-700">
-              These labs are still useful for practice, but they are not the flagship Chemlab experience yet.
+              Use these to warm up before deeper story labs.
             </p>
           </div>
           <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {simulations
-              .filter((simulation) => simulation.slug !== "atomic-builder")
+              .filter((simulation) => ["periodic-table", "equation-balancer", "mole-visualizer"].includes(simulation.slug))
+              .map((simulation) => (
+                <SimulationCard key={simulation.slug} simulation={simulation} />
+              ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="prototype-zone">
+          <div>
+            <Badge tone="amber">Prototype Zone</Badge>
+            <h2 id="prototype-zone" className="mt-3 text-3xl font-black text-slate-950">
+              Early labs we are improving
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-700">
+              These are early labs we are improving. Try them and watch them evolve.
+            </p>
+          </div>
+          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {simulations
+              .filter((simulation) => ["bonding-lab"].includes(simulation.slug))
               .map((simulation) => (
                 <SimulationCard key={simulation.slug} simulation={simulation} />
               ))}
@@ -111,4 +130,3 @@ export default function SimulationsPage() {
     </>
   );
 }
-

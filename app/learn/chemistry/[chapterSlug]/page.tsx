@@ -125,7 +125,7 @@ export default async function ChapterPage({ params }: PageProps) {
             </Card>
             <MasterAlchemBubble
               compact
-              mood="speaking"
+              mood="guide"
               eyebrow="Master Alchem"
               message={`Ask me to explain ${chemistryModule.title} using visual reasoning, hints, exam structure, or lab guide mode.`}
               actionLabel={`Ask about ${chemistryModule.title}`}

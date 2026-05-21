@@ -120,7 +120,7 @@ export function MoleVisualizer() {
           ))}
         </div>
         <MasterAlchemPointer
-          mood="speaking"
+          mood="guide"
           title="Master Alchem's scale trick"
           message="A mole is a counting bridge. First move from grams to moles, then from moles to the particle world."
           href="/ai-tutor"

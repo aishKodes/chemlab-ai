@@ -3,40 +3,39 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { TargetAndTransition } from "framer-motion";
 import { FlaskConical, Sparkles } from "lucide-react";
-import { useId } from "react";
+import Image from "next/image";
+import { useEffect, useId, useState } from "react";
 import type { MasterAlchemMood } from "@/components/master-alchem/MasterAlchemMood";
 import { masterAlchemMoodLabels } from "@/components/master-alchem/MasterAlchemMood";
+import { resolveMasterAlchemAsset } from "@/components/master-alchem/masterAlchemAssets";
 import { cn } from "@/lib/utils";
 
 type MasterAlchemProps = {
   mood?: MasterAlchemMood;
-  size?: "sm" | "md" | "lg" | "xl" | "hero";
+  size?: "xs" | "sm" | "md" | "lg" | "hero";
   message?: string;
   showBubble?: boolean;
   showGlow?: boolean;
-  speaking?: boolean;
   className?: string;
+  fit?: "contain" | "cover";
   label?: string;
 };
 
 const sizeClasses = {
-  sm: "h-28 w-28",
-  md: "h-44 w-44",
-  lg: "h-64 w-64",
-  xl: "h-80 w-80",
-  hero: "h-[22rem] w-[22rem] sm:h-[28rem] sm:w-[28rem] lg:h-[31rem] lg:w-[31rem]",
+  xs: "h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20",
+  sm: "h-24 w-24 sm:h-28 sm:w-28",
+  md: "h-36 w-36 sm:h-40 sm:w-40",
+  lg: "h-56 w-56 sm:h-64 sm:w-64",
+  hero: "h-[min(72vw,20rem)] w-[min(72vw,20rem)] sm:h-[24rem] sm:w-[24rem] lg:h-[28rem] lg:w-[28rem]",
 };
 
 const motionByMood: Record<MasterAlchemMood, TargetAndTransition> = {
   avatar: { y: [0, -5, 0] },
   celebrating: { y: [0, -16, 0], rotate: [-1.5, 1.5, -1.5], scale: [1, 1.025, 1] },
-  excited: { y: [0, -16, 0], rotate: [-1.5, 1.5, -1.5], scale: [1, 1.025, 1] },
-  guide: { y: [0, -10, 0], x: [0, 4, 0] },
+  guide: { y: [0, -9, 0], x: [0, 5, 0] },
   hero: { y: [0, -18, 0], rotate: [-1, 1, -1] },
   idle: { y: [0, -10, 0] },
   labGuide: { y: [0, -10, 0], x: [0, 4, 0] },
-  pointing: { y: [0, -9, 0], x: [0, 5, 0] },
-  speaking: { y: [0, -9, 0], x: [0, 5, 0] },
   thinking: { y: [0, -8, 0], scale: [1, 1.012, 1] },
   warning: { x: [0, -3, 3, -2, 2, 0], y: [0, -7, 0] },
 };
@@ -44,29 +43,20 @@ const motionByMood: Record<MasterAlchemMood, TargetAndTransition> = {
 const moodAura: Record<MasterAlchemMood, string> = {
   avatar: "from-cyan-300 via-blue-300 to-violet-300",
   celebrating: "from-amber-200 via-cyan-200 to-fuchsia-300",
-  excited: "from-lime-200 via-cyan-300 to-blue-300",
-  guide: "from-teal-200 via-sky-300 to-violet-300",
+  guide: "from-teal-300 via-sky-300 to-violet-300",
   hero: "from-cyan-300 via-violet-300 to-amber-200",
   idle: "from-cyan-300 via-blue-300 to-violet-300",
   labGuide: "from-teal-200 via-sky-300 to-violet-300",
-  pointing: "from-teal-300 via-sky-300 to-violet-300",
-  speaking: "from-teal-300 via-sky-300 to-violet-300",
   thinking: "from-violet-300 via-blue-300 to-cyan-200",
   warning: "from-amber-200 via-orange-200 to-violet-200",
 };
 
-function FallbackMasterAlchem({
-  mood,
-  speaking,
-}: {
-  mood: MasterAlchemMood;
-  speaking?: boolean;
-}) {
+function FallbackMasterAlchem({ mood }: { mood: MasterAlchemMood }) {
   const rawId = useId().replace(/:/g, "");
   const faceId = `alchemFace-${mood}-${rawId}`;
   const robeId = `alchemRobe-${mood}-${rawId}`;
   const mistId = `alchemMist-${mood}-${rawId}`;
-  const isSpeaking = speaking ?? (mood === "speaking" || mood === "pointing" || mood === "labGuide" || mood === "guide");
+  const isSpeaking = mood === "guide" || mood === "labGuide" || mood === "hero";
 
   return (
     <svg viewBox="0 0 360 420" role="img" aria-hidden="true" className="relative h-full w-full drop-shadow-2xl">
@@ -124,13 +114,19 @@ export function MasterAlchem({
   message,
   showBubble = false,
   showGlow = true,
-  speaking,
   className,
+  fit = "contain",
   label,
 }: MasterAlchemProps) {
   const reduced = useReducedMotion();
+  const [imageFailed, setImageFailed] = useState(false);
   const accessibleLabel = label ?? `Master Alchem, ${masterAlchemMoodLabels[mood].toLowerCase()}`;
-  const isAvatar = size === "sm" || mood === "avatar";
+  const isAvatar = size === "xs" || mood === "avatar";
+  const asset = resolveMasterAlchemAsset(mood);
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [asset?.src]);
 
   return (
     <motion.figure
@@ -138,7 +134,7 @@ export function MasterAlchem({
       className={cn("relative grid place-items-center", sizeClasses[size], className)}
       animate={reduced ? undefined : motionByMood[mood]}
       transition={{
-        duration: mood === "warning" ? 1.6 : mood === "celebrating" || mood === "excited" ? 3.4 : 5.2,
+        duration: mood === "warning" ? 1.6 : mood === "celebrating" ? 3.4 : 5.2,
         repeat: Infinity,
         ease: "easeInOut",
       }}
@@ -154,7 +150,7 @@ export function MasterAlchem({
         />
       ) : null}
 
-      {mood === "celebrating" || mood === "excited" || mood === "hero" ? (
+      {mood === "celebrating" || mood === "hero" ? (
         <motion.div
           className="absolute -right-1 top-8 grid h-10 w-10 place-items-center rounded-2xl border-2 border-white bg-amber-200 text-amber-700 shadow-lg"
           animate={reduced ? undefined : { rotate: [0, 12, -8, 0], y: [0, -8, 0] }}
@@ -164,7 +160,7 @@ export function MasterAlchem({
         </motion.div>
       ) : null}
 
-      {mood === "labGuide" || mood === "guide" || mood === "pointing" || mood === "speaking" ? (
+      {mood === "labGuide" || mood === "guide" ? (
         <motion.div
           className="absolute left-1 top-12 grid h-10 w-10 place-items-center rounded-2xl border-2 border-white bg-cyan-200 text-blue-700 shadow-lg"
           animate={reduced ? undefined : { x: [0, 8, 0], y: [0, -6, 0] }}
@@ -178,9 +174,22 @@ export function MasterAlchem({
         className={cn(
           "relative grid h-full w-full place-items-center overflow-hidden border-white/80 bg-white/35 shadow-2xl backdrop-blur-sm",
           isAvatar ? "rounded-full border-4" : "rounded-[2.4rem] border-[6px]",
+          fit === "contain" ? "p-1" : "p-0",
         )}
       >
-        <FallbackMasterAlchem mood={mood} speaking={speaking} />
+        {asset && !imageFailed ? (
+          <Image
+            src={asset.src}
+            alt={asset.alt}
+            fill
+            sizes="(max-width: 640px) 96px, 180px"
+            className="object-contain"
+            draggable={false}
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          <FallbackMasterAlchem mood={mood} />
+        )}
       </div>
 
       {showBubble && message ? (

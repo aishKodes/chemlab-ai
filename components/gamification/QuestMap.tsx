@@ -1,5 +1,6 @@
 import {
   Atom,
+  BatteryCharging,
   Beaker,
   Castle,
   Gem,
@@ -78,6 +79,18 @@ const worlds = [
     href: "/labs/cinematic-salt-lab",
     icon: <Waves className="h-8 w-8" aria-hidden="true" />,
     gradient: "bg-gradient-to-br from-teal-200 via-cyan-100 to-emerald-100",
+  },
+  {
+    title: "Electrochem City",
+    description: "Follow electrons through cells, electrodes, bridges, and voltage clues.",
+    progress: 0,
+    missions: 6,
+    status: "Phase 2",
+    xp: 820,
+    href: "/learn/chemistry",
+    icon: <BatteryCharging className="h-8 w-8" aria-hidden="true" />,
+    gradient: "bg-gradient-to-br from-blue-200 via-cyan-100 to-amber-100",
+    locked: true,
   },
   {
     title: "Equilibrium Galaxy",

@@ -148,7 +148,7 @@ export function PeriodicTableExplorer() {
         </Card>
 
         <MasterAlchemPointer
-          mood="excited"
+          mood="celebrating"
           title="Read the table like a map"
           message="Pick two neighbors and compare shells, group, and electronegativity. Trends become easier when you compare, not memorize."
           href="/ai-tutor"

@@ -22,7 +22,7 @@ export default function QuizIndexPage() {
       <Container className="pb-16">
         <MasterAlchemBubble
           compact
-          mood="excited"
+          mood="celebrating"
           eyebrow="Battle briefing"
           message="A boss battle is not a judgment. It is a signal. Win XP for what you know, then send weak spots to the Mistake Lab."
           actionLabel="Warm up with a hint"

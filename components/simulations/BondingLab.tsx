@@ -114,7 +114,7 @@ export function BondingLab() {
           ))}
         </div>
         <MasterAlchemPointer
-          mood="excited"
+          mood="celebrating"
           title="Master Alchem's bonding lens"
           message="Ask: are electrons transferred or shared? Then connect that answer to formula, charge, structure, and properties."
           href="/ai-tutor"

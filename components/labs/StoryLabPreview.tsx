@@ -1,4 +1,4 @@
-import { Beaker, CheckCircle2, FlaskConical, MessageCircle, Sparkles } from "lucide-react";
+import { Beaker, CheckCircle2, FlaskConical, MessageCircle, Sparkles, WandSparkles } from "lucide-react";
 import Image from "next/image";
 import { labSceneAssets } from "@/components/labs/labAssets";
 import { MasterAlchemBubble } from "@/components/master-alchem/MasterAlchemBubble";
@@ -7,24 +7,39 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Progress } from "@/components/ui/Progress";
 
-const storyLabs = [
+const featuredLabs = [
   {
-    title: "Acid-Base Titration: The Color Shift",
-    status: "Featured",
-    progress: 45,
-    scenes: ["briefing", "indicator choice", "drop-by-drop titration", "endpoint evidence", "boss check"],
-    reward: "+220 XP",
-    href: "/labs/neutralization-studio",
-    image: labSceneAssets.virtualLabBench,
+    title: "Cinematic Lab Shell",
+    status: "Phase 1 demo",
+    progress: 100,
+    scenes: ["story intro", "lab stage", "challenge check", "reward loop"],
+    reward: "+80 XP",
+    href: "/labs/demo-cinematic-shell",
+    image: labSceneAssets.magicalLabBackground,
+    icon: <WandSparkles className="h-7 w-7" aria-hidden="true" />,
   },
   {
-    title: "Salt Quest: Identify the Hidden Ion",
-    status: "Next quest",
-    progress: 25,
-    scenes: ["mystery sample", "flame clue", "precipitate test", "evidence board", "final claim"],
-    reward: "+260 XP",
+    title: "Neutralization Studio",
+    status: "Featured prototype",
+    progress: 62,
+    scenes: ["acid added", "indicator clue", "base added", "salt reveal"],
+    reward: "+160 XP",
     href: "/labs/neutralization-studio",
+    image: labSceneAssets.virtualLabBench,
+    icon: <FlaskConical className="h-7 w-7" aria-hidden="true" />,
+  },
+];
+
+const prototypeLabs = [
+  {
+    title: "Cinematic Salt Lab",
+    status: "Prototype",
+    progress: 35,
+    scenes: ["safe mixing", "pH clue", "evaporation", "salt crystal reveal"],
+    reward: "+120 XP",
+    href: "/labs/cinematic-salt-lab",
     image: labSceneAssets.magicalLabBackground,
+    icon: <FlaskConical className="h-7 w-7" aria-hidden="true" />,
   },
   {
     title: "Reaction Rescue: Balance the Lab Door",
@@ -34,34 +49,95 @@ const storyLabs = [
     reward: "+180 XP",
     href: "/simulations/equation-balancer",
     image: labSceneAssets.classroom,
+    icon: <FlaskConical className="h-7 w-7" aria-hidden="true" />,
   },
+];
+
+const comingSoon = [
+  "Daniell Cell Studio",
+  "Acid-Base Titration Studio",
+  "Qualitative Analysis Quest",
 ];
 
 export function StoryLabPreview() {
   return (
     <div className="space-y-6">
       <MasterAlchemBubble
-        mood="excited"
+        mood="celebrating"
         eyebrow="Story Lab Academy"
         message="A story lab is not just a worksheet. You enter a scene, make predictions, take lab actions, collect evidence, and explain what happened like a scientist."
-        actionLabel="Ask for lab guidance"
-        actionHref="/ai-tutor"
+        actionLabel="Open the shell demo"
+        actionHref="/labs/demo-cinematic-shell"
       />
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        {storyLabs.map((lab) => (
+      <LabSection title="Featured Labs" labs={featuredLabs} />
+      <LabSection
+        title="Prototype Labs"
+        description="These early labs are useful for practice, and we are improving them into richer experiments one by one."
+        labs={prototypeLabs}
+      />
+
+      <Card className="bg-gradient-to-br from-white via-violet-50 to-blue-100">
+        <Badge tone="slate">Coming Soon</Badge>
+        <h2 className="mt-3 text-2xl font-black text-slate-950">Next labs to build in Phase 2</h2>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          {comingSoon.map((lab) => (
+            <div key={lab} className="rounded-3xl border border-white bg-white/75 p-4 text-sm font-black text-slate-700 shadow-sm">
+              {lab}
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card className="bg-gradient-to-br from-violet-100 via-white to-blue-100">
+        <div className="grid gap-5 md:grid-cols-[auto_1fr_auto] md:items-center">
+          <span className="grid h-16 w-16 place-items-center rounded-[1.4rem] bg-white text-violet-600 shadow-lg">
+            <MessageCircle className="h-8 w-8" aria-hidden="true" />
+          </span>
+          <div>
+            <h2 className="text-2xl font-black text-slate-950">How story labs feel</h2>
+            <p className="mt-2 text-sm font-semibold leading-6 text-slate-700">
+              Every practical begins with a mystery, gives you safe choices, shows evidence, then asks you to explain what happened.
+            </p>
+          </div>
+          <Button href="/learn/chemistry" variant="secondary">
+            Choose a world
+          </Button>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function LabSection({
+  title,
+  description,
+  labs,
+}: {
+  title: string;
+  description?: string;
+  labs: typeof featuredLabs;
+}) {
+  return (
+    <section aria-labelledby={title.toLowerCase().replaceAll(" ", "-")}>
+      <div className="mb-4">
+        <Badge tone={title.includes("Prototype") ? "amber" : "green"}>{title}</Badge>
+        {description ? <p className="mt-3 max-w-2xl text-sm font-semibold leading-6 text-slate-700">{description}</p> : null}
+      </div>
+      <div className="grid gap-5 lg:grid-cols-2">
+        {labs.map((lab) => (
           <Card key={lab.title} className="relative overflow-hidden bg-gradient-to-br from-white via-cyan-50 to-amber-50 p-0">
             <div className="relative h-44 overflow-hidden">
               <Image
                 src={lab.image}
                 alt=""
                 fill
-                sizes="(min-width: 1024px) 33vw, 100vw"
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
               <span className="absolute left-4 top-4 grid h-14 w-14 place-items-center rounded-3xl border-2 border-white bg-gradient-to-br from-cyan-400 to-blue-500 text-white shadow-lg">
-                <FlaskConical className="h-7 w-7" aria-hidden="true" />
+                {lab.icon}
               </span>
               <Badge tone="amber" className="absolute right-4 top-4">
                 {lab.status}
@@ -69,12 +145,12 @@ export function StoryLabPreview() {
             </div>
             <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-cyan-300/35 blur-2xl" />
             <div className="relative p-5">
-              <h2 className="text-2xl font-black text-slate-950">{lab.title}</h2>
+              <h3 className="text-2xl font-black text-slate-950">{lab.title}</h3>
               <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">
-                Cinematic practical with dialogue, lab actions, reaction logic, success scene, and a short quiz scene.
+                Guided practical with dialogue, lab actions, visible evidence, a success scene, and a short boss check.
               </p>
               <div className="mt-5">
-                <Progress value={lab.progress} label="Prototype depth" />
+                <Progress value={lab.progress} label="Build depth" />
               </div>
               <div className="mt-5 space-y-2">
                 {lab.scenes.map((scene) => (
@@ -97,23 +173,6 @@ export function StoryLabPreview() {
           </Card>
         ))}
       </div>
-
-      <Card className="bg-gradient-to-br from-violet-100 via-white to-blue-100">
-        <div className="grid gap-5 md:grid-cols-[auto_1fr_auto] md:items-center">
-          <span className="grid h-16 w-16 place-items-center rounded-[1.4rem] bg-white text-violet-600 shadow-lg">
-            <MessageCircle className="h-8 w-8" aria-hidden="true" />
-          </span>
-          <div>
-            <h2 className="text-2xl font-black text-slate-950">How story labs feel</h2>
-            <p className="mt-2 text-sm font-semibold leading-6 text-slate-700">
-              Every practical begins with a mystery, gives you safe choices, shows evidence, then asks you to explain what happened.
-            </p>
-          </div>
-          <Button href="/learn/chemistry" variant="secondary">
-            Choose a world
-          </Button>
-        </div>
-      </Card>
-    </div>
+    </section>
   );
 }

@@ -16,7 +16,7 @@ type MasterAlchemDockProps = {
 };
 
 export function MasterAlchemDock({
-  mood = "speaking",
+  mood = "guide",
   title = "Master Alchem is watching the lab.",
   message = "Ask for a hint, a safer explanation, or a step-by-step path when a concept feels foggy.",
   className,

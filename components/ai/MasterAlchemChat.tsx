@@ -187,7 +187,7 @@ export function MasterAlchemChat() {
         <div className="border-b border-blue-100 bg-gradient-to-r from-blue-100 via-white to-fuchsia-100 p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <MasterAlchem mood={loading ? "thinking" : "speaking"} size="sm" />
+              <MasterAlchem mood={loading ? "thinking" : "guide"} size="sm" />
               <div>
                 <h1 className="text-xl font-black text-slate-950">Master Alchem</h1>
                 <p className="text-sm font-semibold text-slate-600">

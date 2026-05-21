@@ -40,7 +40,7 @@ const differentiators = [
   },
   {
     title: "Master Alchem guidance",
-    description: "Hints, lab thinking, feedback, and confidence repair from a warm AI mentor.",
+    description: "Get a hint, try the next step, and recover when a question feels stuck.",
     icon: <WandSparkles className="h-6 w-6 text-violet-600" aria-hidden="true" />,
   },
   {
@@ -50,7 +50,7 @@ const differentiators = [
   },
   {
     title: "Mastery loops",
-    description: "XP, quests, boss battles, and mistake repair reward real understanding.",
+    description: "Earn XP by understanding ideas, fixing mistakes, and beating chapter battles.",
     icon: <Trophy className="h-6 w-6 text-amber-600" aria-hidden="true" />,
   },
 ];
@@ -91,8 +91,8 @@ export function LandingSections() {
           <Reveal>
             <SectionHeading
               eyebrow="Why Chemlab is different"
-              title="A learning universe, not a worksheet with buttons."
-              description="Chemlab blends curiosity loops, guided discovery, instant feedback, and identity-based motivation so students feel like they are becoming chemists."
+              title="A learning universe you can actually explore."
+              description="Pick a mission, make a prediction, test it in a virtual lab, and let Master Alchem help you understand what changed."
             />
           </Reveal>
           <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -143,7 +143,7 @@ export function LandingSections() {
         <Container>
           <Reveal>
             <MasterAlchemDock
-              mood="speaking"
+              mood="guide"
               title="Meet Master Alchem, your magical chemistry mentor."
               message="He explains without judgment, gives hints before answers, guides safe lab thinking, and celebrates the exact moment a concept clicks."
             />
