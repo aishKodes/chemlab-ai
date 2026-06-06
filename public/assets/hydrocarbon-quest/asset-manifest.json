@@ -1,0 +1,139 @@
+{
+  "generatedAt": "2026-06-06T17:41:20.753Z",
+  "rawRoots": [
+    "public/assets/hydrocarbon-quest/raw",
+    "assets/hydrocarbon-quest/raw"
+  ],
+  "assets": {
+    "kabirReference": {
+      "key": "kabirReference",
+      "file": "kabir-reference",
+      "kind": "character",
+      "label": "Kabir reference",
+      "status": "ok",
+      "rawPath": "assets/hydrocarbon-quest/raw/kabir-reference.png",
+      "processedPath": "/assets/hydrocarbon-quest/processed/kabir-reference.png",
+      "webPath": "/assets/hydrocarbon-quest/web/kabir-reference.png",
+      "hasAlpha": true,
+      "checkerboardSuspected": false,
+      "reason": "Ready for live use."
+    },
+    "kabirConfused": {
+      "key": "kabirConfused",
+      "file": "kabir-confused",
+      "kind": "character",
+      "label": "Kabir confused",
+      "status": "ok",
+      "rawPath": "assets/hydrocarbon-quest/raw/kabir-confused.png",
+      "processedPath": "/assets/hydrocarbon-quest/processed/kabir-confused.png",
+      "webPath": "/assets/hydrocarbon-quest/web/kabir-confused.png",
+      "hasAlpha": true,
+      "checkerboardSuspected": false,
+      "reason": "Ready for live use."
+    },
+    "kabirSuccess": {
+      "key": "kabirSuccess",
+      "file": "kabir-success",
+      "kind": "character",
+      "label": "Kabir success",
+      "status": "ok",
+      "rawPath": "assets/hydrocarbon-quest/raw/kabir-success.png",
+      "processedPath": "/assets/hydrocarbon-quest/processed/kabir-success.png",
+      "webPath": "/assets/hydrocarbon-quest/web/kabir-success.png",
+      "hasAlpha": true,
+      "checkerboardSuspected": false,
+      "reason": "Ready for live use."
+    },
+    "aparnaReference": {
+      "key": "aparnaReference",
+      "file": "aparna-reference",
+      "kind": "character",
+      "label": "Aparna reference",
+      "status": "ok",
+      "rawPath": "assets/hydrocarbon-quest/raw/aparna-reference.png",
+      "processedPath": "/assets/hydrocarbon-quest/processed/aparna-reference.png",
+      "webPath": "/assets/hydrocarbon-quest/web/aparna-reference.png",
+      "hasAlpha": true,
+      "checkerboardSuspected": false,
+      "reason": "Ready for live use."
+    },
+    "aparnaExplaining": {
+      "key": "aparnaExplaining",
+      "file": "aparna-explaining",
+      "kind": "character",
+      "label": "Aparna explaining",
+      "status": "ok",
+      "rawPath": "assets/hydrocarbon-quest/raw/aparna-explaining.png",
+      "processedPath": "/assets/hydrocarbon-quest/processed/aparna-explaining.png",
+      "webPath": "/assets/hydrocarbon-quest/web/aparna-explaining.png",
+      "hasAlpha": true,
+      "checkerboardSuspected": false,
+      "reason": "Ready for live use."
+    },
+    "aparnaWarning": {
+      "key": "aparnaWarning",
+      "file": "aparna-warning",
+      "kind": "character",
+      "label": "Aparna warning",
+      "status": "ok",
+      "rawPath": "assets/hydrocarbon-quest/raw/aparna-warning.png",
+      "processedPath": "/assets/hydrocarbon-quest/processed/aparna-warning.png",
+      "webPath": "/assets/hydrocarbon-quest/web/aparna-warning.png",
+      "hasAlpha": true,
+      "checkerboardSuspected": false,
+      "reason": "Ready for live use."
+    },
+    "aparnaCelebrating": {
+      "key": "aparnaCelebrating",
+      "file": "aparna-celebrating",
+      "kind": "character",
+      "label": "Aparna celebrating",
+      "status": "ok",
+      "rawPath": "assets/hydrocarbon-quest/raw/aparna-celebrating.png",
+      "processedPath": "/assets/hydrocarbon-quest/processed/aparna-celebrating.png",
+      "webPath": "/assets/hydrocarbon-quest/web/aparna-celebrating.png",
+      "hasAlpha": true,
+      "checkerboardSuspected": false,
+      "reason": "Ready for live use."
+    },
+    "bgClassroom": {
+      "key": "bgClassroom",
+      "file": "bg-classroom-chemistry",
+      "kind": "background",
+      "label": "Chemistry classroom",
+      "status": "ok",
+      "rawPath": "assets/hydrocarbon-quest/raw/bg-classroom-chemistry.jpeg",
+      "processedPath": "/assets/hydrocarbon-quest/processed/bg-classroom-chemistry.webp",
+      "webPath": "/assets/hydrocarbon-quest/web/bg-classroom-chemistry.webp",
+      "hasAlpha": false,
+      "checkerboardSuspected": false,
+      "reason": "Ready for live use."
+    },
+    "bgKitchen": {
+      "key": "bgKitchen",
+      "file": "bg-kitchen-lpg",
+      "kind": "background",
+      "label": "Kitchen LPG",
+      "status": "ok",
+      "rawPath": "assets/hydrocarbon-quest/raw/bg-kitchen-lpg.jpeg",
+      "processedPath": "/assets/hydrocarbon-quest/processed/bg-kitchen-lpg.webp",
+      "webPath": "/assets/hydrocarbon-quest/web/bg-kitchen-lpg.webp",
+      "hasAlpha": false,
+      "checkerboardSuspected": false,
+      "reason": "Ready for live use."
+    },
+    "bgPuzzleBoard": {
+      "key": "bgPuzzleBoard",
+      "file": "bg-hydrocarbon-puzzle-board",
+      "kind": "background",
+      "label": "Hydrocarbon puzzle board",
+      "status": "ok",
+      "rawPath": "assets/hydrocarbon-quest/raw/bg-hydrocarbon-puzzle-board.jpeg",
+      "processedPath": "/assets/hydrocarbon-quest/processed/bg-hydrocarbon-puzzle-board.webp",
+      "webPath": "/assets/hydrocarbon-quest/web/bg-hydrocarbon-puzzle-board.webp",
+      "hasAlpha": false,
+      "checkerboardSuspected": false,
+      "reason": "Ready for live use."
+    }
+  }
+}

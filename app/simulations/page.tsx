@@ -30,9 +30,9 @@ export default function SimulationsPage() {
       <Container className="space-y-10 pb-16">
         <MasterAlchemBubble
           mood="labGuide"
-          message="Start with Daniell Cell Studio. Build the cell step by step, then follow the electrons through the wire."
-          actionLabel="Open Daniell Cell Studio"
-          actionHref="/labs/daniell-cell-studio"
+          message="Start with Hydrocarbon Naming Quest if IUPAC names feel confusing. Aparna ma'am turns carbon chains into a family-name game."
+          actionLabel="Open Hydrocarbon Naming Quest"
+          actionHref="/labs/hydrocarbon-naming-quest"
         />
 
         <section aria-labelledby="featured-experiences">

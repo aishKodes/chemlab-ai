@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "process:assets": "node scripts/process-assets.mjs"
+    "process:assets": "node scripts/process-assets.mjs",
+    "prepare:hydrocarbon-assets": "node scripts/prepare-hydrocarbon-assets.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

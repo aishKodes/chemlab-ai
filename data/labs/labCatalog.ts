@@ -12,7 +12,7 @@ export type LabCatalogEntry = {
   difficulty: "Beginner" | "Intermediate" | "Advanced";
   estimatedMinutes: number;
   concepts: string[];
-  thumbnailType: "electrochem" | "molecule" | "acid-base" | "practice" | "future";
+  thumbnailType: "electrochem" | "molecule" | "acid-base" | "organic" | "practice" | "future";
 };
 
 export const labCatalog: LabCatalogEntry[] = [
@@ -43,6 +43,20 @@ export const labCatalog: LabCatalogEntry[] = [
     estimatedMinutes: 8,
     concepts: ["geometry", "bond angle", "lone pair", "VSEPR", "ionic lattice"],
     thumbnailType: "molecule",
+  },
+  {
+    slug: "hydrocarbon-naming-quest",
+    title: "Hydrocarbon Naming Quest",
+    description: "Learn IUPAC naming by tracing carbon families, ranking branches, and serving the double-bond VIP.",
+    classLevel: "Class 11",
+    topic: "Organic chemistry",
+    status: "featured",
+    route: "/labs/hydrocarbon-naming-quest",
+    xp: 450,
+    difficulty: "Intermediate",
+    estimatedMinutes: 16,
+    concepts: ["IUPAC naming", "root word", "prefix", "suffix", "branch numbering", "alkene position"],
+    thumbnailType: "organic",
   },
   {
     slug: "neutralization-studio",

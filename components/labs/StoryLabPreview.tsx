@@ -19,9 +19,9 @@ export function StoryLabPreview() {
       <MasterAlchemBubble
         mood="celebrating"
         eyebrow="Story Lab Academy"
-        message="Start with Daniell Cell Studio. Build the cell, watch electrons move, and see how a reaction creates voltage."
-        actionLabel="Open Daniell Cell Studio"
-        actionHref="/labs/daniell-cell-studio"
+        message="Try Hydrocarbon Naming Quest. Trace carbon families, rank branches, and turn IUPAC names into a game."
+        actionLabel="Open Hydrocarbon Naming Quest"
+        actionHref="/labs/hydrocarbon-naming-quest"
       />
 
       <LabSection title="Featured Labs" labs={featuredLabs} />

@@ -65,6 +65,12 @@ const storySteps = [
 
 const featuredLabs = [
   {
+    title: "Hydrocarbon Naming Quest",
+    description: "Trace carbon families, rank branches, and serve the double-bond VIP.",
+    href: "/labs/hydrocarbon-naming-quest",
+    icon: <WandSparkles className="h-6 w-6 text-violet-700" aria-hidden="true" />,
+  },
+  {
     title: "Daniell Cell Studio",
     description: "Build a galvanic cell and watch a reaction become electricity.",
     href: "/labs/daniell-cell-studio",
@@ -81,12 +87,6 @@ const featuredLabs = [
     description: "Rotate real 3D molecules and understand shape by seeing it.",
     href: "/simulations/molecule-explorer",
     icon: <Atom className="h-6 w-6 text-violet-700" aria-hidden="true" />,
-  },
-  {
-    title: "Atomic Builder",
-    description: "Build atoms and see identity, mass, and charge respond.",
-    href: "/simulations/atomic-builder",
-    icon: <Beaker className="h-6 w-6 text-amber-700" aria-hidden="true" />,
   },
 ];
 
@@ -314,19 +314,18 @@ export function LandingSections() {
                 <div>
                   <Badge tone="cyan">Future of learning</Badge>
                   <h2 className="mt-5 text-4xl font-black text-slate-950">
-                    Chemlab is built for the moment learning becomes immersive.
+                    Chemlab grows with every quest students unlock.
                   </h2>
                   <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-slate-700">
-                    The foundation supports adaptive practice, teacher dashboards, richer story labs,
-                    generated character assets, and deeper simulation engines while keeping the student
-                    experience joyful and academically serious.
+                    More worlds, practicals, teacher-guided missions, and challenge paths are coming.
+                    The goal stays simple: make chemistry feel visible, safe, joyful, and serious.
                   </p>
                 </div>
                 <div className="grid gap-3">
                   {[
-                    ["Adaptive paths", <Rocket key="rocket" className="h-5 w-5 text-blue-600" />],
-                    ["Teacher cohorts", <GraduationCap key="grad" className="h-5 w-5 text-emerald-600" />],
-                    ["Cinematic labs", <Beaker key="beaker" className="h-5 w-5 text-violet-600" />],
+                    ["Personal quest paths", <Rocket key="rocket" className="h-5 w-5 text-blue-600" />],
+                    ["Teacher-guided missions", <GraduationCap key="grad" className="h-5 w-5 text-emerald-600" />],
+                    ["More cinematic labs", <Beaker key="beaker" className="h-5 w-5 text-violet-600" />],
                   ].map(([label, icon]) => (
                     <div key={String(label)} className="flex items-center gap-3 rounded-3xl bg-white/75 p-4 font-black text-slate-800 shadow-sm">
                       {icon}

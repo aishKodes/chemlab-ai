@@ -32,6 +32,8 @@ chemistry reasoning without making mistakes feel shameful.
   achievements, and cinematic learning sections
 - Chemistry Worlds quest map with chapter worlds and dynamic chapter routes
 - Story Labs route with Featured, Prototype, and Coming Soon sections
+- Hydrocarbon Naming Quest for IUPAC naming through an animated classroom story
+  and carbon-family puzzle game
 - Daniell Cell Studio flagship lab for Class 12 electrochemistry
 - Lab Engine components for single-screen guided experiments
 - Lab catalog for Featured, Prototype, and Coming Soon experiences
@@ -107,6 +109,31 @@ and bottom action bar in predictable safe zones so controls remain visible.
 Daniell Cell Studio now uses this shell for the experiment phase while keeping
 its PixiJS animated cell scene.
 
+## Hydrocarbon Naming Quest
+
+`/labs/hydrocarbon-naming-quest` teaches early IUPAC naming through a cinematic
+classroom story with Kabir and Aparna ma'am, followed by three game levels:
+
+- Butane: trace four carbons, choose `But`, choose `-ane`, and connect the name
+  to a blue LPG flame cutaway.
+- 2-Methylpentane: trace the five-carbon main chain, avoid the branch trap,
+  number from the correct side, and assemble `2-Methylpentane`.
+- But-1-ene: treat the double bond as the VIP guest, give it position 1, and
+  assemble `But-1-ene`.
+
+The molecule atoms, bonds, numbering badges, name blocks, slot puzzle, glows,
+and reward particles are drawn in code. Character and background artwork is
+loaded from processed assets, not raw uploads.
+
+Hydrocarbon Quest files:
+
+```text
+app/labs/hydrocarbon-naming-quest/page.tsx
+app/dev/hydrocarbon-assets/page.tsx
+components/labs/hydrocarbon-quest/
+scripts/prepare-hydrocarbon-assets.mjs
+```
+
 ## Lab Catalog
 
 Labs are listed in `data/labs/labCatalog.ts`. Each entry contains:
@@ -150,6 +177,7 @@ read bond-angle notes, and complete a short shape challenge.
 ```bash
 npm install
 npm run process:assets
+npm run prepare:hydrocarbon-assets
 npm run dev
 ```
 
@@ -158,6 +186,20 @@ Open `http://localhost:3000`.
 `npm run process:assets` is safe to rerun. It copies raw artwork into
 `public/_source-assets/`, writes cleaned review outputs into `public/processed/`,
 and refreshes `public/processed/asset-manifest.json`.
+
+`npm run prepare:hydrocarbon-assets` prepares the Hydrocarbon Naming Quest
+artwork. It scans both `public/assets/hydrocarbon-quest/raw/` and
+`assets/hydrocarbon-quest/raw/`, writes safe runtime outputs into
+`public/assets/hydrocarbon-quest/web/`, writes processed review outputs into
+`public/assets/hydrocarbon-quest/processed/`, and generates:
+
+```text
+public/assets/hydrocarbon-quest/asset-manifest.json
+components/labs/hydrocarbon-quest/hydrocarbonAssetManifest.ts
+```
+
+Use `/dev/hydrocarbon-assets` to preview each Hydrocarbon Quest asset on white,
+dark, blue, and gradient backgrounds before using it in the live quest.
 
 ## Environment Variables
 
