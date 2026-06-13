@@ -12,12 +12,14 @@ export function AparnaHintBox({
   mood = "thinking",
   warning = false,
   onReplay,
+  showCharacter = true,
   className,
 }: {
   message: string;
   mood?: HydrocarbonPose;
   warning?: boolean;
   onReplay?: () => void;
+  showCharacter?: boolean;
   className?: string;
 }) {
   return (
@@ -33,8 +35,8 @@ export function AparnaHintBox({
       )}
     >
       <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-cyan-300/40 blur-2xl" />
-      <div className="relative grid grid-cols-[4.5rem_1fr] gap-3">
-        <CharacterActor character="Aparna" pose={mood} speaking size="sm" side="right" />
+      <div className={cn("relative grid gap-3", showCharacter ? "grid-cols-[4.5rem_1fr]" : "grid-cols-1")}>
+        {showCharacter ? <CharacterActor character="Aparna" pose={mood} speaking size="sm" /> : null}
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-blue-700">
             <Lightbulb className="h-4 w-4" aria-hidden="true" />

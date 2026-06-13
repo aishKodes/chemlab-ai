@@ -3,10 +3,7 @@ import path from "node:path";
 import sharp from "sharp";
 
 const root = process.cwd();
-const rawRoots = [
-  path.join(root, "public/assets/hydrocarbon-quest/raw"),
-  path.join(root, "assets/hydrocarbon-quest/raw"),
-];
+const rawRoots = [path.join(root, "public/assets/hydrocarbon-quest/raw")];
 const outputRoot = path.join(root, "public/assets/hydrocarbon-quest");
 const processedDir = path.join(outputRoot, "processed");
 const webDir = path.join(outputRoot, "web");
@@ -24,6 +21,76 @@ const expectedAssets = [
   { key: "bgClassroom", file: "bg-classroom-chemistry", kind: "background", label: "Chemistry classroom" },
   { key: "bgKitchen", file: "bg-kitchen-lpg", kind: "background", label: "Kitchen LPG" },
   { key: "bgPuzzleBoard", file: "bg-hydrocarbon-puzzle-board", kind: "background", label: "Hydrocarbon puzzle board" },
+  {
+    key: "sceneFamilyAnalogy",
+    file: "scene-family-analogy",
+    kind: "scene",
+    label: "Family naming classroom scene",
+    ordinalHint: "(1)",
+  },
+  {
+    key: "sceneFullNameRule",
+    file: "scene-full-name-rule",
+    kind: "scene",
+    label: "Full-name rule classroom scene",
+    ordinalHint: "(2)",
+  },
+  {
+    key: "scenePortalLab",
+    file: "scene-portal-lab",
+    kind: "scene",
+    label: "Cinematic lab portal scene",
+    ordinalHint: "(3)",
+  },
+  {
+    key: "sceneCleanPuzzleBoard",
+    file: "scene-clean-puzzle-board",
+    kind: "scene",
+    label: "Clean puzzle board scene",
+    ordinalHint: "(4)",
+  },
+  {
+    key: "sceneButaneReference",
+    file: "scene-butane-reference",
+    kind: "reference",
+    label: "Butane level reference frame",
+    ordinalHint: "(5)",
+  },
+  {
+    key: "sceneMethylpentaneReference",
+    file: "scene-methylpentane-reference",
+    kind: "reference",
+    label: "2-Methylpentane level reference frame",
+    ordinalHint: "(6)",
+  },
+  {
+    key: "sceneButeneReference",
+    file: "scene-butene-reference",
+    kind: "reference",
+    label: "But-1-ene level reference frame",
+    ordinalHint: "(7)",
+  },
+  {
+    key: "sceneAdvancedReference",
+    file: "scene-advanced-reference",
+    kind: "reference",
+    label: "Senior-secondary challenge reference frame",
+    ordinalHint: "(8)",
+  },
+  {
+    key: "sceneQuestMap",
+    file: "scene-quest-map",
+    kind: "scene",
+    label: "Hydrocarbon quest map scene",
+    ordinalHint: "(9)",
+  },
+  {
+    key: "sceneFinalBadge",
+    file: "scene-final-badge",
+    kind: "scene",
+    label: "Hydrocarbon name master reward scene",
+    ordinalHint: "(10)",
+  },
 ];
 
 await fs.mkdir(processedDir, { recursive: true });
@@ -34,7 +101,7 @@ const rawFiles = await collectRawFiles();
 const assets = {};
 
 for (const spec of expectedAssets) {
-  const raw = findAsset(rawFiles, spec.file);
+  const raw = findAsset(rawFiles, spec);
   if (!raw) {
     assets[spec.key] = {
       ...spec,
@@ -44,6 +111,8 @@ for (const spec of expectedAssets) {
       webPath: "",
       hasAlpha: false,
       checkerboardSuspected: false,
+      width: 0,
+      height: 0,
       reason: "Expected asset was not found in public/assets/hydrocarbon-quest/raw or assets/hydrocarbon-quest/raw.",
     };
     continue;
@@ -77,6 +146,8 @@ for (const spec of expectedAssets) {
     webPath: `/assets/hydrocarbon-quest/web/${outBase}`,
     hasAlpha,
     checkerboardSuspected,
+    width: metadata.width ?? 0,
+    height: metadata.height ?? 0,
     reason: safeForLiveUse
       ? "Ready for live use."
       : isCharacter && !hasAlpha
@@ -116,8 +187,12 @@ async function collectRawFiles() {
   return files;
 }
 
-function findAsset(files, basename) {
-  const normalized = normalizeName(basename);
+function findAsset(files, spec) {
+  const normalized = normalizeName(spec.file);
+  if (spec.ordinalHint) {
+    const ordinalMatch = files.find((file) => path.basename(file).includes(spec.ordinalHint));
+    if (ordinalMatch) return ordinalMatch;
+  }
   return files.find((file) => normalizeName(path.basename(file, path.extname(file))) === normalized)
     ?? files.find((file) => normalizeName(path.basename(file, path.extname(file))).includes(normalized));
 }
@@ -173,7 +248,7 @@ export type HydrocarbonQuestAssetStatus = "ok" | "missing" | "unsafe";
 export type HydrocarbonQuestAsset = {
   key: string;
   file: string;
-  kind: "character" | "background";
+  kind: "character" | "background" | "scene" | "reference";
   label: string;
   status: HydrocarbonQuestAssetStatus;
   rawPath: string;
@@ -181,6 +256,8 @@ export type HydrocarbonQuestAsset = {
   webPath: string;
   hasAlpha: boolean;
   checkerboardSuspected: boolean;
+  width: number;
+  height: number;
   reason: string;
 };
 

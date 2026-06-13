@@ -20,8 +20,8 @@ function todayKey() {
 export function getDailyLimit(isAuthenticated: boolean) {
   const fallback = isAuthenticated ? 40 : 12;
   const envValue = isAuthenticated
-    ? process.env.AI_DAILY_LIMIT_FREE_USER
-    : process.env.AI_DAILY_LIMIT_ANONYMOUS;
+    ? process.env.FREE_USER_DAILY_AI_LIMIT || process.env.AI_DAILY_LIMIT_FREE_USER
+    : process.env.ANONYMOUS_DAILY_AI_LIMIT || process.env.AI_DAILY_LIMIT_ANONYMOUS;
   const parsed = Number(envValue);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }

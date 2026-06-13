@@ -25,14 +25,19 @@ export function MoleculeGraph({
   const glowId = `hydrocarbon-glow-${level.id}`;
   const bondGradientId = `hydrocarbon-bond-${level.id}`;
   const atomGradientId = `hydrocarbon-atom-${level.id}`;
+  const hydrogens = level.molecule.showHydrogens ? buildHydrogenAtoms(level) : [];
+  const firstMultipleBond = level.molecule.bonds.find((bond) => bond.type === "double" || bond.type === "triple");
+  const firstMultipleBondFrom = firstMultipleBond ? atomsById.get(firstMultipleBond.from) : undefined;
+  const firstMultipleBondTo = firstMultipleBond ? atomsById.get(firstMultipleBond.to) : undefined;
 
   return (
-    <svg
-      className="h-full min-h-[18rem] w-full overflow-visible"
-      viewBox="0 0 800 430"
-      role="img"
-      aria-label={`${level.targetName} molecule puzzle`}
-    >
+    <div className="relative h-full min-h-[18rem] w-full">
+      <svg
+        className="absolute inset-0 h-full w-full overflow-visible"
+        viewBox="0 0 800 430"
+        role="img"
+        aria-label={`${level.targetName} molecule puzzle`}
+      >
       <defs>
         <filter id={glowId} x="-80%" y="-80%" width="260%" height="260%">
           <feGaussianBlur stdDeviation="7" result="blur" />
@@ -61,6 +66,16 @@ export function MoleculeGraph({
       <rect x="28" y="42" width="744" height="342" rx="34" fill="rgba(255,255,255,0.58)" stroke="rgba(255,255,255,0.82)" />
       <path d="M78 350 C180 310 275 386 400 350 S625 310 728 354" fill="none" stroke="rgba(14,165,233,0.18)" strokeWidth="18" />
 
+      {hydrogens.map((hydrogen) => (
+        <g key={hydrogen.id}>
+          <line x1={hydrogen.parent.x} y1={hydrogen.parent.y} x2={hydrogen.x} y2={hydrogen.y} stroke="rgba(226,232,240,0.92)" strokeWidth="3" strokeLinecap="round" />
+          <circle cx={hydrogen.x} cy={hydrogen.y} r="18" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="3" />
+          <text x={hydrogen.x} y={hydrogen.y + 6} textAnchor="middle" className="pointer-events-none fill-slate-600 text-base font-black">
+            H
+          </text>
+        </g>
+      ))}
+
       {level.molecule.bonds.map((bond) => (
         <BondLine
           key={`${bond.from}-${bond.to}`}
@@ -68,13 +83,13 @@ export function MoleculeGraph({
           from={atomsById.get(bond.from)}
           to={atomsById.get(bond.to)}
           highlighted={isBondHighlighted(bond, selectedAtoms, level.correctChainSequence)}
-          vip={level.id === "butene" && bond.type === "double"}
-          warning={numberingOption && !numberingOption.correct && level.id === "butene" && bond.type === "double"}
+          vip={bond.type === "double" || bond.type === "triple"}
+          warning={Boolean(numberingOption && !numberingOption.correct && (bond.type === "double" || bond.type === "triple"))}
           gradientId={bondGradientId}
         />
       ))}
 
-      {level.molecule.atoms.map((atom, index) => {
+      {level.molecule.atoms.map((atom) => {
         const selected = selectedAtoms.includes(atom.id);
         const wrong = wrongAtoms.includes(atom.id);
         const inMainChain = level.correctChainSequence.includes(atom.id);
@@ -98,17 +113,7 @@ export function MoleculeGraph({
               </motion.g>
             ) : null}
             <motion.g
-              role="button"
-              tabIndex={0}
-              aria-label={`Select carbon ${index + 1}${atom.id.startsWith("b") ? " branch" : ""}`}
-              onClick={() => onAtomClick?.(atom.id)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  onAtomClick?.(atom.id);
-                }
-              }}
-              className="cursor-pointer outline-none"
+              className="pointer-events-none"
               initial={false}
               animate={{
                 scale: wrong ? [1, 1.16, 0.96, 1] : selected || (glowing && inMainChain) ? [1, 1.06, 1] : 1,
@@ -118,8 +123,8 @@ export function MoleculeGraph({
               <circle
                 cx={atom.x}
                 cy={atom.y}
-                r={atom.id.startsWith("b") ? 35 : 40}
-                fill={wrong ? "#fecdd3" : selected ? "#bbf7d0" : `url(#${atomGradientId})`}
+                r={atom.id.startsWith("m") || atom.id.startsWith("e") ? 34 : 40}
+                fill={wrong ? "#fecdd3" : selected ? "#bbf7d0" : atomFill(atom.role, atomGradientId)}
                 stroke={wrong ? "#e11d48" : selected ? "#16a34a" : "#ffffff"}
                 strokeWidth="5"
                 filter={selected || glowing ? `url(#${glowId})` : undefined}
@@ -135,25 +140,112 @@ export function MoleculeGraph({
         );
       })}
 
-      {level.id === "methylpentane" ? (
+      {level.molecule.atoms.some((atom) => atom.role === "methyl") ? (
         <motion.g initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <path d="M250 178 C218 162 218 130 245 103" fill="none" stroke="#f59e0b" strokeWidth="4" strokeDasharray="8 9" />
           <text x="315" y="118" className="fill-amber-800 text-base font-black">
-            side cousin
+            methyl cousin
           </text>
         </motion.g>
       ) : null}
 
-      {level.id === "butene" ? (
+      {firstMultipleBondFrom && firstMultipleBondTo ? (
         <motion.g animate={{ opacity: [0.62, 1, 0.62], scale: [1, 1.02, 1] }} transition={{ duration: 1.8, repeat: Infinity }}>
-          <path d="M188 170 C240 126 302 126 354 170" fill="none" stroke="#f59e0b" strokeWidth="4" strokeLinecap="round" />
-          <text x="215" y="116" className={cn("fill-fuchsia-700 text-base font-black", numberingOption && !numberingOption.correct && "fill-rose-700")}>
-            double-bond VIP
+          <path
+            d={`M${firstMultipleBondFrom.x} ${firstMultipleBondFrom.y - 80} C${(firstMultipleBondFrom.x + firstMultipleBondTo.x) / 2} ${firstMultipleBondFrom.y - 128} ${(firstMultipleBondFrom.x + firstMultipleBondTo.x) / 2} ${firstMultipleBondTo.y - 128} ${firstMultipleBondTo.x} ${firstMultipleBondTo.y - 80}`}
+            fill="none"
+            stroke={firstMultipleBond?.type === "triple" ? "#8b5cf6" : "#f59e0b"}
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          <text x={(firstMultipleBondFrom.x + firstMultipleBondTo.x) / 2 - 70} y={Math.min(firstMultipleBondFrom.y, firstMultipleBondTo.y) - 104} className={cn("fill-fuchsia-700 text-base font-black", numberingOption && !numberingOption.correct && "fill-rose-700")}>
+            {firstMultipleBond?.type === "triple" ? "triple-bond trail" : "double-bond VIP"}
           </text>
         </motion.g>
       ) : null}
-    </svg>
+      </svg>
+      <div className="absolute inset-0 z-20">
+        {level.molecule.atoms.map((atom, index) => (
+          <button
+            key={atom.id}
+            type="button"
+            aria-label={`Select carbon ${index + 1}${atom.id.startsWith("b") || atom.id.startsWith("e") ? " branch" : ""}`}
+            onClick={() => onAtomClick?.(atom.id)}
+            className="absolute h-16 w-16 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-transparent outline-none transition focus-visible:ring-4 focus-visible:ring-blue-500/70"
+            style={{ left: `${(atom.x / 800) * 100}%`, top: `${(atom.y / 430) * 100}%` }}
+          />
+        ))}
+      </div>
+    </div>
   );
+}
+
+function atomFill(role: MoleculeAtom["role"], atomGradientId: string) {
+  if (role === "methyl") return "#fb923c";
+  if (role === "ethyl") return "#4ade80";
+  if (role === "other") return "#c084fc";
+  return `url(#${atomGradientId})`;
+}
+
+function buildHydrogenAtoms(level: HydrocarbonLevel) {
+  const atomsById = new Map(level.molecule.atoms.map((atom) => [atom.id, atom]));
+  const bondsByAtom = new Map<string, MoleculeBond[]>();
+  for (const bond of level.molecule.bonds) {
+    bondsByAtom.set(bond.from, [...(bondsByAtom.get(bond.from) ?? []), bond]);
+    bondsByAtom.set(bond.to, [...(bondsByAtom.get(bond.to) ?? []), bond]);
+  }
+
+  return level.molecule.atoms.flatMap((atom) => {
+    if (atom.element !== "C") return [];
+    const bonds = bondsByAtom.get(atom.id) ?? [];
+    const valenceUsed = bonds.reduce((sum, bond) => sum + bondOrder(bond.type), 0);
+    const hydrogenCount = Math.max(0, 4 - valenceUsed);
+    const usedVectors = bonds
+      .map((bond) => atomsById.get(bond.from === atom.id ? bond.to : bond.from))
+      .filter(Boolean)
+      .map((neighbor) => normalize({ x: (neighbor?.x ?? atom.x) - atom.x, y: (neighbor?.y ?? atom.y) - atom.y }));
+    const directions = chooseHydrogenDirections(usedVectors, hydrogenCount);
+    return directions.map((direction, index) => ({
+      id: `${atom.id}-h${index + 1}`,
+      parent: atom,
+      x: atom.x + direction.x * 68,
+      y: atom.y + direction.y * 68,
+    }));
+  });
+}
+
+function bondOrder(type: MoleculeBond["type"]) {
+  if (type === "double") return 2;
+  if (type === "triple") return 3;
+  return 1;
+}
+
+function normalize(vector: { x: number; y: number }) {
+  const length = Math.hypot(vector.x, vector.y) || 1;
+  return { x: vector.x / length, y: vector.y / length };
+}
+
+function chooseHydrogenDirections(usedVectors: Array<{ x: number; y: number }>, count: number) {
+  const candidates = [
+    { x: 0, y: -1 },
+    { x: 0, y: 1 },
+    { x: -0.72, y: -0.72 },
+    { x: 0.72, y: -0.72 },
+    { x: -0.72, y: 0.72 },
+    { x: 0.72, y: 0.72 },
+    { x: -1, y: 0 },
+    { x: 1, y: 0 },
+  ].map(normalize);
+
+  const ranked = candidates
+    .map((candidate) => ({
+      candidate,
+      score: usedVectors.reduce((max, used) => Math.max(max, candidate.x * used.x + candidate.y * used.y), -1),
+    }))
+    .sort((a, b) => a.score - b.score)
+    .map((item) => item.candidate);
+
+  return ranked.slice(0, count);
 }
 
 function BondLine({
@@ -197,6 +289,19 @@ function BondLine({
       >
         <line {...baseProps} x1={from.x + offsetX} y1={from.y + offsetY} x2={to.x + offsetX} y2={to.y + offsetY} stroke={warning ? "#fb7185" : "#d946ef"} strokeWidth="8" />
         <line {...baseProps} x1={from.x - offsetX} y1={from.y - offsetY} x2={to.x - offsetX} y2={to.y - offsetY} stroke={warning ? "#fb7185" : "#f59e0b"} strokeWidth="8" />
+      </motion.g>
+    );
+  }
+
+  if (bond.type === "triple") {
+    return (
+      <motion.g
+        animate={vip ? { opacity: [0.78, 1, 0.78] } : undefined}
+        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <line {...baseProps} stroke="#8b5cf6" strokeWidth="7" />
+        <line {...baseProps} x1={from.x + offsetX} y1={from.y + offsetY} x2={to.x + offsetX} y2={to.y + offsetY} stroke="#c084fc" strokeWidth="6" />
+        <line {...baseProps} x1={from.x - offsetX} y1={from.y - offsetY} x2={to.x - offsetX} y2={to.y - offsetY} stroke="#6d28d9" strokeWidth="6" />
       </motion.g>
     );
   }

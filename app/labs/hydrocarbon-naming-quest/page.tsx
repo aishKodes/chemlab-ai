@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HydrocarbonNamingQuest } from "@/components/labs/hydrocarbon-quest/HydrocarbonNamingQuest";
+import { HydrocarbonGameEngine } from "@/components/labs/hydrocarbon-quest/HydrocarbonGameEngine";
 
 export const metadata: Metadata = {
   title: "Hydrocarbon Naming Quest",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function HydrocarbonNamingQuestPage() {
-  return <HydrocarbonNamingQuest />;
+  return <HydrocarbonGameEngine />;
 }

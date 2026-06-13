@@ -15,10 +15,33 @@ export function MasterAlchemGuide() {
   const script = getMasterAlchemScript(pathname);
   const explainHref = `/ai-tutor?prompt=${encodeURIComponent(script.explainPrompt)}`;
   const isLabRoute = pathname.startsWith("/labs") || pathname.startsWith("/simulations");
+  const simulationCompactMode = pathname.startsWith("/labs/redox-transfer-kitchen") || pathname.startsWith("/labs/hydrocarbon-naming-quest");
   const placement = isLabRoute ? "lab-safe" : "bottom-right";
 
   if (pathname.startsWith("/admin") || pathname.startsWith("/dev")) {
     return null;
+  }
+
+  if (simulationCompactMode) {
+    return (
+      <aside
+        aria-label="Master Alchem compact guide"
+        data-placement="simulation-compact"
+        className="pointer-events-none fixed bottom-[84px] right-3 z-30 sm:bottom-24"
+      >
+        <Link
+          href={explainHref}
+          title="Ask Master Alchem"
+          aria-label="Ask Master Alchem"
+          className="group pointer-events-auto grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-white/92 shadow-xl shadow-blue-950/18 backdrop-blur transition hover:-translate-y-0.5 hover:bg-cyan-50 sm:h-10 sm:w-10"
+        >
+          <MasterAlchem mood={script.mood} size="xs" showGlow={false} className="scale-[0.66]" />
+          <span className="pointer-events-none absolute right-11 top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-full bg-slate-950 px-3 py-1 text-xs font-black text-white shadow-lg group-hover:block">
+            Ask Master Alchem
+          </span>
+        </Link>
+      </aside>
+    );
   }
 
   return (

@@ -2,6 +2,7 @@
 
 import { hydrocarbonQuestAssetManifest } from "@/components/labs/hydrocarbon-quest/hydrocarbonAssetManifest";
 import type { HydrocarbonQuestAsset } from "@/components/labs/hydrocarbon-quest/hydrocarbonAssetManifest";
+import { allHydrocarbonRoleAssets } from "@/components/labs/hydrocarbon-quest/assetManifest";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
@@ -15,6 +16,7 @@ const previewBackgrounds = [
 
 export function HydrocarbonAssetDebug() {
   const assets = Object.values(hydrocarbonQuestAssetManifest.assets) as HydrocarbonQuestAsset[];
+  const rolesByKey = new Map<string, (typeof allHydrocarbonRoleAssets)[number]>(allHydrocarbonRoleAssets.map((asset) => [asset.key, asset]));
 
   return (
     <Container className="py-10">
@@ -22,21 +24,27 @@ export function HydrocarbonAssetDebug() {
         <Badge tone="amber">Development only</Badge>
         <h1 className="mt-3 text-4xl font-black text-slate-950">Hydrocarbon Quest Asset Check</h1>
         <p className="mt-3 max-w-3xl text-sm font-bold leading-6 text-slate-700">
-          Character assets must look clean on every background before they are used in the live quest. Raw assets are listed for traceability, but the simulation uses processed web assets.
+          The live quest uses processed web assets, never raw uploads. Current production frames are integrated cinematic scenes, while missing transparent character cutouts are kept visible here for future asset upgrades.
         </p>
       </div>
       <div className="grid gap-5">
         {assets.map((asset) => (
           <Card key={asset.key} className="bg-white">
+            {(() => {
+              const role = rolesByKey.get(asset.key);
+              return (
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h2 className="text-2xl font-black text-slate-950">{asset.label}</h2>
                 <p className="mt-1 break-all text-xs font-bold text-slate-500">{asset.rawPath}</p>
+                {role ? <p className="mt-2 text-xs font-black uppercase tracking-[0.14em] text-blue-700">Role: {role.role}</p> : null}
               </div>
               <Badge tone={asset.status === "ok" ? "green" : asset.status === "missing" ? "rose" : "amber"}>
                 {asset.status === "ok" ? "ok" : asset.status === "missing" ? "missing" : "checkerboard suspected"}
               </Badge>
             </div>
+              );
+            })()}
             <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {previewBackgrounds.map((background) => (
                 <div key={background.label} className="overflow-hidden rounded-3xl border border-slate-200">
@@ -58,9 +66,12 @@ export function HydrocarbonAssetDebug() {
               ))}
             </div>
             <div className="mt-4 grid gap-2 rounded-3xl bg-slate-50 p-4 text-sm font-bold text-slate-700 md:grid-cols-3">
-              <p>Live use: {asset.status === "ok" ? "yes" : "no"}</p>
+              <p>Live use: {rolesByKey.has(asset.key) && asset.status === "ok" ? "yes" : "no"}</p>
               <p>Transparency: {asset.hasAlpha ? "has alpha" : "solid background"}</p>
+              <p>Size: {asset.width} x {asset.height}</p>
               <p>Checkerboard: {asset.checkerboardSuspected ? "suspected" : "not detected"}</p>
+              <p>Suggested role: {rolesByKey.get(asset.key)?.role ?? "future transparent cutout slot"}</p>
+              <p>Broken/missing: {asset.status === "missing" ? "yes" : "no"}</p>
             </div>
           </Card>
         ))}

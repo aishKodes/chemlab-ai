@@ -14,6 +14,7 @@ export function NamingSlots({
   enabled,
   onPlace,
   onRemove,
+  compact = false,
 }: {
   level: HydrocarbonLevel;
   slots: SlotMap;
@@ -22,29 +23,30 @@ export function NamingSlots({
   enabled: boolean;
   onPlace: (slotId: string, blockId: string) => void;
   onRemove: (slotId: string) => void;
+  compact?: boolean;
 }) {
   const placedName = assembleName(level, slots);
 
   return (
-    <section aria-labelledby="naming-slots" className="rounded-[1.4rem] border-2 border-white bg-white/84 p-3 shadow-lg backdrop-blur-md">
+    <section aria-labelledby="naming-slots" className={cn("rounded-[1.4rem] border-2 border-white bg-white/84 shadow-lg backdrop-blur-md", compact ? "p-2" : "p-3")}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h2 id="naming-slots" className="text-sm font-black text-slate-950">
+          <h2 id="naming-slots" className={cn("font-black text-slate-950", compact ? "text-xs" : "text-sm")}>
             Family name slots
           </h2>
-          <p className="mt-1 text-xs font-bold text-slate-600">First Name + Middle Name + Surname</p>
+          {compact ? null : <p className="mt-1 text-xs font-bold text-slate-600">First Name + Middle Name + Surname</p>}
         </div>
         <motion.div
           key={placedName || "empty"}
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-black text-white shadow-lg"
+          className={cn("rounded-full bg-slate-950 font-black text-white shadow-lg", compact ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm")}
         >
           {placedName || "Build the name"}
         </motion.div>
       </div>
 
-      <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+      <div className={cn("grid gap-2", compact ? "mt-2 grid-cols-2 xl:grid-cols-4" : "mt-3 sm:grid-cols-2 xl:grid-cols-4")}>
         {level.slots.map((slot) => {
           const blockId = slots[slot.id];
           const block = blockId ? getBlockById(level.availableBlocks, blockId) : undefined;
@@ -53,8 +55,12 @@ export function NamingSlots({
             <motion.div
               key={slot.id}
               animate={failed ? { x: [0, -8, 8, -4, 0] } : undefined}
+              role="button"
+              tabIndex={enabled && selectedBlockId ? 0 : -1}
+              aria-label={`Place selected block in ${slot.label}`}
               className={cn(
-                "min-h-[6.25rem] rounded-[1.2rem] border-2 border-dashed bg-white/72 p-3 transition",
+                "rounded-[1.2rem] border-2 border-dashed bg-white/72 transition",
+                compact ? "min-h-[4.2rem] p-2" : "min-h-[6.25rem] p-3",
                 failed ? "border-rose-300 bg-rose-50" : "border-cyan-200",
                 enabled && selectedBlockId && "hover:border-blue-400 hover:bg-blue-50/80",
               )}
@@ -69,11 +75,18 @@ export function NamingSlots({
               onClick={() => {
                 if (enabled && selectedBlockId) onPlace(slot.id, selectedBlockId);
               }}
+              onKeyDown={(event) => {
+                if (!enabled || !selectedBlockId) return;
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  onPlace(slot.id, selectedBlockId);
+                }
+              }}
             >
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-blue-700">{slot.label}</p>
-                  <p className="mt-1 text-xs font-bold leading-4 text-slate-500">{slot.helper}</p>
+                  <p className="text-xs font-black uppercase tracking-[0.12em] text-blue-700">{compact ? getCompactSlotLabel(slot.id) : slot.label}</p>
+                  {compact ? null : <p className="mt-1 text-xs font-bold leading-4 text-slate-500">{slot.helper}</p>}
                 </div>
                 {block ? (
                   <button
@@ -89,7 +102,7 @@ export function NamingSlots({
                   </button>
                 ) : null}
               </div>
-              {block ? <PlacedBlock block={block} /> : <div className="mt-3 rounded-2xl bg-slate-50 px-3 py-2 text-sm font-black text-slate-400">Drop here</div>}
+              {block ? <PlacedBlock block={block} compact={compact} /> : <div className={cn("rounded-2xl bg-slate-50 px-3 py-2 font-black text-slate-400", compact ? "mt-1 text-xs" : "mt-3 text-sm")}>{compact ? "Tap slot" : "Drop here"}</div>}
             </motion.div>
           );
         })}
@@ -98,12 +111,25 @@ export function NamingSlots({
   );
 }
 
-function PlacedBlock({ block }: { block: NamingBlock }) {
+function getCompactSlotLabel(slotId: string) {
+  if (slotId === "rank") return "Rank";
+  if (slotId === "ethylRank") return "3-";
+  if (slotId === "ethylPrefix") return "Ethyl";
+  if (slotId === "methylRank") return "2-";
+  if (slotId === "methylPrefix") return "Methyl";
+  if (slotId === "doubleRank") return "C=C Seat";
+  if (slotId === "prefix") return "Prefix";
+  if (slotId === "root") return "Root";
+  if (slotId === "suffix") return "Suffix";
+  return slotId;
+}
+
+function PlacedBlock({ block, compact }: { block: NamingBlock; compact?: boolean }) {
   return (
     <motion.div
       initial={{ scale: 0.88, y: 8, opacity: 0 }}
       animate={{ scale: 1, y: 0, opacity: 1 }}
-      className={cn("mt-3 rounded-2xl border-2 px-3 py-2 text-center text-base font-black shadow-md", blockClass(block.kind))}
+      className={cn("rounded-2xl border-2 text-center font-black shadow-md", compact ? "mt-1 px-2 py-1 text-sm" : "mt-3 px-3 py-2 text-base", blockClass(block.kind))}
     >
       {block.label}
     </motion.div>

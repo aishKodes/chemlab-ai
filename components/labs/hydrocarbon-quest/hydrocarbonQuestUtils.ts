@@ -18,12 +18,12 @@ export function getBlockById(blocks: NamingBlock[], blockId?: string) {
 }
 
 export function assembleName(level: HydrocarbonLevel, slots: SlotMap) {
+  if (checkSlotSolution(level, slots)) return level.targetName;
+
   const labels = level.slots
     .map((slot) => getBlockById(level.availableBlocks, slots[slot.id])?.label ?? "")
     .filter(Boolean);
 
-  if (level.id === "methylpentane") return labels.join("");
-  if (level.id === "butene") return `${labels[0] ?? ""}-${labels[1] ?? ""}${labels[2] ?? ""}`;
   return labels.join("");
 }
 

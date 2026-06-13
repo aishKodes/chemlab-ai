@@ -1,14 +1,25 @@
 import type { ReactNode } from "react";
+import type { Molecule3DData } from "@/components/labs/hydrocarbon-quest/3d/molecule3DTypes";
 
-export type HydrocarbonLevelId = "butane" | "methylpentane" | "butene";
+export type HydrocarbonLevelId = string;
 
-export type HydrocarbonQuestMode = "story" | "level" | "success" | "final";
+export type HydrocarbonModuleId =
+  | "family_lineage"
+  | "cousin_branches"
+  | "vip_double_bonds"
+  | "triple_bond_trails"
+  | "numbering_arena"
+  | "senior_secondary_boss";
+
+export type HydrocarbonQuestMode = "story" | "map" | "level" | "success" | "final";
 
 export type HydrocarbonCharacter = "Kabir" | "Aparna" | "Master Alchem";
 
 export type HydrocarbonPose =
   | "idle"
   | "speaking"
+  | "listening"
+  | "explaining"
   | "thinking"
   | "confused"
   | "warning"
@@ -27,6 +38,7 @@ export type DialogueLine = {
 export type MoleculeAtom = {
   id: string;
   element: "C" | "H";
+  role?: "main" | "methyl" | "ethyl" | "other" | "hydrogen";
   label?: string;
   x: number;
   y: number;
@@ -35,13 +47,14 @@ export type MoleculeAtom = {
 export type MoleculeBond = {
   from: string;
   to: string;
-  type: "single" | "double";
+  type: "single" | "double" | "triple";
 };
 
 export type MoleculeGraphData = {
   id: string;
   atoms: MoleculeAtom[];
   bonds: MoleculeBond[];
+  showHydrogens?: boolean;
 };
 
 export type NamingSlot = {
@@ -64,15 +77,37 @@ export type NumberingOption = {
   correct: boolean;
 };
 
+export type HydrocarbonTask =
+  | {
+      type: "trace_main_chain";
+      correctSequence: string[];
+      wrongHint: string;
+    }
+  | {
+      type: "choose_numbering_direction";
+      correctDirection: "left_to_right" | "right_to_left" | "none";
+      wrongHint: string;
+    }
+  | {
+      type: "assemble_name";
+      availableBlocks: string[];
+      correctBlocks: string[];
+    };
+
 export type HydrocarbonLevel = {
   id: HydrocarbonLevelId;
+  moduleId: HydrocarbonModuleId;
   title: string;
   subtitle: string;
   targetName: string;
   formula: string;
+  difficulty: "beginner" | "beginner-plus" | "intermediate" | "senior-secondary";
+  status: "playable" | "locked" | "coming-soon";
   xp: number;
   learningGoal: string;
   molecule: MoleculeGraphData;
+  molecule3D?: Molecule3DData;
+  tasks: HydrocarbonTask[];
   correctChainSequence: string[];
   chainCompleteMessage: string;
   availableBlocks: NamingBlock[];
@@ -83,6 +118,8 @@ export type HydrocarbonLevel = {
   numberingOptions?: NumberingOption[];
   successMessage: string;
   successKind: "flame" | "chain" | "badge";
+  explanation: string;
+  previewAssetRole?: string;
 };
 
 export type SlotMap = Record<string, string | undefined>;

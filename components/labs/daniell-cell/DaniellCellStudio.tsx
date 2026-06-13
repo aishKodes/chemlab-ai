@@ -26,6 +26,7 @@ import type { MasterAlchemMood } from "@/components/master-alchem/MasterAlchemMo
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { trackSimulationComplete, trackSimulationEventClient, trackSimulationStart } from "@/lib/analytics/simulationClient";
 import { cn } from "@/lib/utils";
 import { awardLocalBadge, markLabCompleted, markLabStarted } from "@/lib/progress/labProgress";
 
@@ -68,9 +69,11 @@ export function DaniellCellStudio() {
 
   function handleAction(actionId: string) {
     setLatestFeedbackMood(null);
+    trackSimulationEventClient("daniell-cell-studio", "action_clicked", { actionId, phase });
 
     if (actionId === "build-cell") {
       markLabStarted("daniell-cell-studio");
+      trackSimulationStart("daniell-cell-studio");
       setPhase("setup_cell");
       return;
     }
@@ -120,6 +123,7 @@ export function DaniellCellStudio() {
         rewardClaimedRef.current = true;
         addXp(100);
         markLabCompleted("daniell-cell-studio", xp + 100);
+        trackSimulationComplete("daniell-cell-studio", xp + 100, [], { correctCount });
         awardLocalBadge("electrochem-explorer");
       }
       setPhase("reward");
@@ -140,6 +144,11 @@ export function DaniellCellStudio() {
 
   function handleAnswer(optionId: string) {
     const isCorrect = checkChallengeAnswer(currentQuestion, optionId);
+    trackSimulationEventClient("daniell-cell-studio", isCorrect ? "correct_answer" : "wrong_answer", {
+      questionId: currentQuestion.id,
+      optionId,
+      phase,
+    });
     const previousCorrect = Boolean(answers[currentQuestion.id]?.isCorrect);
     setAnswers((current) => ({
       ...current,

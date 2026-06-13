@@ -30,9 +30,9 @@ export default function SimulationsPage() {
       <Container className="space-y-10 pb-16">
         <MasterAlchemBubble
           mood="labGuide"
-          message="Start with Hydrocarbon Naming Quest if IUPAC names feel confusing. Aparna ma'am turns carbon chains into a family-name game."
-          actionLabel="Open Hydrocarbon Naming Quest"
-          actionHref="/labs/hydrocarbon-naming-quest"
+          message="Start with Redox Transfer Kitchen if oxidation and reduction feel inseparable. Paati turns electron transfer into something you can see."
+          actionLabel="Open Redox Transfer Kitchen"
+          actionHref="/labs/redox-transfer-kitchen"
         />
 
         <section aria-labelledby="featured-experiences">

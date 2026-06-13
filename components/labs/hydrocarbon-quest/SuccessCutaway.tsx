@@ -2,8 +2,8 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, BadgeCheck, Flame, Sparkles, Trophy } from "lucide-react";
-import { CharacterActor } from "@/components/labs/hydrocarbon-quest/CharacterActor";
-import { hydrocarbonQuestAssets } from "@/components/labs/hydrocarbon-quest/hydrocarbonAssetManifest";
+import { CinematicStage } from "@/components/labs/hydrocarbon-quest/CinematicStage";
+import { finalBadgeScene, portalScene, puzzleScene, stageAreaStyle } from "@/components/labs/hydrocarbon-quest/sceneLayouts";
 import type { HydrocarbonLevel } from "@/components/labs/hydrocarbon-quest/hydrocarbonQuestTypes";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -21,69 +21,66 @@ export function SuccessCutaway({
   onContinue: () => void;
 }) {
   const reduced = useReducedMotion();
-  const background = level.successKind === "flame" ? hydrocarbonQuestAssets.bgKitchen.webPath : hydrocarbonQuestAssets.bgPuzzleBoard.webPath;
+  const layout = finalLevel ? finalBadgeScene : level.successKind === "flame" ? portalScene : puzzleScene;
+  const resultArea = level.successKind === "flame"
+    ? { x: 620, y: 190, width: 700, height: 540 }
+    : { x: 560, y: 170, width: 820, height: 560 };
 
   return (
-    <section className="relative min-h-[calc(100svh-5rem)] overflow-hidden bg-slate-950 text-white">
-      <motion.div
-        className="absolute inset-0 bg-cover bg-center opacity-72"
-        style={{ backgroundImage: `url(${background})` }}
-        animate={reduced ? undefined : { scale: [1.03, 1.07, 1.03] }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-blue-950/30" />
-      <SuccessParticles />
-
-      <div className="relative mx-auto grid min-h-[calc(100svh-5rem)] max-w-7xl grid-rows-[auto_minmax(0,1fr)_auto] gap-4 px-4 py-5 sm:px-6">
-        <header className="flex flex-wrap items-center justify-between gap-3 rounded-[1.4rem] border border-white/20 bg-white/12 px-4 py-3 shadow-xl backdrop-blur-md">
-          <div>
-            <Badge tone="green">Level complete</Badge>
-            <h1 className="mt-2 text-2xl font-black sm:text-4xl">{level.targetName} locked</h1>
-          </div>
-          <div className="rounded-full bg-amber-200 px-4 py-2 text-sm font-black text-amber-900 shadow-lg">Total XP {totalXp}</div>
-        </header>
-
-        <div className="grid min-h-0 items-end gap-4 lg:grid-cols-[0.8fr_1.2fr_0.8fr]">
-          <div className="hidden items-end justify-center lg:flex">
-            <CharacterActor character="Kabir" pose="success" speaking={false} size="scene" />
-          </div>
-          <motion.div
-            initial={{ opacity: 0, y: 28, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            className="relative overflow-hidden rounded-[2rem] border-2 border-white bg-white/92 p-5 text-slate-950 shadow-2xl backdrop-blur-md"
-          >
-            <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-300/45 blur-3xl" />
-            {level.successKind === "flame" ? <BlueFlame /> : level.successKind === "badge" ? <FinalBadge /> : <ChainGlow />}
-            <div className="relative mt-5">
-              <Badge tone={finalLevel ? "amber" : "green"}>{finalLevel ? "Final mastery" : `+${level.xp} XP`}</Badge>
-              <h2 className="mt-3 text-3xl font-black text-slate-950">{level.successMessage}</h2>
-              <p className="mt-3 text-sm font-bold leading-6 text-slate-700">
-                You used the family-name rule: side branch first, main chain in the middle, bond family as the surname.
-              </p>
+    <section className="relative min-h-[calc(100svh-5rem)] overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 py-3 text-white">
+      <CinematicStage
+        layout={layout}
+        showCharacters={false}
+        kabirPose="success"
+        aparnaPose="celebrating"
+        activeSpeaker="Aparna"
+        particleTone={level.successKind === "flame" ? "gold" : "violet"}
+        hud={
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-[1.25rem] border border-white/25 bg-slate-950/45 px-4 py-3 text-white shadow-xl backdrop-blur-md">
+            <div>
+              <Badge tone="green">Level complete</Badge>
+              <h1 className="mt-2 text-xl font-black sm:text-3xl">{level.targetName} locked</h1>
             </div>
-          </motion.div>
-          <div className="hidden items-end justify-center lg:flex">
-            <CharacterActor character="Aparna" pose="celebrating" speaking size="scene" side="right" />
+            <div className="rounded-full bg-amber-200 px-4 py-2 text-sm font-black text-amber-900 shadow-lg">Total XP {totalXp}</div>
           </div>
-        </div>
-
-        <div className="rounded-[1.6rem] border-2 border-white bg-white/92 p-4 text-slate-950 shadow-2xl backdrop-blur-md">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-3">
-              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-lime-100 text-lime-700">
-                <BadgeCheck className="h-6 w-6" aria-hidden="true" />
-              </span>
-              <div>
-                <p className="text-sm font-black text-slate-950">{finalLevel ? "Hydrocarbon Name Master" : "Ready for the next family?"}</p>
-                <p className="text-xs font-bold text-slate-600">Mistakes became clues. The name is now yours.</p>
+        }
+        dialogue={
+          <div className="rounded-[1.35rem] border-2 border-white bg-white/92 p-4 text-slate-950 shadow-2xl backdrop-blur-md">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-lime-100 text-lime-700">
+                  <BadgeCheck className="h-6 w-6" aria-hidden="true" />
+                </span>
+                <div>
+                  <p className="text-sm font-black text-slate-950">{finalLevel ? "Hydrocarbon Name Master" : "Ready for the next family?"}</p>
+                  <p className="text-xs font-bold text-slate-600">Mistakes became clues. The name is now yours.</p>
+                </div>
               </div>
+              <Button onClick={onContinue} icon={<ArrowRight className="h-4 w-4" aria-hidden="true" />}>
+                {finalLevel ? "See final badge" : "Next level"}
+              </Button>
             </div>
-            <Button onClick={onContinue} icon={<ArrowRight className="h-4 w-4" aria-hidden="true" />}>
-              {finalLevel ? "See final badge" : "Next level"}
-            </Button>
           </div>
-        </div>
-      </div>
+        }
+      >
+        <SuccessParticles />
+        <motion.div
+          initial={{ opacity: 0, y: 28, scale: 0.96 }}
+          animate={reduced ? { opacity: 1, y: 0, scale: 1 } : { opacity: 1, y: 0, scale: 1 }}
+          className="absolute z-30 overflow-hidden rounded-[2rem] border-2 border-white bg-white/92 p-5 text-slate-950 shadow-2xl backdrop-blur-md"
+          style={stageAreaStyle(resultArea)}
+        >
+          <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-300/45 blur-3xl" />
+          {level.successKind === "flame" ? <BlueFlame /> : level.successKind === "badge" ? <FinalBadge /> : <ChainGlow />}
+          <div className="relative mt-5">
+            <Badge tone={finalLevel ? "amber" : "green"}>{finalLevel ? "Final mastery" : `+${level.xp} XP`}</Badge>
+            <h2 className="mt-3 text-2xl font-black text-slate-950">{level.successMessage}</h2>
+            <p className="mt-3 text-sm font-bold leading-6 text-slate-700">
+              You used the family-name rule: side branch first, main chain in the middle, bond family as the surname.
+            </p>
+          </div>
+        </motion.div>
+      </CinematicStage>
     </section>
   );
 }

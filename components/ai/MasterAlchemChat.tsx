@@ -1,6 +1,6 @@
 "use client";
 
-import { BrainCircuit, FlaskConical, Loader2, Send, Sparkles } from "lucide-react";
+import { BrainCircuit, FlaskConical, Loader2, Send, Sparkles, Volume2 } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 import { chemistryModules } from "@/data/chemistry-modules";
 import { AI_MENTOR_MODES } from "@/data/constants";
@@ -15,6 +15,12 @@ type ChatMessage = {
   role: "user" | "assistant";
   content: string;
   mock?: boolean;
+  source?: string;
+  provider?: string;
+  estimatedCostInr?: number;
+  budgetRemainingInr?: number;
+  spokenText?: string;
+  citations?: Array<{ label: string; pageStart?: number | null }>;
 };
 
 const examplePrompts = [
@@ -46,7 +52,10 @@ export function MasterAlchemChat() {
     typeof window === "undefined" ? "" : new URLSearchParams(window.location.search).get("prompt") ?? "",
   );
   const [mode, setMode] = useState<AiMentorMode>("explain");
+  const [classLevel, setClassLevel] = useState<"8" | "9" | "10" | "11" | "12">("10");
   const [chapterSlug, setChapterSlug] = useState("atomic-structure");
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const [voiceLanguage, setVoiceLanguage] = useState("en-IN");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [remaining, setRemaining] = useState<number | null>(null);
@@ -72,24 +81,33 @@ export function MasterAlchemChat() {
     setMessages((current) => [...current, { role: "user", content: trimmed }]);
 
     try {
-      const response = await fetch("/api/ai", {
+      const response = await fetch("/api/master-alchem/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: trimmed,
           mode,
+          classLevel,
           chapterSlug,
           anonymousId: getAnonymousId(),
         }),
       });
 
       const data = (await response.json()) as {
+        answer?: string;
         message?: string;
         error?: string;
         detail?: string;
         mock?: boolean;
+        source?: string;
+        provider?: string;
+        providerUsed?: string;
+        estimatedCostInr?: number;
+        budgetRemainingInr?: number;
+        spokenText?: string;
         remaining?: number | null;
         unlimited?: boolean;
+        citations?: Array<{ label: string; pageStart?: number | null }>;
       };
 
       if (!response.ok) {
@@ -98,7 +116,17 @@ export function MasterAlchemChat() {
 
       setMessages((current) => [
         ...current,
-        { role: "assistant", content: data.message ?? "I could not respond.", mock: data.mock },
+        {
+          role: "assistant",
+          content: data.answer ?? data.message ?? "I could not respond.",
+          mock: data.mock,
+          source: data.source,
+          provider: data.providerUsed ?? data.provider,
+          estimatedCostInr: data.estimatedCostInr,
+          budgetRemainingInr: data.budgetRemainingInr,
+          spokenText: data.spokenText,
+          citations: data.citations,
+        },
       ]);
       setRemaining(typeof data.remaining === "number" ? data.remaining : null);
       setUnlimited(Boolean(data.unlimited));
@@ -112,6 +140,35 @@ export function MasterAlchemChat() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     void submitPrompt(input);
+  }
+
+  async function speak(message: ChatMessage) {
+    if (typeof window === "undefined") return;
+    const response = await fetch("/api/voice/speak", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: message.spokenText || message.content, language: voiceLanguage }),
+    });
+    const data = (await response.json()) as { mode?: string; text?: string; language?: string; audioUrl?: string };
+    if (data.mode === "browser" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(data.text || message.spokenText || message.content);
+      utterance.lang = data.language || voiceLanguage;
+      window.speechSynthesis.speak(utterance);
+      void fetch("/api/analytics/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventType: "ai_message",
+          eventName: "voice_play_clicked",
+          anonymousId: getAnonymousId(),
+          pagePath: window.location.pathname,
+          metadata: { mode: "browser" },
+        }),
+      });
+    } else if (data.audioUrl) {
+      new Audio(data.audioUrl).play().catch(() => undefined);
+    }
   }
 
   return (
@@ -139,6 +196,66 @@ export function MasterAlchemChat() {
                 {modeLabels[item]}
               </option>
             ))}
+          </select>
+        </label>
+
+        <label className="mt-4 block">
+          <span className="text-sm font-black text-slate-700">Class</span>
+          <select
+            value={classLevel}
+            onChange={(event) => setClassLevel(event.target.value as typeof classLevel)}
+            className="focus-ring mt-2 h-11 w-full rounded-2xl border border-blue-100 bg-white/85 px-3 text-sm font-bold text-slate-800"
+          >
+            {["8", "9", "10", "11", "12"].map((level) => (
+              <option key={level} value={level}>
+                Class {level}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <div className="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 p-3">
+          <p className="text-sm font-black text-emerald-800">Low-cost mode active</p>
+          <p className="mt-1 text-xs font-semibold leading-5 text-emerald-700">
+            FAQ, cache, and NCERT notes are checked before AI. Voice stays off unless you tap the speaker.
+          </p>
+        </div>
+
+        <label className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-blue-100 bg-white/75 p-3">
+          <span>
+            <span className="block text-sm font-black text-slate-700">Voice</span>
+            <span className="block text-xs font-semibold text-slate-500">Browser speech, no paid TTS</span>
+          </span>
+          <input
+            type="checkbox"
+            checked={voiceEnabled}
+            onChange={(event) => {
+              setVoiceEnabled(event.target.checked);
+              void fetch("/api/analytics/event", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  eventType: "ai_message",
+                  eventName: "voice_enabled",
+                  anonymousId: getAnonymousId(),
+                  metadata: { enabled: event.target.checked },
+                }),
+              });
+            }}
+            className="h-5 w-5 accent-blue-600"
+          />
+        </label>
+
+        <label className="mt-4 block">
+          <span className="text-sm font-black text-slate-700">Voice language</span>
+          <select
+            value={voiceLanguage}
+            onChange={(event) => setVoiceLanguage(event.target.value)}
+            className="focus-ring mt-2 h-11 w-full rounded-2xl border border-blue-100 bg-white/85 px-3 text-sm font-bold text-slate-800"
+          >
+            <option value="en-IN">English (India)</option>
+            <option value="en-US">English (US)</option>
+            <option value="hi-IN">Hindi</option>
           </select>
         </label>
 
@@ -216,6 +333,61 @@ export function MasterAlchemChat() {
                 )}
               >
                 <div className="whitespace-pre-wrap">{message.content}</div>
+                {message.role === "assistant" && message.citations?.length ? (
+                  <div className="mt-3 space-y-1 rounded-xl border border-slate-200 bg-white/60 p-2 text-xs font-semibold text-slate-500">
+                    {message.citations.slice(0, 3).map((citation) => (
+                      <div key={`${citation.label}-${citation.pageStart ?? ""}`}>
+                        {citation.label}
+                        {citation.pageStart ? `, p. ${citation.pageStart}` : ""}
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+                {message.role === "assistant" ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {message.source ? (
+                      <span className="rounded-full border border-cyan-100 bg-cyan-50 px-2 py-1 text-[11px] font-black uppercase tracking-wide text-cyan-700">
+                        {message.source === "rag" ? "NCERT" : message.source}
+                      </span>
+                    ) : null}
+                    {typeof message.estimatedCostInr === "number" ? (
+                      <span className="rounded-full border border-emerald-100 bg-emerald-50 px-2 py-1 text-[11px] font-black text-emerald-700">
+                        ₹{message.estimatedCostInr.toFixed(3)}
+                      </span>
+                    ) : null}
+                    {typeof message.budgetRemainingInr === "number" ? (
+                      <span className="rounded-full border border-slate-200 bg-white/70 px-2 py-1 text-[11px] font-black text-slate-500">
+                        ₹{message.budgetRemainingInr.toFixed(1)} left
+                      </span>
+                    ) : null}
+                    {voiceEnabled ? (
+                      <button
+                        type="button"
+                        className="rounded-full border border-blue-100 bg-blue-50 px-2 py-1 text-[11px] font-black text-blue-700 hover:bg-blue-100"
+                        onClick={() => void speak(message)}
+                      >
+                        <Volume2 className="mr-1 inline h-3 w-3" aria-hidden="true" />
+                        speak
+                      </button>
+                    ) : null}
+                    {["helpful", "not_helpful", "wrong_answer", "too_hard", "too_long"].map((rating) => (
+                      <button
+                        key={rating}
+                        type="button"
+                        className="rounded-full border border-slate-200 bg-white/70 px-2 py-1 text-[11px] font-black text-slate-500 hover:bg-white"
+                        onClick={() => {
+                          void fetch("/api/master-alchem/feedback", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ rating, anonymousId: getAnonymousId() }),
+                          });
+                        }}
+                      >
+                        {rating.replaceAll("_", " ")}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
                 {message.mock ? (
                   <div className="mt-3 inline-flex items-center gap-1 rounded-md border border-amber-200/25 bg-amber-300/10 px-2 py-1 text-xs text-amber-100">
                     <Sparkles className="h-3 w-3" aria-hidden="true" />

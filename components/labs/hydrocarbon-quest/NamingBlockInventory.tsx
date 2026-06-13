@@ -11,24 +11,26 @@ export function NamingBlockInventory({
   usedBlockIds,
   enabled,
   onSelect,
+  compact = false,
 }: {
   blocks: NamingBlock[];
   selectedBlockId?: string;
   usedBlockIds: string[];
   enabled: boolean;
   onSelect: (blockId: string) => void;
+  compact?: boolean;
 }) {
   const used = new Set(usedBlockIds);
 
   return (
-    <section aria-labelledby="naming-blocks" className="rounded-[1.4rem] border-2 border-white bg-white/78 p-3 shadow-lg backdrop-blur-md">
+    <section aria-labelledby="naming-blocks" className={cn("rounded-[1.4rem] border-2 border-white bg-white/78 shadow-lg backdrop-blur-md", compact ? "p-2" : "p-3")}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 id="naming-blocks" className="text-sm font-black text-slate-950">
           Name blocks
         </h2>
-        <p className="text-xs font-bold text-slate-600">Drag or tap, then choose a slot.</p>
+        {compact ? null : <p className="text-xs font-bold text-slate-600">Drag or tap, then choose a slot.</p>}
       </div>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className={cn("flex flex-wrap gap-2", compact ? "mt-2" : "mt-3")}>
         {blocks.map((block) => {
           const isUsed = used.has(block.id);
           const isSelected = selectedBlockId === block.id;
@@ -46,7 +48,8 @@ export function NamingBlockInventory({
               whileHover={enabled && !isUsed ? { y: -3, scale: 1.03 } : undefined}
               whileTap={enabled && !isUsed ? { scale: 0.97 } : undefined}
               className={cn(
-                "focus-ring rounded-2xl border-2 px-4 py-2 text-sm font-black shadow-[0_5px_0_rgba(15,23,42,0.12)] transition",
+                "focus-ring rounded-2xl border-2 text-sm font-black shadow-[0_5px_0_rgba(15,23,42,0.12)] transition",
+                compact ? "px-3 py-1.5" : "px-4 py-2",
                 getBlockStyle(block.kind),
                 isSelected && "ring-4 ring-blue-300",
                 isUsed && "cursor-not-allowed opacity-35 grayscale",
