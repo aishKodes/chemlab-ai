@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/Container";
 export const metadata: Metadata = {
   title: "Story Labs",
   description:
-    "Chemlab story labs turn chemistry practicals into guided scenes with Master Alchem, lab actions, evidence checks, and quiz moments.",
+    "Chemlab story labs turn chemistry practicals into guided scenes with Chem-Shastri, lab actions, evidence checks, and quiz moments.",
 };
 
 export default function LabsPage() {
@@ -15,7 +15,7 @@ export default function LabsPage() {
       <PageHeader
         eyebrow="Labs"
         title="Story Labs"
-        description="Build cells, mix reactions, follow evidence, and unlock mastery with Master Alchem beside you."
+        description="Build cells, mix reactions, follow evidence, and unlock mastery with Chem-Shastri beside you."
       />
       <Container className="pb-16">
         <StoryLabPreview />

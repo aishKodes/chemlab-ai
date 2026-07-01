@@ -15,7 +15,7 @@ export default function NeutralizationStudioPage() {
       <PageHeader
         eyebrow="Featured Lab"
         title="Neutralization Studio"
-        description="Discover how acid and base become salt and water. Master Alchem guides each step."
+        description="Discover how acid and base become salt and water. Chem-Shastri guides each step."
       />
       <Container className="pb-16">
         <NeutralizationStudio />

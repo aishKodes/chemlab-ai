@@ -46,7 +46,7 @@ Prototype labs retained:
 - Mole Visualizer.
 - Bonding Lab.
 
-## 3. Master Alchem Assets Found
+## 3. Chem-Shastri Assets Found
 
 These were discovered and moved to quarantine because they are RGB PNGs with no alpha channel and visible checkerboard-looking backgrounds:
 
@@ -122,7 +122,7 @@ Processed object cutouts may be inspected on `/dev/assets`, but they are not use
 
 The following groups remain quarantined:
 
-- Master Alchem PNG cutouts.
+- Chem-Shastri PNG cutouts.
 - Student PNG cutouts.
 - Lab prop PNG cutouts.
 

@@ -10,7 +10,7 @@
     "alternate_questions": ["Why is balancing equations necessary?", "Why must equations be balanced?"],
     "short_answer": "We balance chemical equations because atoms are conserved in a chemical reaction.",
     "full_answer": "A chemical equation is balanced to obey the law of conservation of mass. The number of atoms of each element must be the same on the reactant and product sides.",
-    "master_alchem_style_answer": "We balance equations because atoms do not disappear or appear during a normal chemical reaction. Master Alchem's quick check is: count each element on the left, count it on the right, then adjust coefficients until both sides match.",
+    "master_alchem_style_answer": "We balance equations because atoms do not disappear or appear during a normal chemical reaction. Chem-Shastri's quick check is: count each element on the left, count it on the right, then adjust coefficients until both sides match.",
     "key_points": ["Atoms are conserved", "Coefficients can change", "Subscripts should not be changed"],
     "equations": [],
     "tags": ["equations", "conservation of mass", "class 10"],

@@ -240,7 +240,7 @@ function DaniellIntro({ onStart }: { onStart: () => void }) {
             </p>
             <div className="mt-7 space-y-3">
               <DialogueLine speaker="Student" text={introExchange[0]} />
-              <DialogueLine speaker="Master Alchem" text={introExchange[1]} highlight />
+              <DialogueLine speaker="Chem-Shastri" text={introExchange[1]} highlight />
             </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button onClick={onStart} size="lg" icon={<Zap className="h-5 w-5" aria-hidden="true" />}>

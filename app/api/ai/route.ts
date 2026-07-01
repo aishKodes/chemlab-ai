@@ -17,7 +17,7 @@ const requestSchema = z.object({
 export async function POST(request: Request) {
   const parsed = requestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
-    return Response.json({ error: "Invalid Master Alchem request.", details: parsed.error.flatten().fieldErrors }, { status: 400 });
+    return Response.json({ error: "Invalid Chem-Shastri request.", details: parsed.error.flatten().fieldErrors }, { status: 400 });
   }
   try {
     const response = await answerMasterAlchem(
@@ -49,6 +49,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     const status = typeof (error as { status?: unknown }).status === "number" ? Number((error as { status: number }).status) : 502;
-    return Response.json({ error: error instanceof Error ? error.message : "Master Alchem request failed." }, { status });
+    return Response.json({ error: error instanceof Error ? error.message : "Chem-Shastri request failed." }, { status });
   }
 }

@@ -21,7 +21,7 @@ export function MasterAlchemLabGuide({
       <div className="grid gap-3 sm:grid-cols-[auto_1fr] sm:items-center">
         <MasterAlchem mood={mood} size="xs" showGlow={false} className="mx-auto" />
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-blue-700">Master Alchem</p>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-blue-700">Chem-Shastri</p>
           <p className="mt-1 text-sm font-bold leading-5 text-slate-700">{message}</p>
         </div>
       </div>

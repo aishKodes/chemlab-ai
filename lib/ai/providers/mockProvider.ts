@@ -25,7 +25,7 @@ export class MockProvider implements AiProvider {
       latencyMs: Date.now() - started,
       inputTokens: Math.ceil(request.messages.map((message) => message.content).join("\n").length / 4),
       outputTokens: 110,
-      content: `Here is a direct Master Alchem practice answer.\n\n${mockChemistryAnswer(userMessage)}\n\nTiny check: which keyword in your question tells us the main chemistry idea?`,
+      content: `Here is a direct Chem-Shastri practice answer.\n\n${mockChemistryAnswer(userMessage)}\n\nTiny check: which keyword in your question tells us the main chemistry idea?`,
     };
   }
 

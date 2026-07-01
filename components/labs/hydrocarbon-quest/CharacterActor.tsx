@@ -16,7 +16,7 @@ export function CharacterActor({
   size = "scene",
   className,
 }: {
-  character: Exclude<HydrocarbonCharacter, "Master Alchem">;
+  character: Exclude<HydrocarbonCharacter, "Chem-Shastri">;
   pose?: HydrocarbonPose;
   speaking?: boolean;
   stagePlacement?: {

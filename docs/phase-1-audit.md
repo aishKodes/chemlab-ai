@@ -66,9 +66,9 @@ Phase 2 candidates:
 - Qualitative analysis quest.
 - Richer equation-balancing puzzle scene.
 
-## 3. Current Master Alchem Asset Paths
+## 3. Current Chem-Shastri Asset Paths
 
-Raw Master Alchem PNGs are quarantined:
+Raw Chem-Shastri PNGs are quarantined:
 
 - `public/_quarantine/bad-assets/master-alchem-avatar.png`
 - `public/_quarantine/bad-assets/master-alchem-celebrating.png`
@@ -85,7 +85,7 @@ Processed review outputs are in:
 - `public/processed/master-alchem/`
 - `public/processed/master-alchem/manifest.json`
 
-Runtime decision: no processed Master Alchem image is approved for live use yet. The live app uses the CSS/SVG fallback from `components/master-alchem/MasterAlchem.tsx`.
+Runtime decision: no processed Chem-Shastri image is approved for live use yet. The live app uses the CSS/SVG fallback from `components/master-alchem/MasterAlchem.tsx`.
 
 ## 4. Student / Lab / Background Asset Paths
 
@@ -135,7 +135,7 @@ Processed character and prop cutouts are review-only until manually approved on 
 
 Phase 1 completed or in progress:
 
-- Master Alchem system and guide.
+- Chem-Shastri system and guide.
 - Asset processing and preview page.
 - Homepage student-facing language.
 - Chemistry worlds quest map.

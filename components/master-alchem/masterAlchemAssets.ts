@@ -54,7 +54,7 @@ const approvedProcessedAssets: Partial<Record<MasterAlchemMood, string>> = {};
 export function resolveMasterAlchemAsset(mood: MasterAlchemMood) {
   const src = approvedProcessedAssets[mood];
   if (!src) return null;
-  return { src, alt: `Master Alchem ${mood}` };
+  return { src, alt: `Chem-Shastri ${mood}` };
 }
 
 export function hasApprovedMasterAlchemAsset(mood: MasterAlchemMood) {
@@ -76,7 +76,7 @@ export function getMasterAlchemAssetMetadata(mood: MasterAlchemMood) {
       mood,
       safety: "approved" as const,
       src: approved,
-      reason: "Approved processed Master Alchem asset.",
+      reason: "Approved processed Chem-Shastri asset.",
     };
   }
 
@@ -93,12 +93,12 @@ export function getMasterAlchemAssetMetadata(mood: MasterAlchemMood) {
   return {
     mood,
     safety: "missing" as const,
-    reason: "No Master Alchem asset exists for this mood; use the SVG/CSS fallback.",
+    reason: "No Chem-Shastri asset exists for this mood; use the SVG/CSS fallback.",
   };
 }
 
 export function getMasterAlchemAssetDecision() {
-  return "No processed Master Alchem cutout is approved for live use yet; the SVG/CSS mentor is used to avoid checkerboard artifacts.";
+  return "No processed Chem-Shastri cutout is approved for live use yet; the SVG/CSS mentor is used to avoid checkerboard artifacts.";
 }
 
 export function getMasterAlchemFallbackAsset() {

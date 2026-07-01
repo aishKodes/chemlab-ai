@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Chemistry Worlds",
-  description: "Choose colourful Chemlab chapter worlds with simulations, Master Alchem guidance, boss quizzes, and mistake objects.",
+  description: "Choose colourful Chemlab chapter worlds with simulations, Chem-Shastri guidance, boss quizzes, and mistake objects.",
 };
 
 export default function ChemistryCurriculumPage() {
@@ -14,7 +14,7 @@ export default function ChemistryCurriculumPage() {
       <PageHeader
         eyebrow="Learn"
         title="Chemistry Worlds"
-        description="Every chapter is a world. Every quest connects simulations, Master Alchem guidance, boss quizzes, and mistake objects."
+        description="Every chapter is a world. Every quest connects simulations, Chem-Shastri guidance, boss quizzes, and mistake objects."
       />
       <Container className="pb-16">
         <QuestMap />

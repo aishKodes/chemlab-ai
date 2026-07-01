@@ -40,7 +40,7 @@ const differentiators = [
     icon: <Compass className="h-6 w-6 text-blue-600" aria-hidden="true" />,
   },
   {
-    title: "Master Alchem guidance",
+    title: "Chem-Shastri guidance",
     description: "Get a hint, try the next step, and recover when a question feels stuck.",
     icon: <WandSparkles className="h-6 w-6 text-violet-600" aria-hidden="true" />,
   },
@@ -57,7 +57,7 @@ const differentiators = [
 ];
 
 const storySteps = [
-  ["Scene dialogue", "A practical begins with a mystery and Master Alchem's briefing."],
+  ["Scene dialogue", "A practical begins with a mystery and Chem-Shastri's briefing."],
   ["Lab action", "Students choose variables, tools, observations, and predictions."],
   ["Evidence check", "Chemlab connects the visual result to the chemistry principle."],
   ["Boss moment", "A short challenge locks in the concept before the next scene."],
@@ -99,7 +99,7 @@ export function LandingSections() {
             <SectionHeading
               eyebrow="Why Chemlab is different"
               title="A learning universe you can actually explore."
-              description="Pick a mission, make a prediction, test it in a virtual lab, and let Master Alchem help you understand what changed."
+              description="Pick a mission, make a prediction, test it in a virtual lab, and let Chem-Shastri help you understand what changed."
             />
           </Reveal>
           <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -124,7 +124,7 @@ export function LandingSections() {
             <SectionHeading
               eyebrow="Virtual Labs"
               title="Start with labs that feel alive."
-              description="Predict, change something, watch the result, then explain what happened with Master Alchem beside you."
+              description="Predict, change something, watch the result, then explain what happened with Chem-Shastri beside you."
             />
           </Reveal>
           <div className="mt-8 grid gap-5 lg:grid-cols-3">
@@ -151,7 +151,7 @@ export function LandingSections() {
           <Reveal>
             <MasterAlchemDock
               mood="guide"
-              title="Meet Master Alchem, your magical chemistry mentor."
+              title="Meet Chem-Shastri, your magical chemistry mentor."
               message="He explains without judgment, gives hints before answers, guides safe lab thinking, and celebrates the exact moment a concept clicks."
             />
           </Reveal>
@@ -164,7 +164,7 @@ export function LandingSections() {
             <SectionHeading
               eyebrow="Chemistry Worlds"
               title="Every chapter is a world. Every concept is alive."
-              description="Choose a world, enter a mission, run a simulation, ask Master Alchem, fight a boss quiz, and unlock the next level."
+              description="Choose a world, enter a mission, run a simulation, ask Chem-Shastri, fight a boss quiz, and unlock the next level."
             />
           </Reveal>
           <Reveal delay={0.08} className="mt-8">
@@ -251,7 +251,7 @@ export function LandingSections() {
             <SectionHeading
               eyebrow="Mistake Lab"
               title="Wrong answers become targeted review objects."
-              description="Mistakes get names, weaknesses, retry prompts, and Master Alchem rescue guidance so students improve without shame."
+              description="Mistakes get names, weaknesses, retry prompts, and Chem-Shastri rescue guidance so students improve without shame."
             />
           </Reveal>
           <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -277,7 +277,7 @@ export function LandingSections() {
                     <h2 className="mt-4 text-3xl font-black text-slate-950">Progress Galaxy</h2>
                     <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-slate-700">
                       Daily quest, XP, streak, chapter mastery, labs completed, mistake objects,
-                      and Master Alchem activity all live in one cheerful command center.
+                      and Chem-Shastri activity all live in one cheerful command center.
                     </p>
                   </div>
                   <LevelBadge level={4} title="Reaction Rookie" />
@@ -288,7 +288,7 @@ export function LandingSections() {
                     <div className="flex items-center gap-3">
                       <MessageCircle className="h-7 w-7 text-violet-600" aria-hidden="true" />
                       <div>
-                        <p className="text-sm font-black text-slate-500">Master Alchem activity</p>
+                        <p className="text-sm font-black text-slate-500">Chem-Shastri activity</p>
                         <p className="text-2xl font-black text-slate-950">18 hints</p>
                       </div>
                     </div>
@@ -351,7 +351,7 @@ export function LandingSections() {
                     Ready to enter Chemlab?
                   </div>
                   <h2 className="mt-5 text-4xl font-black text-white">
-                    Start a quest. Meet Master Alchem. Make chemistry visible.
+                    Start a quest. Meet Chem-Shastri. Make chemistry visible.
                   </h2>
                   <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-blue-50">
                     Chemlab turns chemistry into a colourful interactive world where students learn by
@@ -363,7 +363,7 @@ export function LandingSections() {
                     Start Learning
                   </Button>
                   <Button href="/ai-tutor" variant="secondary">
-                    Meet Master Alchem
+                    Meet Chem-Shastri
                   </Button>
                 </div>
               </div>

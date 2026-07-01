@@ -41,7 +41,7 @@ export default function RedoxGameAuditPage() {
         <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">Development audit</p>
         <h1 className="mt-3 text-4xl font-black">Redox Transfer Kitchen Repair Audit</h1>
         <p className="mt-3 max-w-3xl text-slate-300">
-          This page records the repaired learning flow: transaction table first, optional 3D exploration second, compact Master Alchem launcher, and reducer-based success conditions.
+          This page records the repaired learning flow: transaction table first, optional 3D exploration second, compact Chem-Shastri launcher, and reducer-based success conditions.
         </p>
 
         <section className="mt-8 grid gap-5 lg:grid-cols-3">
@@ -60,7 +60,7 @@ export default function RedoxGameAuditPage() {
             <div className="mt-4 grid gap-2 text-sm font-semibold text-lime-100">
               <div className="rounded-2xl bg-lime-300/12 px-3 py-2">No central 3D orbit scene in default learning mode.</div>
               <div className="rounded-2xl bg-lime-300/12 px-3 py-2">Action tray stays below the board.</div>
-              <div className="rounded-2xl bg-lime-300/12 px-3 py-2">Master Alchem compact launcher: right edge, bottom safe area.</div>
+              <div className="rounded-2xl bg-lime-300/12 px-3 py-2">Chem-Shastri compact launcher: right edge, bottom safe area.</div>
               <div className="rounded-2xl bg-lime-300/12 px-3 py-2">Long explanation is moved into Why drawer.</div>
             </div>
           </article>

@@ -18,7 +18,7 @@ export function DashboardOverview() {
         <StatCard label="Total XP" value="2,840" detail="740 XP until next level" icon={<Trophy className="h-5 w-5" aria-hidden="true" />} />
         <StatCard label="Study streak" value="4 days" detail="Keep your flame glowing" icon={<Flame className="h-5 w-5" aria-hidden="true" />} />
         <StatCard label="Labs completed" value="6" detail="2 practicals this week" icon={<Beaker className="h-5 w-5" aria-hidden="true" />} />
-        <StatCard label="Master Alchem" value="18 hints" detail="Mentor activity" icon={<MessageCircle className="h-5 w-5" aria-hidden="true" />} />
+        <StatCard label="Chem-Shastri" value="18 hints" detail="Mentor activity" icon={<MessageCircle className="h-5 w-5" aria-hidden="true" />} />
         <StatCard label="Monsters left" value="3" detail="Defeat with practice loops" icon={<WandSparkles className="h-5 w-5" aria-hidden="true" />} />
       </div>
 

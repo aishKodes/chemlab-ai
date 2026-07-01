@@ -1,24 +1,23 @@
-import type { Metadata } from "next";
-import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
-import { PageHeader } from "@/components/layout/PageHeader";
-import { Container } from "@/components/ui/Container";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Progress Galaxy",
-  description: "A colourful Chemlab student dashboard for XP, streaks, labs completed, chapter mastery, mistake objects, and Master Alchem activity.",
-};
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { LoadingState } from "@/components/ui/LoadingState";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { dashboardPathForRole } from "@/lib/auth/authTypes";
 
-export default function DashboardPage() {
-  return (
-    <>
-      <PageHeader
-        eyebrow="Progress Galaxy"
-        title="Progress Galaxy"
-        description="Track XP, streaks, daily quests, mastery, labs completed, mistake objects, recent achievements, and Master Alchem activity."
-      />
-      <Container className="pb-16">
-        <DashboardOverview />
-      </Container>
-    </>
-  );
+export default function DashboardRedirectPage() {
+  const { user, isLoading, isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (!isAuthenticated) {
+      router.replace("/login?next=/dashboard");
+      return;
+    }
+    router.replace(dashboardPathForRole(user?.role));
+  }, [isAuthenticated, isLoading, router, user?.role]);
+
+  return <LoadingState label="Opening your dashboard" />;
 }

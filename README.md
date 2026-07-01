@@ -1,14 +1,14 @@
 # Chemlab
 
 Chemlab is a colourful interactive chemistry learning universe. Phase 1 prepares
-the product foundation: chemistry worlds, Master Alchem guidance, asset safety,
+the product foundation: chemistry worlds, Chem-Shastri guidance, asset safety,
 AI mock mode, gamified learning surfaces, and a reusable cinematic simulation
 shell for future high-quality labs.
 
 Phase 3 adds the reusable lab engine foundation used to keep future labs
 single-screen, guided, and game-like instead of turning into disconnected pages.
 
-Master Alchem is Chemlab's signature mentor character: a warm floating alchemical
+Chem-Shastri is Chemlab's signature mentor character: a warm floating alchemical
 science guide who gives hints, lab guidance, safe explanations, and step-by-step
 chemistry reasoning without making mistakes feel shameful.
 
@@ -28,7 +28,7 @@ chemistry reasoning without making mistakes feel shameful.
 
 ## Current Features
 
-- Colourful homepage with Master Alchem, animated atoms, molecule motifs, XP,
+- Colourful homepage with Chem-Shastri, animated atoms, molecule motifs, XP,
   achievements, and cinematic learning sections
 - Chemistry Worlds quest map with chapter worlds and dynamic chapter routes
 - Story Labs route with Featured, Prototype, and Coming Soon sections
@@ -40,8 +40,8 @@ chemistry reasoning without making mistakes feel shameful.
 - Local lab-progress utilities for started/completed labs and badges
 - Reusable cinematic simulation shell with story, experiment, challenge, and reward scenes
 - `/labs/demo-cinematic-shell` Phase 1 shell demo
-- Site-wide Master Alchem guide with route-specific student guidance
-- Master Alchem SVG/CSS character system with quarantined asset tracking
+- Site-wide Chem-Shastri guide with route-specific student guidance
+- Chem-Shastri SVG/CSS character system with quarantined asset tracking
 - Neutralization Studio guided lab prototype using clean scene backgrounds and SVG/CSS
   lab glassware
 - Real Molecule Explorer using 3Dmol.js with embedded molecule models
@@ -53,7 +53,8 @@ chemistry reasoning without making mistakes feel shameful.
 - Chemical Bonding Lab playground prototype
 - Molecular mass calculator
 - Mole calculator
-- Master Alchem chat UI using `/api/ai`
+- Chem-Shastri chat UI using `/api/chem-shastri/chat` with `/api/master-alchem/chat`
+  compatibility
 - Quiz runner with local sample questions
 - Student dashboard shell
 - Admin/content/question manager foundations
@@ -63,7 +64,7 @@ chemistry reasoning without making mistakes feel shameful.
 
 `/labs/daniell-cell-studio` is the first full Chemlab flagship simulation. It
 uses a client-only PixiJS stage for the animated lab bench and React/Framer
-Motion overlays for the HUD, Master Alchem dialogue, step controls, challenge
+Motion overlays for the HUD, Chem-Shastri dialogue, step controls, challenge
 questions, and reward state.
 
 The lab teaches:
@@ -103,7 +104,7 @@ labStateMachine.ts
 ```
 
 `LabShell` is the main layout primitive for future high-quality labs. It keeps
-the top HUD, central stage, Master Alchem lab guide, challenge/reward panels,
+the top HUD, central stage, Chem-Shastri lab guide, challenge/reward panels,
 and bottom action bar in predictable safe zones so controls remain visible.
 
 Daniell Cell Studio now uses this shell for the experiment phase while keeping
@@ -158,6 +159,30 @@ added one by one without rewriting page layouts.
 - `awardLocalBadge(badgeId)`
 
 This is intentionally client-only and can later sync to Supabase.
+
+## Stage 5 Chem-Shastri Intelligence
+
+Stage 5 makes Chem-Shastri context-aware without making provider keys required
+for local development. The new service layer lives in `lib/chem-shastri/` and
+adds:
+
+- direct answers for common chemistry doubts before paid AI routing
+- page/class/role/language context chips
+- Chem-Shastri resource suggestions from Hostinger public resources with local
+  fallbacks
+- strict chemistry safety handling
+- Gemini-first routing through the existing AI router
+- OpenAI fallback only when explicitly enabled
+- manual-only voice controls
+- admin status and retrieval test routes
+
+Useful commands:
+
+```bash
+npm run test:chem-shastri-context
+npm run lint
+npm run build
+```
 
 ## Molecule Explorer
 
@@ -228,9 +253,9 @@ and `SUPABASE_SERVICE_ROLE_KEY` are only read from server route/helper files.
 
 ## AI Provider Setup
 
-Master Alchem calls `POST /api/ai`. Supported providers:
+Chem-Shastri calls `POST /api/ai`. Supported providers:
 
-- `mock`: returns a useful Master Alchem chemistry response without external calls.
+- `mock`: returns a useful Chem-Shastri chemistry response without external calls.
 - `openai-compatible`: posts to `AI_BASE_URL/chat/completions`, or OpenAI's
   default `/v1/chat/completions` endpoint if `AI_BASE_URL` is not set.
 - `gemini`: posts to Google Generative Language `generateContent`.
@@ -248,7 +273,7 @@ when any of these are true:
 - the app is running in development mode
 - the request host is localhost
 
-This keeps production guardrails intact while allowing long local Master Alchem
+This keeps production guardrails intact while allowing long local Chem-Shastri
 conversations during development.
 
 ## Character and Asset Strategy
@@ -321,7 +346,7 @@ simulationTypes.ts
 
 The shell supports the intended Chemlab lab rhythm:
 
-1. Story intro with Master Alchem.
+1. Story intro with Chem-Shastri.
 2. Experiment scene with an animated lab stage.
 3. Challenge scene with safe feedback.
 4. Reward scene with XP, stars, and badge.
@@ -360,6 +385,35 @@ records. Server helpers return `null` when Supabase env vars are absent.
 
 No paid infrastructure is required except user-provided AI API usage.
 
+## Stage 2 Hostinger Backend Connection
+
+The frontend can connect to the Stage 1 Hostinger PHP/MySQL API while keeping
+all public simulations available on Vercel.
+
+Required frontend env values:
+
+```bash
+NEXT_PUBLIC_BACKEND_URL=https://api.chemlearning.in
+BACKEND_INTERNAL_API_URL=https://api.chemlearning.in
+```
+
+Local development can point `NEXT_PUBLIC_BACKEND_URL` to a local backend URL
+such as `http://localhost:8000`. If the backend URL is absent or unreachable,
+login/signup show readable errors and public class/resource pages use local
+fallback data for Redox Transfer Kitchen and Hydrocarbon Naming Quest.
+
+Stage 2 adds:
+
+- Backend API helpers in `lib/api/`
+- Local token auth provider and role guards in `components/auth/`
+- Student, teacher, and admin dashboard shells
+- Public `/classes` and `/resources` pages
+- Notification UI foundation
+- Chem-Shastri user-facing mentor naming with compact lab-route launcher
+
+See `docs/frontend-backend-integration.md` and
+`docs/stage-2-frontend-auth-qa.md` for setup and QA.
+
 ## Development Commands
 
 ```bash
@@ -376,7 +430,7 @@ app/                 App Router pages and route handlers
 assets/             Clean generated scene backgrounds used at runtime
 components/          UI, layout, chemistry, simulations, tools, AI, quiz, dashboard, admin
 components/master-alchem/
-                     Master Alchem character, route scripts, provider, and guide
+                     Chem-Shastri character, route scripts, provider, and guide
 components/labs/     Story labs, Daniell Cell Studio, asset mapping, and prototypes
 components/lab-engine/
                      Reusable LabShell, HUD, action bar, guide, challenge, reward
@@ -406,7 +460,7 @@ content/chemistry/   Future markdown/content source
 4. Put polished, student-facing copy in the page. Keep implementation details in
    docs, not in the learning surface.
 5. Add a `data/labs/labCatalog.ts` entry when it belongs in the lab catalog.
-6. Add Master Alchem route guidance if the lab needs a dedicated message.
+6. Add Chem-Shastri route guidance if the lab needs a dedicated message.
 7. Add the new experience to `/labs` or `/simulations` as Featured, Practice,
    Prototype, or Coming Soon.
 8. Run `npm run lint` and `npm run build`.
@@ -418,7 +472,7 @@ content/chemistry/   Future markdown/content source
 - Teacher dashboard and classroom cohorts
 - Admin CRUD for chapters, lessons, questions, and simulations
 - Visual note editor and spaced mistake review
-- Regenerate Master Alchem and lab props with true transparency
+- Regenerate Chem-Shastri and lab props with true transparency
 - Deepen Daniell Cell Studio with drag positioning, richer ion choices, and optional sound
 - Add the next LabShell-based flagship practical: Titration Studio or Electrolysis Studio
 - Acid-base titration and salt-identification story labs with richer assessment

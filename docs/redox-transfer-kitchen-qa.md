@@ -18,7 +18,7 @@ Use this checklist before calling the Redox lab ready.
 - [ ] Level 7 agents challenge works.
 - [ ] No 3D rotation in default game mode.
 - [ ] Explore 3D mode works separately.
-- [ ] Master Alchem icon does not block gameplay.
+- [ ] Chem-Shastri icon does not block gameplay.
 - [ ] Text does not block visuals.
 - [ ] Sounds are soft or no-op safely.
 - [ ] Mobile is playable.

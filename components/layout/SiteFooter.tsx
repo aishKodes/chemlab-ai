@@ -17,7 +17,7 @@ const columns = [
     links: [
       { href: "/tools/molecular-mass-calculator", label: "Molecular mass" },
       { href: "/tools/equation-balancer", label: "Equation checker" },
-      { href: "/ai-tutor", label: "Master Alchem" },
+      { href: "/ai-tutor", label: "Chem-Shastri" },
     ],
   },
   {
@@ -47,7 +47,7 @@ export function SiteFooter() {
             </div>
             <p className="mt-5 max-w-md text-sm font-medium leading-6 text-slate-600">
               Built for students who learn best by touching, testing, predicting,
-              playing, and asking Master Alchem for the next step.
+              playing, and asking Chem-Shastri for the next step.
             </p>
             <div className="mt-5 flex items-center gap-3 text-blue-600">
               <GraduationCap className="h-5 w-5" aria-hidden="true" />

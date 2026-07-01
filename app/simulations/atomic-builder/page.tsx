@@ -14,7 +14,7 @@ export default function AtomicBuilderPage() {
       <PageHeader
         eyebrow="Virtual Lab"
         title="Atomic Builder"
-        description="Touch the atom. Change the charge. Watch identity, isotope, and ion logic respond while Master Alchem keeps the model grounded."
+        description="Touch the atom. Change the charge. Watch identity, isotope, and ion logic respond while Chem-Shastri keeps the model grounded."
       />
       <Container className="pb-16">
         <AtomicBuilder />

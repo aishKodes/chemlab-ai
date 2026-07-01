@@ -120,7 +120,7 @@ export function AtomicBuilder() {
           className="w-full"
           icon={<BrainCircuit className="h-4 w-4" aria-hidden="true" />}
         >
-          Ask Master Alchem to explain this atom
+          Ask Chem-Shastri to explain this atom
         </Button>
       </Card>
 
@@ -169,7 +169,7 @@ export function AtomicBuilder() {
         </Card>
         <MasterAlchemPointer
           mood="thinking"
-          title="Master Alchem's lab note"
+          title="Chem-Shastri's lab note"
           message="Identity follows protons. Isotope follows neutrons. Charge follows the difference between protons and electrons."
           href="/ai-tutor"
           cta="Ask for a custom explanation"

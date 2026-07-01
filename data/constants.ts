@@ -21,4 +21,5 @@ export const AI_MENTOR_MODES = [
   "check_my_answer",
   "exam_mode",
   "lab_guide_mode",
+  "teacher_mode",
 ] as const;

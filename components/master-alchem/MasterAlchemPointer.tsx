@@ -36,7 +36,7 @@ export function MasterAlchemPointer({
         <div>
           <div className="inline-flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 text-xs font-black text-blue-700">
             <Sparkles className="h-3.5 w-3.5 text-amber-500" aria-hidden="true" />
-            Master Alchem
+            Chem-Shastri
           </div>
           <h3 className="mt-3 text-lg font-black text-slate-950">{title}</h3>
           <p className="mt-1 text-sm font-semibold leading-6 text-slate-700">{message}</p>

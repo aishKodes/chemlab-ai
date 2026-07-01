@@ -58,7 +58,7 @@ function buildRagOnlyAnswer({
 }) {
   if (!chunks.length) {
     return budgetBlocked
-      ? "Master Alchem is in low-cost mode today. I need a little more NCERT context to answer that properly."
+      ? "Chem-Shastri is in low-cost mode today. I need a little more NCERT context to answer that properly."
       : "I need a little more context to answer that properly.";
   }
   const topChunks = chunks.slice(0, 2);
@@ -69,7 +69,7 @@ function buildRagOnlyAnswer({
     })
     .filter(Boolean);
   const prefix = budgetBlocked
-    ? "Master Alchem is in low-cost mode today. Here is the best answer from Chemlab's verified notes."
+    ? "Chem-Shastri is in low-cost mode today. Here is the best answer from Chemlab's verified notes."
     : "From Chemlab's verified NCERT notes:";
   return `${prefix}\n\n${notes.map((note) => `- ${note}`).join("\n")}`;
 }
@@ -145,7 +145,7 @@ export async function answerMasterAlchem(
   };
 
   if (process.env.MASTER_ALCHEM_ENABLED === "false") {
-    throw Object.assign(new Error("Master Alchem is currently disabled."), { status: 503 });
+    throw Object.assign(new Error("Chem-Shastri is currently disabled."), { status: 503 });
   }
 
   const rateKey = `master-alchem:${request.userId || request.anonymousId || "anonymous"}`;
@@ -154,7 +154,7 @@ export async function answerMasterAlchem(
   const configuredLimit = limitForRequest(request);
   const limit = devUnlimited ? legacyLimit : { ...legacyLimit, limit: configuredLimit };
   if (!limit.allowed) {
-    throw Object.assign(new Error("Daily Master Alchem limit reached."), { status: 429, limit });
+    throw Object.assign(new Error("Daily Chem-Shastri limit reached."), { status: 429, limit });
   }
 
   const conversationId = await createOrLoadConversation(request);

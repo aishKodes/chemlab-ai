@@ -8,7 +8,7 @@ import { getAiUsageOverview } from "@/lib/analytics/aiUsage";
 
 export const metadata: Metadata = {
   title: "Admin AI",
-  description: "Master Alchem AI routing, cache, cost, and model usage overview.",
+  description: "Chem-Shastri AI routing, cache, cost, and model usage overview.",
 };
 
 export default async function AdminAiPage() {
@@ -17,7 +17,7 @@ export default async function AdminAiPage() {
     <>
       <PageHeader
         eyebrow="Admin / AI"
-        title="Master Alchem AI control."
+        title="Chem-Shastri AI control."
         description="Provider usage, cache behavior, estimated cost, and model routing health."
       />
       <Container className="space-y-6 pb-16">

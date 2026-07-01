@@ -5,6 +5,9 @@ export const dynamic = "force-dynamic";
 
 const allowedEvents = new Set([
   "page_view",
+  "chem_shastri_opened",
+  "chem_shastri_question_asked",
+  "chem_shastri_answer_returned",
   "master_alchem_opened",
   "master_alchem_question_asked",
   "master_alchem_answer_returned",

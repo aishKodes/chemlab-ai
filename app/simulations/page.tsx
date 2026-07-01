@@ -25,7 +25,7 @@ export default function SimulationsPage() {
       <PageHeader
         eyebrow="Virtual Labs"
         title="Enter a lab. Touch the chemistry."
-        description="Choose a featured experience first. Master Alchem will guide you from prediction to observation to explanation."
+        description="Choose a featured experience first. Chem-Shastri will guide you from prediction to observation to explanation."
       />
       <Container className="space-y-10 pb-16">
         <MasterAlchemBubble

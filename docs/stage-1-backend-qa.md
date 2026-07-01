@@ -1,0 +1,22 @@
+# Stage 1 Backend QA Checklist
+
+- [ ] `https://api.chemlearning.in/api/health` works.
+- [ ] Database connects.
+- [ ] `php src/database/migrate.php` runs.
+- [ ] `php src/database/seed.php` runs.
+- [ ] First admin exists from `ADMIN_*`.
+- [ ] Student signup works.
+- [ ] Teacher signup works.
+- [ ] Login works.
+- [ ] `GET /api/auth/me` works with bearer token.
+- [ ] Verification email attempt is logged.
+- [ ] SMTP test works or fails gracefully with a clear error.
+- [ ] `GET /api/public/classes` works.
+- [ ] Redox Transfer Kitchen resource is seeded.
+- [ ] Hydrocarbon Naming Quest resource is seeded.
+- [ ] `POST /api/analytics/event` stores an event.
+- [ ] Admin endpoint rejects non-admin token.
+- [ ] Admin endpoint accepts admin token.
+- [ ] CORS only allows configured origins.
+- [ ] No real secrets are committed.
+- [ ] Existing Vercel frontend build still passes.

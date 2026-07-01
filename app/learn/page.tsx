@@ -17,7 +17,7 @@ export default function LearnPage() {
       <PageHeader
         eyebrow="Learning index"
         title="Choose your next chemistry world."
-        description="Pick a world, enter a quest, run a lab, and let Master Alchem guide the tricky parts."
+        description="Pick a world, enter a quest, run a lab, and let Chem-Shastri guide the tricky parts."
       />
       <Container className="pb-16">
         <div className="grid gap-4 lg:grid-cols-3">

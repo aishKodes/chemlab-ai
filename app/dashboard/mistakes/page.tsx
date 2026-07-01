@@ -10,7 +10,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Mistake Monster Lab",
-  description: "Turn wrong chemistry answers into named misconception objects with weaknesses, practice links, and Master Alchem rescue prompts.",
+  description: "Turn wrong chemistry answers into named misconception objects with weaknesses, practice links, and Chem-Shastri rescue prompts.",
 };
 
 const mistakes = [
@@ -37,7 +37,7 @@ export default function MistakesPage() {
       <PageHeader
         eyebrow="Mistake Monster Lab"
         title="Mistake Monster Lab"
-        description="Your mistakes are not failures. They are clues with names, weaknesses, practice links, and Master Alchem rescue prompts."
+        description="Your mistakes are not failures. They are clues with names, weaknesses, practice links, and Chem-Shastri rescue prompts."
       />
       <Container className="pb-16">
         <MasterAlchemBubble
@@ -45,7 +45,7 @@ export default function MistakesPage() {
           mood="warning"
           eyebrow="No shame zone"
           message="A wrong answer is a useful signal. Name the misconception, attack its weakness, and try a smaller retry exercise."
-          actionLabel="Ask Master Alchem"
+          actionLabel="Ask Chem-Shastri"
           actionHref="/ai-tutor"
           className="mb-6"
         />
@@ -91,7 +91,7 @@ export default function MistakesPage() {
               <p className="mt-3 text-sm font-medium leading-6 text-slate-600">{mistake.note}</p>
               <div className="mt-5 flex gap-2">
                 <Button size="sm" variant="secondary" icon={<BrainCircuit className="h-4 w-4" aria-hidden="true" />}>
-                  Ask Master Alchem
+                  Ask Chem-Shastri
                 </Button>
                 <Button size="sm" variant="ghost" icon={<CheckCircle2 className="h-4 w-4" aria-hidden="true" />}>
                   Resolved

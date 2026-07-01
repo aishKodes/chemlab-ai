@@ -26,7 +26,7 @@ export function Hero() {
               <p className="mt-6 max-w-2xl text-xl font-semibold leading-9 text-slate-700">
                 Enter the world where chemistry becomes visible, playable, and
                 unforgettable. Build atoms, run cinematic labs, battle misconceptions,
-                and learn with Master Alchem step by step.
+                and learn with Chem-Shastri step by step.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Button href="/learn/chemistry" size="lg" icon={<Map className="h-5 w-5" aria-hidden="true" />}>
@@ -46,7 +46,7 @@ export function Hero() {
                   variant="ghost"
                   icon={<MessageCircle className="h-5 w-5" aria-hidden="true" />}
                 >
-                  Meet Master Alchem
+                  Meet Chem-Shastri
                 </Button>
               </div>
               <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">

@@ -122,7 +122,7 @@ export function MasterAlchem({
 }: MasterAlchemProps) {
   const reduced = useReducedMotion();
   const [failedAssetSrc, setFailedAssetSrc] = useState<string | null>(null);
-  const accessibleLabel = label ?? `Master Alchem, ${masterAlchemMoodLabels[mood].toLowerCase()}`;
+  const accessibleLabel = label ?? `Chem-Shastri, ${masterAlchemMoodLabels[mood].toLowerCase()}`;
   const isAvatar = size === "xs" || mood === "avatar";
   const asset = resolveMasterAlchemAsset(mood);
 

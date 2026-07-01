@@ -249,7 +249,7 @@ export function RealMoleculeExplorer() {
             >
               <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-black text-violet-700">
                 <Sparkles className="h-3.5 w-3.5 text-amber-500" aria-hidden="true" />
-                Master Alchem says
+                Chem-Shastri says
               </div>
               <p className="mt-3 text-sm font-bold leading-6 text-slate-700">
                 First notice the shape, then ask why the electron pairs settle there. Shape is the clue that connects bonding to behaviour.

@@ -33,7 +33,7 @@ in the app experience until regenerated with real transparency.
 
 | Need | Replacement |
 | --- | --- |
-| Master Alchem | Original SVG/CSS mentor in `components/master-alchem/MasterAlchem.tsx` |
+| Chem-Shastri | Original SVG/CSS mentor in `components/master-alchem/MasterAlchem.tsx` |
 | Acid/base beakers | SVG/CSS vessels in `components/labs/NeutralizationStudio.tsx` |
 | Mixing beaker | SVG/CSS pH-responsive beaker in `NeutralizationStudio` |
 | pH meter | UI evidence panel plus SVG lab scene |

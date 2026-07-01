@@ -14,7 +14,7 @@ export default function MoleVisualizerPage() {
       <PageHeader
         eyebrow="Virtual Lab"
         title="Mole Concept Visualizer"
-        description="Watch mass become moles, then particle clouds, while Master Alchem turns Avogadro's number into a scale story."
+        description="Watch mass become moles, then particle clouds, while Chem-Shastri turns Avogadro's number into a scale story."
       />
       <Container className="pb-16">
         <MoleVisualizer />

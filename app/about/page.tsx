@@ -33,14 +33,14 @@ export default function AboutPage() {
           />
           <FeatureCard
             title="Safe guidance"
-            description="Master Alchem keeps chemistry focused on learning, evidence, and safe theory instead of risky real-world instructions."
+            description="Chem-Shastri keeps chemistry focused on learning, evidence, and safe theory instead of risky real-world instructions."
             icon={<ShieldCheck className="h-6 w-6" aria-hidden="true" />}
           />
         </div>
         <MasterAlchemBubble
           mood="idle"
           eyebrow="Mentor philosophy"
-          message="Master Alchem is designed to feel warm and magical, but his teaching style stays precise: evidence first, safe theory, clear steps, and no shame when students are wrong."
+          message="Chem-Shastri is designed to feel warm and magical, but his teaching style stays precise: evidence first, safe theory, clear steps, and no shame when students are wrong."
           className="mt-6"
         />
         <Card className="mt-6">

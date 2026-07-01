@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { MasterAlchemProvider } from "@/components/master-alchem/MasterAlchemProvider";
+import { AppProviders } from "@/components/providers/AppProviders";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,12 +24,12 @@ export const metadata: Metadata = {
     template: "%s | Chemlab",
   },
   description:
-    "A colourful interactive chemistry learning universe where students build atoms, run virtual labs, and learn with Master Alchem.",
+    "A colourful interactive chemistry learning universe where students build atoms, run virtual labs, and learn with Chem-Shastri.",
   applicationName: "Chemlab",
   openGraph: {
     title: "Chemlab",
     description:
-      "Chemistry, but alive: quests, simulations, boss quizzes, mistake monsters, and Master Alchem.",
+      "Chemistry, but alive: quests, simulations, boss quizzes, mistake clues, and Chem-Shastri.",
     url: siteUrl,
     siteName: "Chemlab",
     type: "website",
@@ -54,11 +54,11 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <MasterAlchemProvider>
+        <AppProviders>
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
-        </MasterAlchemProvider>
+        </AppProviders>
       </body>
     </html>
   );

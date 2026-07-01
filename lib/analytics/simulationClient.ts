@@ -1,5 +1,7 @@
 "use client";
 
+import { learningApi } from "@/lib/api/learningApi";
+
 function anonymousId() {
   const key = "chemlab_anonymous_id";
   const existing = window.localStorage.getItem(key);
@@ -28,6 +30,15 @@ export function trackSimulationEventClient(
       keepalive: true,
     })
     .catch(() => undefined);
+  void learningApi.simulationEvent({
+    simulation_slug: simulationSlug,
+    event_name: eventName,
+    step_key: String(metadata.stepKey ?? metadata.step ?? "general"),
+    success: metadata.success,
+    mistake_key: metadata.mistakeKey ?? metadata.mistake_key,
+    anonymous_id: anonymousId(),
+    metadata,
+  });
 }
 
 export const trackSimulationStart = (simulationSlug: string, metadata: Record<string, unknown> = {}) =>

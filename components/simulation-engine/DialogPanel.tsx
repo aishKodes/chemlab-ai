@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/Card";
 export function DialogPanel({
   mood = "guide",
   message,
-  eyebrow = "Master Alchem",
+  eyebrow = "Chem-Shastri",
 }: {
   mood?: MasterAlchemMood;
   message: string;

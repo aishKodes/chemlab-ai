@@ -126,7 +126,7 @@ export default async function ChapterPage({ params }: PageProps) {
             <MasterAlchemBubble
               compact
               mood="guide"
-              eyebrow="Master Alchem"
+              eyebrow="Chem-Shastri"
               message={`Ask me to explain ${chemistryModule.title} using visual reasoning, hints, exam structure, or lab guide mode.`}
               actionLabel={`Ask about ${chemistryModule.title}`}
               actionHref="/ai-tutor"

@@ -22,7 +22,7 @@ const demoConfig: CinematicLessonConfig = {
     {
       id: "story",
       label: "Hear the mission",
-      description: "Master Alchem explains what the student is about to test.",
+      description: "Chem-Shastri explains what the student is about to test.",
     },
     {
       id: "experiment",

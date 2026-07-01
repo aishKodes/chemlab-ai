@@ -1,0 +1,22 @@
+# Stage 2 Frontend Auth QA
+
+- [ ] Logged-out navbar shows Login and Sign up.
+- [ ] Student signup form works.
+- [ ] Teacher signup form works.
+- [ ] Login works.
+- [ ] Wrong password shows a readable error.
+- [ ] `/dashboard` redirects based on role.
+- [ ] Student dashboard is protected.
+- [ ] Teacher dashboard is protected.
+- [ ] Admin dashboard is protected.
+- [ ] Logout clears token.
+- [ ] `/classes` shows Class 9-12.
+- [ ] `/resources` shows seeded simulations.
+- [ ] Redox simulation still opens.
+- [ ] Hydrocarbon simulation still opens.
+- [ ] Chem-Shastri name appears instead of Master Alchem.
+- [ ] Chat icon is compact on `/labs` routes.
+- [ ] Chat icon does not block simulation controls.
+- [ ] Notifications component handles empty or unavailable state.
+- [ ] Analytics event calls do not break UI.
+- [ ] `npm run build` passes.

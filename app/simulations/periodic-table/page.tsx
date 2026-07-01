@@ -14,7 +14,7 @@ export default function PeriodicTableSimulationPage() {
       <PageHeader
         eyebrow="Virtual Lab"
         title="Periodic Table Explorer"
-        description="Click colourful element cards, discover families, compare trends, and ask Master Alchem why each element behaves the way it does."
+        description="Click colourful element cards, discover families, compare trends, and ask Chem-Shastri why each element behaves the way it does."
       />
       <Container className="pb-16">
         <PeriodicTableExplorer />

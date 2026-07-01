@@ -1,49 +1,117 @@
-import type { Metadata } from "next";
-import { Brain, ChartNoAxesColumn, FlaskConical, MessageCircleQuestion } from "lucide-react";
+"use client";
+
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
+import { Activity, BookOpen, FlaskConical, MailWarning, MessageSquareText, Users } from "lucide-react";
+import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
-import { StatCard } from "@/components/ui/StatCard";
-import { getAdminAnalyticsOverview } from "@/lib/analytics/adminMetrics";
+import { Button } from "@/components/ui/Button";
+import { Container } from "@/components/ui/Container";
+import { ErrorState } from "@/components/ui/ErrorState";
+import { LoadingState } from "@/components/ui/LoadingState";
+import { adminApi } from "@/lib/api/adminApi";
+import { getReadableApiError } from "@/lib/api/apiErrors";
+import type { BackendAdminAnalyticsSummary, BackendLearningEvent } from "@/lib/api/backendTypes";
 
-export const metadata: Metadata = {
-  title: "Admin Analytics",
-  description: "Chemlab learning, AI, RAG, and simulation analytics.",
-};
+export default function AdminAnalyticsPage() {
+  const [data, setData] = useState<BackendAdminAnalyticsSummary | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export default async function AdminAnalyticsPage() {
-  const overview = await getAdminAnalyticsOverview();
+  useEffect(() => {
+    adminApi
+      .getAdminAnalyticsSummary()
+      .then(setData)
+      .catch((caught) => setError(getReadableApiError(caught)))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const summary = data?.summary ?? {};
+
   return (
     <>
       <PageHeader
         eyebrow="Admin / Analytics"
-        title="Chemlab learning signals."
-        description="AI usage, RAG activity, student progress, misconceptions, and question coverage."
+        title="Learning event summary."
+        description="Stage 3 stores and summarizes events. Deeper mastery intelligence comes in Stage 4."
       />
       <Container className="space-y-6 pb-16">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Conversations" value={String(overview.conversations)} icon={<Brain className="h-5 w-5" />} />
-          <StatCard label="AI messages" value={String(overview.ai.totalRequests)} icon={<ChartNoAxesColumn className="h-5 w-5" />} />
-          <StatCard label="AI cost today" value={`₹${overview.ai.budget.usedInr.toFixed(2)}`} detail={`₹${overview.ai.budget.remainingInr.toFixed(2)} remaining`} icon={<ChartNoAxesColumn className="h-5 w-5" />} />
-          <StatCard label="Knowledge chunks" value={String(overview.chunks)} icon={<FlaskConical className="h-5 w-5" />} />
-          <StatCard label="Unanswered" value={String(overview.unanswered)} icon={<MessageCircleQuestion className="h-5 w-5" />} />
-        </div>
-        <Card>
-          <h2 className="text-lg font-black text-slate-950">Common misconceptions</h2>
-          <div className="mt-4 space-y-3">
-            {overview.learning.misconceptions.length ? (
-              overview.learning.misconceptions.map((row) => (
-                <div key={`${row.misconception_key}-${row.confidence}`} className="rounded-2xl border border-slate-200 bg-white/70 p-3">
-                  <p className="font-bold text-slate-800">{row.misconception_key}</p>
-                  <p className="text-sm text-slate-500">confidence {row.confidence} / resolved {String(row.resolved)}</p>
+        {error ? <ErrorState description={error} /> : null}
+        {loading ? (
+          <LoadingState label="Loading analytics" />
+        ) : (
+          <>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <Metric label="Users" value={summary.users ?? 0} icon={<Users className="h-5 w-5" />} />
+              <Metric label="Published resources" value={summary.published_resources ?? 0} icon={<BookOpen className="h-5 w-5" />} />
+              <Metric label="Memory decks" value={summary.memory_decks ?? 0} icon={<Activity className="h-5 w-5" />} />
+              <Metric label="Email failures" value={summary.email_failures ?? 0} icon={<MailWarning className="h-5 w-5" />} />
+            </div>
+            <Card>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-xl font-black text-slate-950">Stage 4 analytics areas</h2>
+                  <p className="mt-1 text-sm font-bold text-slate-600">Open deeper learning intelligence views.</p>
                 </div>
-              ))
-            ) : (
-              <p className="text-sm font-medium text-slate-500">No misconceptions detected yet.</p>
-            )}
-          </div>
-        </Card>
+              </div>
+              <div className="mt-4 grid gap-3 md:grid-cols-3">
+                {[
+                  { href: "/admin/analytics/resources", label: "Resources", icon: BookOpen },
+                  { href: "/admin/analytics/simulations", label: "Simulations", icon: FlaskConical },
+                  { href: "/admin/analytics/mistakes", label: "Mistakes", icon: Activity },
+                  { href: "/admin/analytics/chem-shastri", label: "Chem-Shastri", icon: MessageSquareText },
+                  { href: "/admin/analytics/students", label: "Students", icon: Users },
+                  { href: "/admin/analytics/rollups", label: "Rollups", icon: Activity },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Button key={item.href} href={item.href} variant="secondary" icon={<Icon className="h-4 w-4" aria-hidden="true" />}>
+                      {item.label}
+                    </Button>
+                  );
+                })}
+              </div>
+            </Card>
+            <Card>
+              <h2 className="text-xl font-black text-slate-950">Top events</h2>
+              <div className="mt-4 grid gap-3 md:grid-cols-2">
+                {(data?.top_events ?? []).map((event) => (
+                  <div key={event.event_name} className="rounded-2xl border border-blue-100 bg-blue-50/70 p-4">
+                    <p className="font-black text-slate-950">{event.event_name}</p>
+                    <p className="text-sm font-bold text-blue-700">{event.total} events</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+            <AdminTable<BackendLearningEvent & Record<string, unknown>>
+              items={(data?.recent_events ?? []) as (BackendLearningEvent & Record<string, unknown>)[]}
+              columns={[
+                { key: "id", label: "ID" },
+                { key: "event_type", label: "Type" },
+                { key: "event_name", label: "Name" },
+                { key: "page_path", label: "Page" },
+                { key: "created_at", label: "Created" },
+              ]}
+              emptyTitle="No events stored yet"
+            />
+          </>
+        )}
       </Container>
     </>
+  );
+}
+
+function Metric({ label, value, icon }: { label: string; value: number; icon: ReactNode }) {
+  return (
+    <Card>
+      <div className="flex items-center gap-3">
+        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-violet-100 text-violet-700">{icon}</div>
+        <div>
+          <p className="text-sm font-black text-slate-500">{label}</p>
+          <p className="text-2xl font-black text-slate-950">{value}</p>
+        </div>
+      </div>
+    </Card>
   );
 }

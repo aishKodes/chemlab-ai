@@ -143,7 +143,7 @@ export function PeriodicTableExplorer() {
             Common oxidation states: {selected.commonOxidationStates.map((state) => (state > 0 ? `+${state}` : state)).join(", ")}
           </p>
           <button className="focus-ring mt-5 rounded-2xl bg-blue-600 px-4 py-3 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5">
-            Ask Master Alchem why this element behaves this way
+            Ask Chem-Shastri why this element behaves this way
           </button>
         </Card>
 

@@ -14,13 +14,13 @@ export function MasterAlchemCard() {
         <div className="flex-1">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-black text-violet-700 shadow-sm">
             <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-            Master Alchem
+            Chem-Shastri
           </div>
           <h3 className="mt-4 text-3xl font-black text-slate-950">
             A magical science mentor who helps you think step by step.
           </h3>
           <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-slate-700">
-            Master Alchem gives hints before answers, turns calculations into visible
+            Chem-Shastri gives hints before answers, turns calculations into visible
             steps, guides lab thinking, and helps students recover from mistakes
             without shame.
           </p>
@@ -38,7 +38,7 @@ export function MasterAlchemCard() {
         <div className="rounded-[1.5rem] border-2 border-white bg-white/85 p-4 shadow-lg lg:w-72">
           <div className="flex items-center gap-2 text-sm font-black text-slate-800">
             <MessageCircle className="h-4 w-4 text-blue-600" aria-hidden="true" />
-            Master Alchem says
+            Chem-Shastri says
           </div>
           <p className="mt-3 text-sm font-medium leading-6 text-slate-700">
             “Predict first: if electrons change but protons stay the same, what changes - identity or charge?”
@@ -48,7 +48,7 @@ export function MasterAlchemCard() {
             className="mt-4 w-full"
             icon={<BrainCircuit className="h-4 w-4" aria-hidden="true" />}
           >
-            Ask Master Alchem
+            Ask Chem-Shastri
           </Button>
         </div>
       </div>

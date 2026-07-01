@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Compass, EyeOff, MessageCircle, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MasterAlchem } from "@/components/master-alchem/MasterAlchem";
 import { getMasterAlchemScript } from "@/components/master-alchem/masterAlchemScripts";
 import { cn } from "@/lib/utils";
@@ -15,8 +15,23 @@ export function MasterAlchemGuide() {
   const script = getMasterAlchemScript(pathname);
   const explainHref = `/ai-tutor?prompt=${encodeURIComponent(script.explainPrompt)}`;
   const isLabRoute = pathname.startsWith("/labs") || pathname.startsWith("/simulations");
-  const simulationCompactMode = pathname.startsWith("/labs/redox-transfer-kitchen") || pathname.startsWith("/labs/hydrocarbon-naming-quest");
+  const simulationCompactMode = pathname.startsWith("/labs/");
   const placement = isLabRoute ? "lab-safe" : "bottom-right";
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = window.localStorage.getItem("chemlab_mentor_guide_expanded");
+    if (stored === "true" && !simulationCompactMode) {
+      queueMicrotask(() => setExpanded(true));
+    }
+  }, [simulationCompactMode]);
+
+  function setGuideExpanded(nextExpanded: boolean) {
+    setExpanded(nextExpanded);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("chemlab_mentor_guide_expanded", String(nextExpanded));
+    }
+  }
 
   if (pathname.startsWith("/admin") || pathname.startsWith("/dev")) {
     return null;
@@ -25,19 +40,19 @@ export function MasterAlchemGuide() {
   if (simulationCompactMode) {
     return (
       <aside
-        aria-label="Master Alchem compact guide"
+        aria-label="Chem-Shastri compact guide"
         data-placement="simulation-compact"
         className="pointer-events-none fixed bottom-[84px] right-3 z-30 sm:bottom-24"
       >
         <Link
           href={explainHref}
-          title="Ask Master Alchem"
-          aria-label="Ask Master Alchem"
-          className="group pointer-events-auto grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-white/92 shadow-xl shadow-blue-950/18 backdrop-blur transition hover:-translate-y-0.5 hover:bg-cyan-50 sm:h-10 sm:w-10"
+          title="Ask Chem-Shastri"
+          aria-label="Ask Chem-Shastri"
+          className="group pointer-events-auto grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-white/92 shadow-xl shadow-blue-950/18 backdrop-blur transition hover:-translate-y-0.5 hover:bg-cyan-50 sm:h-[42px] sm:w-[42px]"
         >
           <MasterAlchem mood={script.mood} size="xs" showGlow={false} className="scale-[0.66]" />
           <span className="pointer-events-none absolute right-11 top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-full bg-slate-950 px-3 py-1 text-xs font-black text-white shadow-lg group-hover:block">
-            Ask Master Alchem
+            Ask Chem-Shastri
           </span>
         </Link>
       </aside>
@@ -46,7 +61,7 @@ export function MasterAlchemGuide() {
 
   return (
     <aside
-      aria-label="Master Alchem page guide"
+      aria-label="Chem-Shastri page guide"
       data-placement={placement}
       className={cn(
         "pointer-events-none fixed z-30 w-[min(20rem,calc(100vw-1.5rem))]",
@@ -76,8 +91,8 @@ export function MasterAlchemGuide() {
                   <button
                     type="button"
                     className="focus-ring grid h-8 w-8 place-items-center rounded-full bg-white text-slate-600 shadow-sm transition hover:bg-blue-50"
-                    aria-label="Collapse Master Alchem guide"
-                    onClick={() => setExpanded(false)}
+                    aria-label="Collapse Chem-Shastri guide"
+                    onClick={() => setGuideExpanded(false)}
                   >
                     <EyeOff className="h-4 w-4" aria-hidden="true" />
                   </button>
@@ -113,11 +128,11 @@ export function MasterAlchemGuide() {
               "focus-ring pointer-events-auto flex items-center gap-2 rounded-full border-2 border-white bg-white/94 p-1.5 pr-3 text-sm font-black text-blue-700 shadow-2xl backdrop-blur",
               !isLabRoute && "ml-auto",
             )}
-            onClick={() => setExpanded(true)}
-            aria-label="Open Master Alchem guide"
+            onClick={() => setGuideExpanded(true)}
+            aria-label="Open Chem-Shastri guide"
           >
             <MasterAlchem mood={script.mood} size="xs" showGlow={false} />
-            Ask Master Alchem
+            Ask Chem-Shastri
             <ChevronDown className="h-4 w-4 rotate-180" aria-hidden="true" />
           </motion.button>
         )}

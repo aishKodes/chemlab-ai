@@ -14,7 +14,7 @@ export default function BondingLabPage() {
       <PageHeader
         eyebrow="Virtual Lab"
         title="Chemical Bonding Lab"
-        description="Enter the bonding playground: combine atom cards, compare ionic and covalent rules, and let Master Alchem point out the valence pattern."
+        description="Enter the bonding playground: combine atom cards, compare ionic and covalent rules, and let Chem-Shastri point out the valence pattern."
       />
       <Container className="pb-16">
         <BondingLab />

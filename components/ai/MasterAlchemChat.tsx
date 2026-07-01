@@ -1,14 +1,16 @@
 "use client";
 
-import { BrainCircuit, FlaskConical, Loader2, Send, Sparkles, Volume2 } from "lucide-react";
-import { FormEvent, useMemo, useState } from "react";
+import { BookOpen, BrainCircuit, FlaskConical, Languages, Loader2, PlusCircle, Send, Sparkles, Volume2 } from "lucide-react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { chemistryModules } from "@/data/chemistry-modules";
 import { AI_MENTOR_MODES } from "@/data/constants";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { MasterAlchem } from "@/components/master-alchem/MasterAlchem";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import type { AiMentorMode } from "@/lib/ai/types";
+import { learningApi } from "@/lib/api/learningApi";
 import { cn } from "@/lib/utils";
 
 type ChatMessage = {
@@ -21,6 +23,9 @@ type ChatMessage = {
   budgetRemainingInr?: number;
   spokenText?: string;
   citations?: Array<{ label: string; pageStart?: number | null }>;
+  contextChips?: string[];
+  suggestedResources?: Array<{ title: string; slug: string; type: string; routeUrl?: string | null; reason?: string }>;
+  followUpQuestions?: string[];
 };
 
 const examplePrompts = [
@@ -38,14 +43,16 @@ const modeLabels: Record<AiMentorMode, string> = {
   check_my_answer: "Check answer",
   exam_mode: "Exam mode",
   lab_guide_mode: "Lab guide",
+  teacher_mode: "Teacher mode",
 };
 
 export function MasterAlchemChat() {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
       content:
-        "I am Master Alchem. Bring me a chemistry question, a wrong answer, or a lab puzzle, and I will guide the reasoning one step at a time.",
+        "I am Chem-Shastri. Bring me a chemistry question, a wrong answer, or a lab puzzle, and I will guide the reasoning one step at a time.",
     },
   ]);
   const [input, setInput] = useState(() =>
@@ -54,12 +61,26 @@ export function MasterAlchemChat() {
   const [mode, setMode] = useState<AiMentorMode>("explain");
   const [classLevel, setClassLevel] = useState<"8" | "9" | "10" | "11" | "12">("10");
   const [chapterSlug, setChapterSlug] = useState("atomic-structure");
+  const [preferredLanguage, setPreferredLanguage] = useState<"en" | "hi" | "bn" | "or">("en");
+  const [usePageContext, setUsePageContext] = useState(true);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [voiceLanguage, setVoiceLanguage] = useState("en-IN");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [remaining, setRemaining] = useState<number | null>(null);
   const [unlimited, setUnlimited] = useState(process.env.NEXT_PUBLIC_DEV_MODE === "true");
+
+  useEffect(() => {
+    if (user?.class_level && ["9", "10", "11", "12"].includes(user.class_level)) {
+      queueMicrotask(() => setClassLevel(user.class_level as "9" | "10" | "11" | "12"));
+    }
+  }, [user?.class_level]);
+
+  useEffect(() => {
+    if (user?.preferred_language && ["en", "hi", "bn", "or"].includes(user.preferred_language)) {
+      queueMicrotask(() => setPreferredLanguage(user.preferred_language as "en" | "hi" | "bn" | "or"));
+    }
+  }, [user?.preferred_language]);
 
   function getAnonymousId() {
     const existing = window.localStorage.getItem("chemlab_anonymous_id");
@@ -79,9 +100,23 @@ export function MasterAlchemChat() {
     setLoading(true);
     setInput("");
     setMessages((current) => [...current, { role: "user", content: trimmed }]);
+    void learningApi.logChemShastriQuestion({
+      question_text: trimmed,
+      class_id: undefined,
+      classLevel,
+      mode,
+      resourceSlug: chapterSlug,
+      simulation_slug:
+        typeof window !== "undefined" && window.location.pathname.startsWith("/labs/")
+          ? window.location.pathname.split("/").filter(Boolean).at(-1)
+          : undefined,
+      role: user?.role ?? "anonymous",
+      anonymous_id: getAnonymousId(),
+      metadata: { currentPage: typeof window === "undefined" ? undefined : window.location.pathname },
+    });
 
     try {
-      const response = await fetch("/api/master-alchem/chat", {
+      const response = await fetch("/api/chem-shastri/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -89,6 +124,15 @@ export function MasterAlchemChat() {
           mode,
           classLevel,
           chapterSlug,
+          preferredLanguage,
+          role: user?.role ?? "anonymous",
+          currentPage: typeof window === "undefined" ? undefined : window.location.pathname,
+          usePageContext,
+          resourceSlug: chapterSlug,
+          simulationSlug:
+            typeof window !== "undefined" && window.location.pathname.startsWith("/labs/")
+              ? window.location.pathname.split("/").filter(Boolean).at(-1)
+              : undefined,
           anonymousId: getAnonymousId(),
         }),
       });
@@ -108,10 +152,13 @@ export function MasterAlchemChat() {
         remaining?: number | null;
         unlimited?: boolean;
         citations?: Array<{ label: string; pageStart?: number | null }>;
+        contextChips?: string[];
+        suggestedResources?: Array<{ title: string; slug: string; type: string; routeUrl?: string | null; reason?: string }>;
+        followUpQuestions?: string[];
       };
 
       if (!response.ok) {
-        throw new Error(data.error ?? data.detail ?? "Master Alchem request failed.");
+        throw new Error(data.error ?? data.detail ?? "Chem-Shastri request failed.");
       }
 
       setMessages((current) => [
@@ -126,12 +173,15 @@ export function MasterAlchemChat() {
           budgetRemainingInr: data.budgetRemainingInr,
           spokenText: data.spokenText,
           citations: data.citations,
+          contextChips: data.contextChips,
+          suggestedResources: data.suggestedResources,
+          followUpQuestions: data.followUpQuestions,
         },
       ]);
       setRemaining(typeof data.remaining === "number" ? data.remaining : null);
       setUnlimited(Boolean(data.unlimited));
     } catch (caughtError) {
-      setError(caughtError instanceof Error ? caughtError.message : "Master Alchem request failed.");
+      setError(caughtError instanceof Error ? caughtError.message : "Chem-Shastri request failed.");
     } finally {
       setLoading(false);
     }
@@ -180,7 +230,7 @@ export function MasterAlchemChat() {
           </div>
           <div>
             <h2 className="font-black text-slate-950">Mentor modes</h2>
-            <p className="text-sm font-semibold text-slate-600">Choose how Master Alchem helps.</p>
+            <p className="text-sm font-semibold text-slate-600">Choose how Chem-Shastri helps.</p>
           </div>
         </div>
 
@@ -220,6 +270,33 @@ export function MasterAlchemChat() {
             FAQ, cache, and NCERT notes are checked before AI. Voice stays off unless you tap the speaker.
           </p>
         </div>
+
+        <label className="mt-4 block">
+          <span className="text-sm font-black text-slate-700">Answer language</span>
+          <select
+            value={preferredLanguage}
+            onChange={(event) => setPreferredLanguage(event.target.value as typeof preferredLanguage)}
+            className="focus-ring mt-2 h-11 w-full rounded-2xl border border-blue-100 bg-white/85 px-3 text-sm font-bold text-slate-800"
+          >
+            <option value="en">English</option>
+            <option value="hi">Hindi / Hinglish</option>
+            <option value="bn">Bengali</option>
+            <option value="or">Odia</option>
+          </select>
+        </label>
+
+        <label className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-blue-100 bg-white/75 p-3">
+          <span>
+            <span className="block text-sm font-black text-slate-700">Use page context</span>
+            <span className="block text-xs font-semibold text-slate-500">Class, lab, and resource hints</span>
+          </span>
+          <input
+            type="checkbox"
+            checked={usePageContext}
+            onChange={(event) => setUsePageContext(event.target.checked)}
+            className="h-5 w-5 accent-blue-600"
+          />
+        </label>
 
         <label className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-blue-100 bg-white/75 p-3">
           <span>
@@ -295,7 +372,7 @@ export function MasterAlchemChat() {
           </p>
         ) : remaining !== null ? (
           <p className="mt-5 rounded-2xl border border-lime-200 bg-lime-100 p-3 text-sm font-black text-lime-800">
-            {remaining} Master Alchem messages remaining today.
+            {remaining} Chem-Shastri messages remaining today.
           </p>
         ) : null}
       </Card>
@@ -306,7 +383,7 @@ export function MasterAlchemChat() {
             <div className="flex items-center gap-3">
               <MasterAlchem mood={loading ? "thinking" : "guide"} size="sm" />
               <div>
-                <h1 className="text-xl font-black text-slate-950">Master Alchem</h1>
+                <h1 className="text-xl font-black text-slate-950">Chem-Shastri</h1>
                 <p className="text-sm font-semibold text-slate-600">
                   Ask, test an idea, or request a hint.
                 </p>
@@ -343,6 +420,48 @@ export function MasterAlchemChat() {
                     ))}
                   </div>
                 ) : null}
+                {message.role === "assistant" && message.contextChips?.length ? (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {message.contextChips.slice(0, 5).map((chip) => (
+                      <span key={chip} className="rounded-full bg-blue-50 px-2 py-1 text-[11px] font-black text-blue-700">
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+                {message.role === "assistant" && message.suggestedResources?.length ? (
+                  <div className="mt-3 rounded-2xl border border-amber-100 bg-amber-50/80 p-3">
+                    <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wide text-amber-800">
+                      <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+                      Try next
+                    </div>
+                    <div className="mt-2 grid gap-2">
+                      {message.suggestedResources.slice(0, 3).map((resource) => (
+                        <a
+                          key={`${resource.type}-${resource.slug}`}
+                          href={resource.routeUrl ?? `/resources?query=${encodeURIComponent(resource.slug)}`}
+                          className="rounded-xl bg-white/75 px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-white"
+                        >
+                          {resource.title}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+                {message.role === "assistant" && message.followUpQuestions?.length ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {message.followUpQuestions.slice(0, 3).map((prompt) => (
+                      <button
+                        key={prompt}
+                        type="button"
+                        className="rounded-full border border-violet-100 bg-violet-50 px-2 py-1 text-[11px] font-black text-violet-700 hover:bg-white"
+                        onClick={() => void submitPrompt(prompt)}
+                      >
+                        {prompt}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
                 {message.role === "assistant" ? (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {message.source ? (
@@ -376,7 +495,7 @@ export function MasterAlchemChat() {
                         type="button"
                         className="rounded-full border border-slate-200 bg-white/70 px-2 py-1 text-[11px] font-black text-slate-500 hover:bg-white"
                         onClick={() => {
-                          void fetch("/api/master-alchem/feedback", {
+                          void fetch("/api/chem-shastri/feedback", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ rating, anonymousId: getAnonymousId() }),
@@ -401,7 +520,7 @@ export function MasterAlchemChat() {
             <div className="flex justify-start">
               <div className="flex items-center gap-2 rounded-2xl border border-blue-100 bg-white/85 px-4 py-3 text-sm font-bold text-slate-700">
                 <Loader2 className="h-4 w-4 animate-spin text-blue-600" aria-hidden="true" />
-                Master Alchem is thinking through the chemistry...
+                Chem-Shastri is thinking through the chemistry...
               </div>
             </div>
           ) : null}
@@ -415,14 +534,14 @@ export function MasterAlchemChat() {
 
         <form onSubmit={handleSubmit} className="border-t border-blue-100 bg-white/60 p-5">
           <label className="sr-only" htmlFor="ai-message">
-            Message Master Alchem
+            Message Chem-Shastri
           </label>
           <div className="flex gap-3">
             <textarea
               id="ai-message"
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Ask Master Alchem about bonding, balancing, moles, periodic trends..."
+              placeholder="Ask Chem-Shastri about bonding, balancing, moles, periodic trends..."
               rows={2}
               className="focus-ring min-h-12 flex-1 resize-none rounded-2xl border border-blue-100 bg-white/90 px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-slate-400"
             />
@@ -438,6 +557,26 @@ export function MasterAlchemChat() {
           <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-black text-slate-500">
             <FlaskConical className="h-4 w-4 text-cyan-600" aria-hidden="true" />
             Safe theory, step-by-step reasoning, lab guide mode, and no-shame mistake repair.
+            <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 text-blue-700">
+              <Languages className="h-3.5 w-3.5" aria-hidden="true" />
+              multilingual-ready
+            </span>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 text-violet-700"
+              onClick={() =>
+                setMessages([
+                  {
+                    role: "assistant",
+                    content:
+                      "New chat started. Ask Chem-Shastri a chemistry doubt, a lab question, or a teaching prompt.",
+                  },
+                ])
+              }
+            >
+              <PlusCircle className="h-3.5 w-3.5" aria-hidden="true" />
+              new chat
+            </button>
           </div>
         </form>
       </Card>

@@ -14,7 +14,7 @@ export default function EquationBalancerSimulationPage() {
       <PageHeader
         eyebrow="Virtual Lab"
         title="Equation Balance Checker"
-        description="Balance reactions like a puzzle game. Match every atom, clear the challenge, and let Master Alchem explain the conservation clue."
+        description="Balance reactions like a puzzle game. Match every atom, clear the challenge, and let Chem-Shastri explain the conservation clue."
       />
       <Container className="pb-16">
         <EquationBalancer />

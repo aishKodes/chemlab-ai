@@ -10,9 +10,9 @@ export type MasterAlchemLine = {
 export const masterAlchemLines = {
   hero: {
     mood: "guide",
-    eyebrow: "Master Alchem",
+    eyebrow: "Chem-Shastri",
     line: "Welcome, future chemist. Pick a world, touch a model, and I will guide every reaction step by step.",
-    action: "Meet Master Alchem",
+    action: "Meet Chem-Shastri",
   },
   quest: {
     mood: "celebrating",

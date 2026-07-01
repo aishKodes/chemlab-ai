@@ -131,7 +131,7 @@ export const characterAssetConfigs: Record<CharacterAssetKey, CharacterAssetConf
   },
 };
 
-export const assetByCharacterPose: Record<Exclude<HydrocarbonCharacter, "Master Alchem">, Partial<Record<HydrocarbonPose, CharacterAssetKey>>> = {
+export const assetByCharacterPose: Record<Exclude<HydrocarbonCharacter, "Chem-Shastri">, Partial<Record<HydrocarbonPose, CharacterAssetKey>>> = {
   Kabir: {
     idle: "kabirReference",
     listening: "kabirReference",
@@ -295,7 +295,7 @@ export const sceneLayouts = {
   final: finalBadgeScene,
 };
 
-export function resolveCharacterConfig(character: Exclude<HydrocarbonCharacter, "Master Alchem">, pose: HydrocarbonPose): CharacterAssetConfig {
+export function resolveCharacterConfig(character: Exclude<HydrocarbonCharacter, "Chem-Shastri">, pose: HydrocarbonPose): CharacterAssetConfig {
   const assetKey = assetByCharacterPose[character][pose] ?? assetByCharacterPose[character].idle;
   return characterAssetConfigs[assetKey ?? (character === "Kabir" ? "kabirReference" : "aparnaReference")];
 }

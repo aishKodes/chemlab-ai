@@ -17,7 +17,8 @@
     "rag:embed": "tsx scripts/embed-knowledge.ts",
     "rag:reindex": "tsx scripts/reindex-knowledge.ts",
     "master-alchem:seed-faqs": "tsx scripts/seed-master-alchem-faqs.ts",
-    "test:master-alchem-cost": "tsx scripts/test-master-alchem-cost.ts"
+    "test:master-alchem-cost": "tsx scripts/test-master-alchem-cost.ts",
+    "test:chem-shastri-context": "tsx scripts/test-chem-shastri-context.ts"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",

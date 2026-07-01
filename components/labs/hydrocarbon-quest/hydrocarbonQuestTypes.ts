@@ -13,7 +13,7 @@ export type HydrocarbonModuleId =
 
 export type HydrocarbonQuestMode = "story" | "map" | "level" | "success" | "final";
 
-export type HydrocarbonCharacter = "Kabir" | "Aparna" | "Master Alchem";
+export type HydrocarbonCharacter = "Kabir" | "Aparna" | "Chem-Shastri";
 
 export type HydrocarbonPose =
   | "idle"

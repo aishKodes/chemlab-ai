@@ -68,7 +68,7 @@ export function HeroUniversePanel() {
           <div className="flex items-center gap-3">
             <MasterAlchem mood="guide" size="xs" showGlow={false} className="shrink-0" />
             <div>
-              <p className="text-sm font-black text-violet-700">Master Alchem</p>
+              <p className="text-sm font-black text-violet-700">Chem-Shastri</p>
               <p className="text-sm font-bold text-slate-700">
                 “Great prediction. Want a hint, lab guide, or full step?”
               </p>

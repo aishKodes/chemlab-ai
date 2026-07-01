@@ -12,9 +12,9 @@ These are full rectangular backgrounds and do not need transparency.
 - `assets/chemlab-magical-lab-background.png`
 - `assets/chemlab-virtual-lab-bench.png`
 
-### Master Alchem assets discovered
+### Chem-Shastri assets discovered
 
-The Master Alchem generated PNGs existed, but all were RGB PNGs with no alpha channel and visible checkerboard-looking backgrounds. They are quarantined and not used in student UI.
+The Chem-Shastri generated PNGs existed, but all were RGB PNGs with no alpha channel and visible checkerboard-looking backgrounds. They are quarantined and not used in student UI.
 
 - `public/_quarantine/bad-assets/master-alchem-avatar.png`
 - `public/_quarantine/bad-assets/master-alchem-celebrating.png`
@@ -26,7 +26,7 @@ The Master Alchem generated PNGs existed, but all were RGB PNGs with no alpha ch
 - `public/_quarantine/bad-assets/master-alchem-thinking.png`
 - `public/_quarantine/bad-assets/master-alchem-warning.png`
 
-Decision: replace runtime usage with the clean SVG/CSS Master Alchem component until transparent assets are regenerated.
+Decision: replace runtime usage with the clean SVG/CSS Chem-Shastri component until transparent assets are regenerated.
 
 ### Student assets discovered
 
@@ -89,7 +89,7 @@ These remain accessible but are not presented as the flagship experience.
 - Lab pages that felt like UI cards rather than experiments.
 - Student-facing copy that mentioned backend/API/development details.
 - Simulations page that presented every prototype as equally polished.
-- Lack of persistent Master Alchem guidance across routes.
+- Lack of persistent Chem-Shastri guidance across routes.
 
 ## What Was Kept
 

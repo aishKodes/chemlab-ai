@@ -133,7 +133,7 @@ export function EquationBalancer({ toolMode = false }: { toolMode?: boolean }) {
         ) : null}
         <MasterAlchemPointer
           mood={parsed.valid && parsed.balanced ? "celebrating" : "thinking"}
-          title="Master Alchem's conservation clue"
+          title="Chem-Shastri's conservation clue"
           message="You may change coefficients, but do not change subscripts. Subscripts change the substance; coefficients change how many particles react."
           href="/ai-tutor"
           cta="Ask for a balancing hint"

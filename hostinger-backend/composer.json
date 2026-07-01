@@ -1,0 +1,22 @@
+{
+  "name": "chemlab/hostinger-backend",
+  "description": "Hostinger PHP + MySQL API foundation for Chemlab.",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.1",
+    "phpmailer/phpmailer": "^6.9"
+  },
+  "autoload": {
+    "classmap": [
+      "src/"
+    ],
+    "psr-4": {
+      "Chemlab\\": "src/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  }
+}

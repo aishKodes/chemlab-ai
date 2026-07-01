@@ -17,7 +17,7 @@ type MasterAlchemDockProps = {
 
 export function MasterAlchemDock({
   mood = "guide",
-  title = "Master Alchem is watching the lab.",
+  title = "Chem-Shastri is watching the lab.",
   message = "Ask for a hint, a safer explanation, or a step-by-step path when a concept feels foggy.",
   className,
 }: MasterAlchemDockProps) {
@@ -26,12 +26,12 @@ export function MasterAlchemDock({
       <div className="grid gap-4 p-5 sm:grid-cols-[auto_1fr] sm:items-center">
         <MasterAlchem mood={mood} size="md" />
         <div>
-          <Badge tone="blue">Master Alchem</Badge>
+          <Badge tone="blue">Chem-Shastri</Badge>
           <h2 className="mt-3 text-2xl font-black text-slate-950">{title}</h2>
           <p className="mt-2 text-sm font-semibold leading-6 text-slate-700">{message}</p>
           <div className="mt-5 flex flex-wrap gap-2">
             <Button href="/ai-tutor" size="sm" icon={<BrainCircuit className="h-4 w-4" aria-hidden="true" />}>
-              Ask Master Alchem
+              Ask Chem-Shastri
             </Button>
             <Button href="/labs" size="sm" variant="ghost" icon={<Beaker className="h-4 w-4" aria-hidden="true" />}>
               Story labs
