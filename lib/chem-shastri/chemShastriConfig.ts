@@ -31,7 +31,7 @@ export const chemShastriConfig = {
     boolEnv("CHEM_SHASTRI_ALLOW_UNSAFE_CHEMISTRY_INSTRUCTIONS", boolEnv("ALLOW_UNSAFE_CHEMISTRY_INSTRUCTIONS", false)),
   voiceAutoSpeakEnabled: () => boolEnv("CHEM_SHASTRI_VOICE_AUTO_SPEAK", boolEnv("VOICE_AUTO_SPEAK", false)),
   hostingerBaseUrl: () =>
-    (process.env.BACKEND_INTERNAL_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "").replace(/\/+$/, ""),
+    (process.env.BACKEND_INTERNAL_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "https://api.chemlearning.in").replace(/\/+$/, ""),
 };
 
 export async function getChemShastriAdminSummary(): Promise<ChemShastriAdminSummary> {

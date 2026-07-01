@@ -25,6 +25,17 @@ export function StoryLabPreview() {
       />
 
       <LabSection title="Featured Labs" labs={featuredLabs} />
+      <Card className="bg-gradient-to-br from-amber-50 via-white to-cyan-50">
+        <Badge tone="amber">Classroom Battles</Badge>
+        <h2 className="mt-3 text-2xl font-black text-slate-950">Join a live quiz or practice publicly</h2>
+        <p className="mt-2 text-sm font-semibold leading-6 text-slate-700">
+          Teachers can launch PIN-based rooms, while students can practice Redox and IUPAC quiz battles any time.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Button href="/join" variant="secondary">Join with PIN</Button>
+          <Button href="/public-quizzes">Open quiz battles</Button>
+        </div>
+      </Card>
       <LabSection
         title="Prototype Labs"
         description="These early labs are useful for practice, and we are improving them into richer experiments one by one."

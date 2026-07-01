@@ -40,6 +40,15 @@ export function buildChemShastriContext(request: ChemShastriRequest): ChemShastr
   if (type === "lab" && request.simulationSlug) {
     learningSignals.push(`The learner is inside the ${request.simulationSlug.replaceAll("-", " ")} lab.`);
   }
+  if (
+    request.resourceSlug === "some-basic-concepts-of-chemistry" ||
+    request.simulationSlug === "basic-concepts-chemistry-universe" ||
+    request.chapterSlug === "some-basic-concepts-of-chemistry"
+  ) {
+    learningSignals.push(
+      "Use Class 11 Unit 1 context: matter classification, SI units, scientific notation, significant figures, mole concept, formulas, stoichiometry, and limiting reagent.",
+    );
+  }
   if (role === "teacher") {
     learningSignals.push("The user is a teacher, so give classroom-ready wording when useful.");
   }

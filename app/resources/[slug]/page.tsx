@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useEffect, useMemo, useState } from "react";
-import { BookOpen, FlaskConical, Sparkles } from "lucide-react";
+import { BookOpen, ExternalLink, FlaskConical, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -10,6 +10,7 @@ import { Container } from "@/components/ui/Container";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { ResourceFeedback } from "@/components/learning/ResourceFeedback";
+import { UnitResourceOverview } from "@/components/content-factory/UnitResourceOverview";
 import { publicApi, fallbackResources } from "@/lib/api/publicApi";
 import { getReadableApiError } from "@/lib/api/apiErrors";
 import type { BackendResource } from "@/lib/api/backendTypes";
@@ -69,6 +70,17 @@ export default function ResourceDetailPage({ params }: { params: Promise<{ slug:
                 <Button href={chemShastriPrompt} variant="secondary" icon={<Sparkles className="h-4 w-4" />}>
                   Ask Chem-Shastri
                 </Button>
+                {resource.source_url ? (
+                  <a
+                    href={resource.source_url}
+                    target={resource.external_open_mode === "same_tab" ? undefined : "_blank"}
+                    rel="noreferrer"
+                    className="focus-ring inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-violet-200 bg-white/75 px-4 text-sm font-extrabold text-violet-800 shadow-[0_6px_0_rgba(124,58,237,0.16)] transition hover:-translate-y-0.5 hover:bg-violet-50"
+                  >
+                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                    Open source
+                  </a>
+                ) : null}
               </div>
             </Card>
             <div className="grid gap-5 md:grid-cols-3">
@@ -84,14 +96,33 @@ export default function ResourceDetailPage({ params }: { params: Promise<{ slug:
                 <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
                   {resource.source_reference ?? "Original Chemlab resource. Admins can add approved references from the backend."}
                 </p>
+                {resource.attribution_text || resource.license_type || resource.author ? (
+                  <div className="mt-4 rounded-2xl bg-white/75 p-4 text-xs font-bold leading-5 text-slate-600">
+                    {resource.author ? <p><span className="font-black text-slate-800">Author:</span> {resource.author}</p> : null}
+                    {resource.license_type ? <p><span className="font-black text-slate-800">License:</span> {resource.license_type}</p> : null}
+                    {resource.attribution_text ? <p><span className="font-black text-slate-800">Attribution:</span> {resource.attribution_text}</p> : null}
+                  </div>
+                ) : null}
               </Card>
               <Card>
                 <h3 className="text-xl font-black text-slate-950">Content</h3>
                 <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-                  {content?.summary ?? "Detailed student-facing notes can be added through content_json or linked practice tools."}
+                  {resource.student_instructions ?? content?.summary ?? "Detailed student-facing notes can be added through content_json or linked practice tools."}
                 </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {resource.student_level ? <Badge tone="blue">{resource.student_level}</Badge> : null}
+                  {resource.estimated_minutes ? <Badge tone="amber">{resource.estimated_minutes} min</Badge> : null}
+                  {resource.quality_status ? <Badge tone="green">{resource.quality_status.replaceAll("_", " ")}</Badge> : null}
+                </div>
               </Card>
             </div>
+            {resource.why_useful ? (
+              <Card className="bg-gradient-to-br from-white via-lime-50 to-cyan-50">
+                <h3 className="text-xl font-black text-slate-950">Why this helps</h3>
+                <p className="mt-2 text-sm font-bold leading-6 text-slate-700">{resource.why_useful}</p>
+              </Card>
+            ) : null}
+            {slug === "some-basic-concepts-of-chemistry" ? <UnitResourceOverview /> : null}
             <ResourceFeedback resourceId={resource.id} resourceSlug={resource.slug} resourceType={resource.type} />
           </>
         ) : (

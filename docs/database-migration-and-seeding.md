@@ -1,78 +1,84 @@
-# Chemlab Database Migration And Seeding
+# Chemlab Database Install And Seeding
 
-This guide is for the Hostinger PHP/MySQL backend in `hostinger-backend/`.
+Chemlab now supports the simple Hostinger `public_html` workflow.
 
-## Files
+## Primary Files
 
-- Migrations: `hostinger-backend/migrations/`
-- Seeders: `hostinger-backend/seeders/`
-- Migration runner: `hostinger-backend/src/database/migrate.php`
-- Seeder runner: `hostinger-backend/src/database/seed.php`
-- Readiness check: `hostinger-backend/scripts/check-backend.php`
-- Smoke test: `hostinger-backend/scripts/smoke-test.php`
-
-## Before Running
-
-Copy the production environment template on the server:
+After running:
 
 ```bash
-cd hostinger-backend
-cp .env.production.example .env
+php scripts/build-hostinger-publichtml-package.php
 ```
 
-Fill:
+the package contains:
+
+- `database/schema.sql`
+- `database/seed.sql`
+- `install.php`
+- `config.example.php`
+
+## Browser Installer Flow
+
+1. Upload `dist/chemlab-hostinger-publichtml/` contents into `api.chemlearning.in/public_html/`.
+2. Rename `config.example.php` to `config.php`.
+3. Fill database, mail, admin, and JWT values.
+4. Open:
 
 ```txt
-DB_HOST
-DB_NAME
-DB_USER
-DB_PASS
-JWT_SECRET
-SMTP_HOST
-SMTP_USERNAME
-SMTP_PASSWORD
-SMTP_FROM_EMAIL
-ADMIN_NAME
-ADMIN_EMAIL
-ADMIN_PASSWORD
+https://api.chemlearning.in/install.php
 ```
 
-Generate a strong JWT secret:
+5. Click `Check requirements`.
+6. Click `Run full install`.
 
-```bash
-php -r 'echo bin2hex(random_bytes(32)).PHP_EOL;'
+The full installer:
+
+- checks PHP and PDO MySQL
+- checks `config.php`
+- checks database connection
+- runs `database/schema.sql`
+- runs `database/seed.sql`
+- creates or updates the first admin with `password_hash()`
+- creates `storage/install.lock`
+
+## Manual phpMyAdmin Flow
+
+If you want to use phpMyAdmin:
+
+1. Import `database/schema.sql`
+2. Import `database/seed.sql`
+3. Open:
+
+```txt
+https://api.chemlearning.in/install.php?action=create-admin
 ```
 
-## Install Dependencies
+Admin creation stays in PHP because the password must be hashed safely.
 
-```bash
-cd hostinger-backend
-composer install --no-dev
-```
+## What schema.sql Contains
 
-If Composer is not available on Hostinger, run Composer locally and upload the generated `vendor/` directory.
+`schema.sql` combines:
 
-## Run Migrations
+- Stage 1 base tables
+- Stage 3 learning tools
+- Stage 4 learning intelligence
 
-```bash
-php src/database/migrate.php
-```
+It is generated from:
 
-The runner records applied SQL migrations in `schema_migrations`. Re-running the command is safe because already-applied migrations are skipped.
+- `hostinger-backend/migrations/001_create_stage_1_tables.sql`
+- `hostinger-backend/migrations/002_stage_3_learning_tools.sql`
+- `hostinger-backend/migrations/003_stage_4_learning_intelligence.sql`
 
-## Run Seeders
+## What seed.sql Contains
 
-```bash
-php src/database/seed.php
-```
+`seed.sql` combines SQL seeders only. The PHP admin seeder is intentionally excluded.
 
-Seeders create or update:
+It creates or updates:
 
 - Class 9 Science
 - Class 10 Science
 - Class 11 Chemistry
 - Class 12 Chemistry
-- First admin user from `ADMIN_*`
 - Site settings, including `site_name = Chemlab` and `ai_name = Chem-Shastri`
 - Email templates
 - Existing simulations as resources
@@ -81,44 +87,23 @@ Seeders create or update:
 
 ## Stage 6 NCERT Skeleton
 
-`hostinger-backend/seeders/007_stage_6_ncert_skeleton.sql` adds editable draft structure for Classes 9-12.
+The NCERT skeleton is a draft scaffold, not final published textbook content.
 
-It intentionally creates draft placeholders, not final published syllabus content. Admins must verify the current syllabus mapping before publishing chapters or topics.
+Mapped resources:
 
-The seeder maps:
+- `redox-transfer-kitchen` -> Class 10 Science, Chemical Reactions and Equations, Oxidation and reduction
+- `hydrocarbon-naming-quest` -> Class 11 Chemistry, Hydrocarbons, IUPAC nomenclature
 
-- `redox-transfer-kitchen` to Class 10 Science, Chemical Reactions and Equations, Oxidation and reduction
-- `hydrocarbon-naming-quest` to Class 11 Chemistry, Hydrocarbons, IUPAC nomenclature
+Admins should verify the syllabus mapping in `/admin/resources/structure` before publishing.
 
-## Post-Run Checks
+## Legacy CLI Flow
 
-Run:
+For advanced environments, the existing migration/seeder runners still exist:
 
 ```bash
-php scripts/check-backend.php
-php scripts/smoke-test.php
+cd hostinger-backend
+php src/database/migrate.php
+php src/database/seed.php
 ```
 
-Then verify in a browser:
-
-```txt
-https://api.chemlearning.in/api/health
-https://api.chemlearning.in/api/public/classes
-https://api.chemlearning.in/api/public/resources
-```
-
-## Admin Verification
-
-After login as the seeded admin:
-
-- Open `/admin/resources/structure`
-- Confirm classes, subjects, books, chapters, and topics are visible
-- Keep seeded NCERT skeleton rows as draft until verified
-- Open `/admin/resources`
-- Confirm Redox Transfer Kitchen and Hydrocarbon Naming Quest have class/topic mappings
-
-## Rollback Notes
-
-For production data, take a MySQL export before running new migrations or seeders.
-
-The Stage 6 seeder uses draft rows and update statements. If you need to remove it manually, archive or delete the draft books/chapters/topics created for NCERT skeletons, then clear the `ncert_skeleton_note` site setting.
+For the user's normal Hostinger workflow, prefer `install.php`.

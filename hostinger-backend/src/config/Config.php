@@ -12,6 +12,7 @@ final class Config
     public static function load(string $basePath): void
     {
         self::$values['BASE_PATH'] = $basePath;
+        self::loadPhpConfig($basePath . '/config.php');
 
         $envFile = $basePath . '/.env';
         if (is_file($envFile) && is_readable($envFile)) {
@@ -27,7 +28,7 @@ final class Config
                 $value = trim($value);
                 $value = trim($value, "\"'");
 
-                if ($key !== '' && getenv($key) === false) {
+                if ($key !== '' && !array_key_exists($key, self::$values)) {
                     self::$values[$key] = $value;
                     $_ENV[$key] = $value;
                 }
@@ -37,17 +38,17 @@ final class Config
 
     public static function get(string $key, ?string $default = null): ?string
     {
-        $value = getenv($key);
-        if ($value !== false) {
-            return (string) $value;
+        if (array_key_exists($key, self::$values)) {
+            return (string) self::$values[$key];
         }
 
         if (array_key_exists($key, $_ENV)) {
             return (string) $_ENV[$key];
         }
 
-        if (array_key_exists($key, self::$values)) {
-            return (string) self::$values[$key];
+        $value = getenv($key);
+        if ($value !== false) {
+            return (string) $value;
         }
 
         return $default;
@@ -100,5 +101,74 @@ final class Config
     {
         $config = self::group($group);
         return $config[$key] ?? $default;
+    }
+
+    private static function loadPhpConfig(string $path): void
+    {
+        if (!is_file($path) || !is_readable($path)) {
+            return;
+        }
+
+        $config = require $path;
+        if (!is_array($config)) {
+            return;
+        }
+
+        $map = [
+            'app.env' => 'APP_ENV',
+            'app.name' => 'APP_NAME',
+            'app.url' => 'APP_URL',
+            'app.frontend_url' => 'FRONTEND_URL',
+            'app.api_url' => 'API_URL',
+            'app.default_language' => 'DEFAULT_LANGUAGE',
+            'database.host' => 'DB_HOST',
+            'database.name' => 'DB_NAME',
+            'database.user' => 'DB_USER',
+            'database.pass' => 'DB_PASS',
+            'database.charset' => 'DB_CHARSET',
+            'security.jwt_secret' => 'JWT_SECRET',
+            'security.jwt_expires_days' => 'JWT_EXPIRES_DAYS',
+            'mail.host' => 'SMTP_HOST',
+            'mail.port' => 'SMTP_PORT',
+            'mail.secure' => 'SMTP_SECURE',
+            'mail.username' => 'SMTP_USERNAME',
+            'mail.password' => 'SMTP_PASSWORD',
+            'mail.from_email' => 'SMTP_FROM_EMAIL',
+            'mail.from_name' => 'SMTP_FROM_NAME',
+            'admin.name' => 'ADMIN_NAME',
+            'admin.email' => 'ADMIN_EMAIL',
+            'admin.password' => 'ADMIN_PASSWORD',
+            'cors.allowed_origins' => 'CORS_ALLOWED_ORIGINS',
+            'upload.max_mb' => 'UPLOAD_MAX_MB',
+            'upload.allowed_types' => 'UPLOAD_ALLOWED_TYPES',
+            'ai.daily_budget_inr' => 'AI_DAILY_BUDGET_INR',
+        ];
+
+        foreach ($map as $configPath => $envKey) {
+            $value = self::arrayPath($config, $configPath);
+            if ($value === null) {
+                continue;
+            }
+
+            if (is_array($value)) {
+                $value = implode(',', array_map(static fn (mixed $item): string => (string) $item, $value));
+            }
+
+            self::$values[$envKey] = (string) $value;
+            $_ENV[$envKey] = (string) $value;
+        }
+    }
+
+    private static function arrayPath(array $data, string $path): mixed
+    {
+        $cursor = $data;
+        foreach (explode('.', $path) as $part) {
+            if (!is_array($cursor) || !array_key_exists($part, $cursor)) {
+                return null;
+            }
+            $cursor = $cursor[$part];
+        }
+
+        return $cursor;
     }
 }

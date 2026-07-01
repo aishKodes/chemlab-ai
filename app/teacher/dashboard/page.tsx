@@ -109,6 +109,7 @@ function TeacherDashboard() {
               </div>
             </div>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <Button href="/teacher/quizzes" variant="secondary">Live quizzes</Button>
               <Button href="/teacher/classrooms" variant="secondary">Classrooms</Button>
               <Button href="/teacher/analytics" variant="secondary">Analytics</Button>
               <Button href="/teacher/assignments" variant="secondary">Assignments</Button>

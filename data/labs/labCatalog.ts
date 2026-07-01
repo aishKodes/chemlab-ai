@@ -12,10 +12,24 @@ export type LabCatalogEntry = {
   difficulty: "Beginner" | "Intermediate" | "Advanced";
   estimatedMinutes: number;
   concepts: string[];
-  thumbnailType: "electrochem" | "molecule" | "acid-base" | "organic" | "practice" | "future";
+  thumbnailType: "electrochem" | "molecule" | "acid-base" | "organic" | "practice" | "basic-concepts" | "future";
 };
 
 export const labCatalog: LabCatalogEntry[] = [
+  {
+    slug: "basic-concepts-chemistry-universe",
+    title: "Chemistry Scale Universe",
+    description: "Explore matter, measurement, mole concept, and stoichiometry as a multi-zone Class 11 universe.",
+    classLevel: "Class 11",
+    topic: "Some Basic Concepts of Chemistry",
+    status: "featured",
+    route: "/labs/basic-concepts-chemistry-universe",
+    xp: 630,
+    difficulty: "Intermediate",
+    estimatedMinutes: 22,
+    concepts: ["matter", "SI units", "significant figures", "mole concept", "stoichiometry", "limiting reagent"],
+    thumbnailType: "basic-concepts",
+  },
   {
     slug: "daniell-cell-studio",
     title: "Daniell Cell Studio",

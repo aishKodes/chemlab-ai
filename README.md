@@ -56,6 +56,11 @@ chemistry reasoning without making mistakes feel shameful.
 - Chem-Shastri chat UI using `/api/chem-shastri/chat` with `/api/master-alchem/chat`
   compatibility
 - Quiz runner with local sample questions
+- Teacher live quiz rooms with 6-digit PIN join links
+- Public quiz battles and leaderboards
+- Smart memory card scheduling with due/weak/mastered summaries
+- Resource curation fields for source URL, license, attribution, review status,
+  student instructions, and usefulness notes
 - Student dashboard shell
 - Admin/content/question manager foundations
 - Supabase schema and seed data with RLS policies
@@ -183,6 +188,84 @@ npm run test:chem-shastri-context
 npm run lint
 npm run build
 ```
+
+## Stage 7 Teacher Quizzes, Memory, And Resources
+
+Stage 7 connects classroom-ready quiz and review foundations:
+
+- `/teacher/quizzes` lets teacher/admin users create quiz rooms.
+- `/teacher/quizzes/[quizId]` starts a live room and generates a 6-digit PIN.
+- `/join` and `/join/[pin]` let students join as guests.
+- `/quiz-room/[sessionId]` plays the live quiz one question at a time.
+- `/public-quizzes` and `/leaderboards` expose public practice battles.
+- `/memory-cards` shows due, weak, new, and mastered memory-card counts.
+- `/admin/resources` includes source, license, attribution, quality, and
+  student guidance fields.
+
+Backend additions are in:
+
+```text
+hostinger-backend/migrations/004_stage_7_live_quizzes_memory_resources.sql
+hostinger-backend/seeders/008_stage_7_quiz_memory_resource_content.sql
+hostinger-backend/src/controllers/LiveQuizController.php
+```
+
+Guides:
+
+```text
+docs/teacher-live-quiz-guide.md
+docs/smart-memory-card-guide.md
+docs/resource-curation-and-license-guide.md
+docs/stage-7-teacher-quiz-memory-resource-qa.md
+```
+
+## Stage 8 Content Factory And Class 11 Unit 1
+
+Stage 8 adds a scalable content production pattern for chapter packs:
+
+```text
+Content Factory -> generate/curate chapter pack -> admin review -> publish
+```
+
+The first pack is Class 11 Chemistry Unit 1, `Some Basic Concepts of Chemistry`.
+It lives in:
+
+```text
+lib/content-factory/
+data/content-packs/class-11/some-basic-concepts-of-chemistry.ts
+app/admin/content-factory/page.tsx
+app/roadmap/chemistry/page.tsx
+app/admin/roadmap/page.tsx
+```
+
+The new flagship Unit 1 lab is:
+
+```text
+app/labs/basic-concepts-chemistry-universe/page.tsx
+components/labs/basic-concepts-universe/
+```
+
+Playable zones:
+
+- Matter World
+- Measurement Lab
+- Mole Portal
+- Stoichiometry Factory
+
+Preview zones:
+
+- Chemical Laws Court
+- Formula Detective
+
+Hostinger seeding is handled by:
+
+```text
+hostinger-backend/seeders/008_stage_8_class_11_unit_1_content.php
+```
+
+It upserts the Class 11 Unit 1 chapter, topics, resources, memory decks/cards,
+quick drills/questions, concept map, mistake patterns, and teacher quiz packs
+with `quality_status = needs_review`.
 
 ## Molecule Explorer
 

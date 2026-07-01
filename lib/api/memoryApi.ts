@@ -1,5 +1,5 @@
 import { backendClient } from "@/lib/api/backendClient";
-import type { BackendMemoryCard, BackendMemoryDeck, BackendMemoryProgress } from "@/lib/api/backendTypes";
+import type { BackendMemoryCard, BackendMemoryDeck, BackendMemoryProgress, BackendMemorySummary } from "@/lib/api/backendTypes";
 
 export const fallbackMemoryDecks: BackendMemoryDeck[] = [
   {
@@ -46,7 +46,21 @@ export const memoryApi = {
     response_time_ms?: number;
     review_mode?: "learn" | "review" | "mistake_fix";
     metadata?: Record<string, unknown>;
-  }) => backendClient.post<{ review_id: number; next_review_at?: string }>("/api/learning/memory/review", payload),
+  }) => backendClient.post<{ review_id: number; next_review_at?: string; progress?: BackendMemoryProgress }>("/api/learning/memory/review", payload),
+  getDue: (anonymousId?: string) =>
+    backendClient.get<{ cards: Array<BackendMemoryCard & Partial<BackendMemoryProgress> & { deck_title?: string; deck_slug?: string }>; summary: BackendMemorySummary }>(
+      "/api/learning/memory/due",
+      { query: anonymousId ? { anonymous_id: anonymousId } : undefined },
+    ),
+  getStudyPlan: (deckId: string | number, anonymousId?: string) =>
+    backendClient.get<{
+      deck: BackendMemoryDeck;
+      summary: BackendMemorySummary;
+      cards: Array<BackendMemoryCard & Partial<BackendMemoryProgress>>;
+      message: string;
+    }>(`/api/learning/memory/decks/${deckId}/study-plan`, {
+      query: anonymousId ? { anonymous_id: anonymousId } : undefined,
+    }),
   getProgress: (anonymousId?: string) =>
     backendClient.get<{ progress: BackendMemoryProgress[] }>("/api/learning/memory/progress", {
       query: anonymousId ? { anonymous_id: anonymousId } : undefined,

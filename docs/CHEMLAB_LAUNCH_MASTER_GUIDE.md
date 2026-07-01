@@ -1,145 +1,158 @@
 # Chemlab Launch Master Guide
 
-This is the single launch checklist for deploying Chemlab with:
+This is the primary launch flow for Chemlab.
 
 - Frontend: Vercel, `https://www.chemlearning.in`
-- Backend: Hostinger PHP/MySQL, `https://api.chemlearning.in`
+- Backend: Hostinger public_html, `https://api.chemlearning.in`
 - Database: Hostinger MySQL
 - Email: Hostinger SMTP
 
-## 1. Prepare Frontend Env
+## 1. Build The Hostinger public_html Package
 
-In Vercel, set:
+From the project root:
 
-```txt
-NEXT_PUBLIC_SITE_URL=https://www.chemlearning.in
-NEXT_PUBLIC_BACKEND_URL=https://api.chemlearning.in
-BACKEND_INTERNAL_API_URL=https://api.chemlearning.in
+```bash
+php scripts/build-hostinger-publichtml-package.php
 ```
 
-Optional AI values:
+This creates:
 
 ```txt
-GEMINI_API_KEY=
-OPENAI_API_KEY=
-CHEM_SHASTRI_ENABLED=true
-CHEM_SHASTRI_DEFAULT_PROVIDER=gemini
-CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED=false
-CHEM_SHASTRI_DAILY_BUDGET_INR=50
-DEV_UNLIMITED_AI=false
+dist/chemlab-hostinger-publichtml/
+dist/chemlab-hostinger-publichtml.zip
 ```
 
-Use `.env.production.example` as the source template.
+Upload the contents of `dist/chemlab-hostinger-publichtml/`, not the folder itself.
 
-## 2. Create Hostinger Subdomain
+## 2. Create The Hostinger Subdomain
 
-Create:
+In Hostinger hPanel, create:
 
 ```txt
 api.chemlearning.in
 ```
 
-Point the subdomain to the Hostinger hosting plan.
-
-Preferred document root:
+Use the normal Hostinger folder:
 
 ```txt
-hostinger-backend/public
+api.chemlearning.in/public_html/
 ```
 
-If Hostinger cannot point directly to that folder, upload the backend so only `public/` is web-accessible. Keep `.env`, `src/`, `migrations/`, `seeders/`, and `storage/` outside direct public browsing whenever possible.
-
-## 3. Create MySQL Database
+## 3. Create The MySQL Database
 
 In Hostinger hPanel:
 
-1. Create a database.
-2. Create a database user.
+1. Create a MySQL database.
+2. Create a MySQL user.
 3. Grant the user access.
-4. Copy DB host, name, user, and password.
-
-## 4. Configure Backend Env
-
-On Hostinger:
-
-```bash
-cd hostinger-backend
-cp .env.production.example .env
-```
-
-Fill:
+4. Copy:
 
 ```txt
 DB_HOST
 DB_NAME
 DB_USER
 DB_PASS
-JWT_SECRET
-SMTP_HOST
-SMTP_PORT
-SMTP_SECURE
-SMTP_USERNAME
-SMTP_PASSWORD
-SMTP_FROM_EMAIL
-ADMIN_NAME
-ADMIN_EMAIL
-ADMIN_PASSWORD
-CORS_ALLOWED_ORIGINS
 ```
 
-Generate `JWT_SECRET`:
+## 4. Upload The Backend
+
+Upload the package contents into:
+
+```txt
+api.chemlearning.in/public_html/
+```
+
+The folder should look like:
+
+```txt
+public_html/
+├── index.php
+├── health.php
+├── install.php
+├── config.example.php
+├── .htaccess
+├── src/
+├── database/
+│   ├── schema.sql
+│   └── seed.sql
+├── storage/
+│   └── logs/
+└── uploads/
+```
+
+If `vendor/` is present, upload it too. If not, auth, APIs, and Hostinger SMTP can still work because Chemlab includes a built-in SMTP sender. `vendor/` is now optional and only needed if you specifically want PHPMailer.
+
+## 5. Create config.php
+
+In `public_html`, rename:
+
+```txt
+config.example.php
+```
+
+to:
+
+```txt
+config.php
+```
+
+Fill:
+
+- database host/name/user/password
+- mail host/port/user/password/from email
+- admin name/email/password
+- JWT secret
+- frontend URL
+- API URL
+
+Generate a JWT secret locally:
 
 ```bash
 php -r 'echo bin2hex(random_bytes(32)).PHP_EOL;'
 ```
 
-## 5. Install Backend Dependencies
-
-```bash
-cd hostinger-backend
-composer install --no-dev
-```
-
-If Composer is unavailable on Hostinger, run the command locally and upload `vendor/`.
-
-## 6. Run Backend Readiness Check
-
-```bash
-php scripts/check-backend.php
-```
-
-Fix hard failures before continuing. Warnings for SMTP are acceptable only before email setup is complete.
-
-## 7. Run Migrations And Seeders
-
-```bash
-php src/database/migrate.php
-php src/database/seed.php
-```
-
-Then:
-
-```bash
-php scripts/smoke-test.php
-```
-
-Expected seeded content:
-
-- Class 9 Science
-- Class 10 Science
-- Class 11 Chemistry
-- Class 12 Chemistry
-- First admin user
-- Email templates
-- Redox Transfer Kitchen
-- Hydrocarbon Naming Quest
-- Draft NCERT skeleton structure
-
-## 8. Verify Public API
+## 6. Open The Browser Installer
 
 Open:
 
 ```txt
+https://api.chemlearning.in/install.php
+```
+
+Click:
+
+1. Check requirements
+2. Run full install
+
+Full install runs:
+
+- `database/schema.sql`
+- `database/seed.sql`
+- first admin creation with `password_hash()`
+- `storage/install.lock`
+
+After install, delete `install.php` or keep `storage/install.lock` active.
+
+## 7. Manual phpMyAdmin Option
+
+If you prefer manual import:
+
+1. Import `database/schema.sql`
+2. Import `database/seed.sql`
+3. Open:
+
+```txt
+https://api.chemlearning.in/install.php?action=create-admin
+```
+
+This creates or updates the admin user safely with a hashed password from `config.php`.
+
+## 8. Test The API
+
+Open:
+
+```txt
+https://api.chemlearning.in/health.php
 https://api.chemlearning.in/api/health
 https://api.chemlearning.in/api/public/classes
 https://api.chemlearning.in/api/public/resources
@@ -151,75 +164,69 @@ Expected response format:
 { "ok": true, "data": {} }
 ```
 
-## 9. Verify Auth
+## 9. Set Vercel Environment
 
-Test:
+In Vercel set:
 
-1. Student signup
-2. Teacher signup
-3. Login
-4. `/api/auth/me`
-5. Logout
-6. Forgot password
-7. Email verification or graceful email failure logging
+```txt
+NEXT_PUBLIC_SITE_URL=https://www.chemlearning.in
+NEXT_PUBLIC_BACKEND_URL=https://api.chemlearning.in
+BACKEND_INTERNAL_API_URL=https://api.chemlearning.in
+```
 
-## 10. Verify Admin
+Optional Chem-Shastri values:
 
-1. Login as seeded admin.
-2. Open `/admin`.
-3. Open `/admin/resources/structure`.
-4. Confirm seeded NCERT skeletons are draft.
-5. Open `/admin/resources`.
-6. Confirm the Redox and Hydrocarbon resources are mapped.
-7. Test `/admin/email` or the backend email test route after SMTP is configured.
+```txt
+GEMINI_API_KEY=
+OPENAI_API_KEY=
+CHEM_SHASTRI_ENABLED=true
+CHEM_SHASTRI_DEFAULT_PROVIDER=gemini
+CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED=false
+CHEM_SHASTRI_DAILY_BUDGET_INR=50
+DEV_UNLIMITED_AI=false
+```
 
-## 11. Verify Frontend
+## 10. Login As Admin
 
 Open:
 
 ```txt
-https://www.chemlearning.in
-https://www.chemlearning.in/classes
-https://www.chemlearning.in/resources
-https://www.chemlearning.in/labs/redox-transfer-kitchen
-https://www.chemlearning.in/labs/hydrocarbon-naming-quest
-https://www.chemlearning.in/ai-tutor
+https://www.chemlearning.in/login
 ```
 
-Check:
+Use the admin email/password from `config.php`.
 
-- Public resources render.
-- Login/signup links appear when logged out.
-- Dashboard route redirects by role.
-- Chem-Shastri is the visible mentor name.
-- Chem-Shastri compact icon does not block lab controls.
-- Simulations still open without backend or AI keys.
+Then verify:
 
-## 12. Production Safety Rules
+- `/admin`
+- `/admin/resources/structure`
+- `/admin/resources`
+- `/classes`
+- `/resources`
+- `/labs/redox-transfer-kitchen`
+- `/labs/hydrocarbon-naming-quest`
 
+## 11. Production Safety Rules
+
+- Do not upload real secrets to Git.
+- Do not expose `config.php`.
 - Do not put backend secrets in `NEXT_PUBLIC_*`.
-- Do not commit `.env`.
 - Keep `DEV_UNLIMITED_AI=false` in production.
 - Keep paid voice generation disabled until explicitly enabled.
 - Keep NCERT skeleton rows draft until verified.
 - Do not publish generated assets with visible checkerboard backgrounds.
 
-## 13. Post-Launch Monitoring
+## Optional Advanced Method
 
-Check daily for the first week:
+The older Composer/SSH style workflow still works for developers who want it:
 
-- Signup/login errors
-- SMTP failures in `email_logs`
-- Analytics event inserts
-- AI budget or provider failures
-- Simulation page errors
-- Admin route authorization
+```bash
+cd hostinger-backend
+composer install --no-dev
+php src/database/migrate.php
+php src/database/seed.php
+php scripts/check-backend.php
+php scripts/smoke-test.php
+```
 
-## 14. Stage 7 Suggestions
-
-- Full admin CMS editing workflow
-- Verified NCERT chapter/topic publishing
-- Better media upload moderation
-- User progress storage from simulations
-- Teacher classroom dashboards
-- Real Chem-Shastri conversation persistence on Hostinger
+But the primary recommended Hostinger workflow is the public_html package plus browser installer.

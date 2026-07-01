@@ -78,8 +78,8 @@ No real secrets are committed in these templates.
 ## Launch Risks
 
 - Hostinger `.env` must be filled manually.
-- Hostinger document root must point to `hostinger-backend/public`.
-- Composer dependencies or uploaded `vendor/` are required for PHPMailer.
+- For the simple Hostinger flow, upload the generated package contents directly into `api.chemlearning.in/public_html/` and fill `config.php`.
+- Composer dependencies or uploaded `vendor/` are optional. If absent, Chemlab uses its built-in SMTP sender for Hostinger SMTP.
 - SMTP should be tested from Hostinger because local SMTP reachability can differ.
 - Public AI remains safe without paid keys, but real provider keys must be added manually when desired.
 
@@ -87,9 +87,9 @@ No real secrets are committed in these templates.
 
 Chemlab is ready for a controlled production deployment pass after:
 
-1. Hostinger env is filled.
-2. Migrations and seeders are run.
-3. `check-backend.php` and `smoke-test.php` pass on Hostinger.
+1. Hostinger `config.php` is filled.
+2. `install.php` full install is run, or `database/schema.sql` and `database/seed.sql` are imported manually before `install.php?action=create-admin`.
+3. `storage/install.lock` is present after install.
 4. Vercel env values are set.
 5. Signup, login, public resources, and the two simulations are manually smoke-tested.
 

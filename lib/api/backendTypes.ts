@@ -116,6 +116,20 @@ export type BackendResource = {
   content_json?: Record<string, unknown> | string | null;
   source_type?: string | null;
   source_reference?: string | null;
+  source_url?: string | null;
+  license_type?: string | null;
+  attribution_text?: string | null;
+  author?: string | null;
+  embed_url?: string | null;
+  external_open_mode?: "same_tab" | "new_tab" | "embed" | null;
+  quality_status?: "draft" | "needs_review" | "verified" | "published" | "archived" | null;
+  accuracy_reviewed_by?: number | null;
+  accuracy_reviewed_at?: string | null;
+  accuracy_notes?: string | null;
+  why_useful?: string | null;
+  student_instructions?: string | null;
+  student_level?: "beginner" | "intermediate" | "advanced" | null;
+  estimated_minutes?: number | null;
   status?: "draft" | "published" | "archived";
   topic?: string | null;
   approved_by?: number | null;
@@ -269,6 +283,107 @@ export type BackendQuizQuestion = {
   updated_at?: string;
 };
 
+export type BackendTeacherQuiz = {
+  id?: number;
+  uuid?: string;
+  teacher_user_id?: number;
+  title: string;
+  slug: string;
+  description?: string | null;
+  class_id?: number | null;
+  subject_id?: number | null;
+  chapter_id?: number | null;
+  topic_id?: number | null;
+  source_drill_id?: number | null;
+  source_drill_title?: string | null;
+  status?: "draft" | "published" | "archived";
+  visibility?: "private" | "public";
+  time_limit_minutes?: number | null;
+  shuffle_questions?: 0 | 1 | boolean;
+  show_correct_after_each?: 0 | 1 | boolean;
+  show_leaderboard?: 0 | 1 | boolean;
+  quality_status?: "draft" | "needs_review" | "verified" | "published" | "archived";
+  source_reference?: string | null;
+  question_count?: number | string;
+  questions?: BackendTeacherQuizQuestion[];
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type BackendTeacherQuizQuestion = {
+  id?: number;
+  quiz_id?: number;
+  question_text: string;
+  question_type?: "mcq" | "multi_select" | "true_false" | "short_answer";
+  options_json?: string[] | Record<string, unknown> | string | null;
+  correct_answer_json?: string[] | Record<string, unknown> | string | null;
+  explanation?: string | null;
+  hint?: string | null;
+  points?: number;
+  mistake_key?: string | null;
+  order_index?: number;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type BackendLiveQuizSession = {
+  id: number;
+  uuid: string;
+  quiz_id?: number;
+  teacher_user_id?: number;
+  pin_code: string;
+  join_url?: string | null;
+  status: "waiting" | "live" | "ended" | "archived";
+  quiz_title?: string;
+  quiz_description?: string | null;
+  started_at?: string | null;
+  ended_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type BackendLiveQuizParticipant = {
+  id: number;
+  session_id: number;
+  user_id?: number | null;
+  guest_name?: string | null;
+  display_name: string;
+  joined_at?: string;
+  completed_at?: string | null;
+  score?: number;
+  total_points?: number;
+  correct_count?: number;
+  wrong_count?: number;
+  duration_seconds?: number;
+  rank_position?: number | null;
+};
+
+export type BackendLiveQuizAnswer = {
+  id?: number;
+  session_id: number;
+  participant_id: number;
+  question_id: number;
+  question_text?: string;
+  selected_answer_json?: unknown;
+  correct_answer_json?: unknown;
+  is_correct?: 0 | 1 | boolean;
+  points_awarded?: number;
+  response_time_ms?: number | null;
+  mistake_key?: string | null;
+  explanation?: string | null;
+  answered_at?: string;
+};
+
+export type BackendPublicLeaderboardEntry = {
+  id?: number;
+  participant_name: string;
+  score: number;
+  total_points?: number;
+  duration_seconds?: number;
+  correct_count?: number;
+  created_at?: string;
+};
+
 export type BackendConceptMap = {
   id?: number;
   uuid?: string;
@@ -363,13 +478,24 @@ export type BackendMemoryProgress = {
   deck_id: number;
   card_id: number;
   ease_score?: number | string;
+  interval_days?: number;
   review_count?: number;
   forgot_count?: number;
   hard_count?: number;
+  lapse_count?: number;
   last_rating?: string | null;
   last_reviewed_at?: string | null;
   next_review_at?: string | null;
   mastered?: 0 | 1 | boolean;
+  due_status?: "new" | "due" | "learning" | "review" | "mastered";
+};
+
+export type BackendMemorySummary = {
+  total: number;
+  due: number;
+  mastered: number;
+  weak: number;
+  new_cards: number;
 };
 
 export type BackendQuizAttempt = {

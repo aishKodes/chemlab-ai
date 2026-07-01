@@ -10,6 +10,41 @@ export const fallbackClasses: BackendClass[] = [
 
 export const fallbackResources: BackendResource[] = [
   {
+    type: "explanation",
+    title: "Some Basic Concepts of Chemistry",
+    slug: "some-basic-concepts-of-chemistry",
+    description:
+      "Class 11 Unit 1 learning pack for matter, measurement, mole concept, formula work, and stoichiometry.",
+    route_url: null,
+    class_level: "11",
+    source_type: "NCERT",
+    source_reference: "NCERT Class 11 Chemistry Unit 1, Some Basic Concepts of Chemistry",
+    status: "published",
+    quality_status: "needs_review",
+    student_level: "intermediate",
+    estimated_minutes: 35,
+    content_json: {
+      summary:
+        "Use the Chemistry Scale Universe lab, memory decks, quick drills, and concept map to build a clean foundation for Class 11 chemistry.",
+      topics:
+        "Matter, measurement, scientific notation, significant figures, laws of combination, mole concept, empirical formula, stoichiometry, limiting reagent.",
+    },
+  },
+  {
+    type: "simulation",
+    title: "Chemistry Scale Universe",
+    slug: "basic-concepts-chemistry-universe",
+    description: "Explore matter, measurement, mole concept, and stoichiometry as a multi-zone Class 11 universe.",
+    route_url: "/labs/basic-concepts-chemistry-universe",
+    class_level: "11",
+    source_type: "SIMULATION",
+    source_reference: "NCERT Class 11 Chemistry Unit 1, Some Basic Concepts of Chemistry",
+    status: "published",
+    quality_status: "needs_review",
+    student_level: "intermediate",
+    estimated_minutes: 22,
+  },
+  {
     type: "simulation",
     title: "Redox Transfer Kitchen",
     slug: "redox-transfer-kitchen",

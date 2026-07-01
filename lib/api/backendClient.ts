@@ -14,9 +14,10 @@ type RequestOptions = {
 };
 
 const DEFAULT_TIMEOUT_MS = 12000;
+const DEFAULT_BACKEND_URL = "https://api.chemlearning.in";
 
 export function getBackendBaseUrl() {
-  return process.env.NEXT_PUBLIC_BACKEND_URL?.replace(/\/+$/, "") ?? "";
+  return (process.env.NEXT_PUBLIC_BACKEND_URL || DEFAULT_BACKEND_URL).replace(/\/+$/, "");
 }
 
 export function isBackendConfigured() {

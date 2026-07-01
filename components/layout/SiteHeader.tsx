@@ -16,6 +16,7 @@ const navigation = [
   { href: "/resources", label: "Resources" },
   { href: "/memory-cards", label: "Cards" },
   { href: "/quick-drills", label: "Drills" },
+  { href: "/public-quizzes", label: "Battles" },
   { href: "/simulations", label: "Simulations" },
   { href: "/labs", label: "Labs" },
   { href: "/quiz", label: "Quiz" },

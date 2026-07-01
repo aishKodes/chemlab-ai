@@ -107,13 +107,14 @@ function StudentDashboard() {
           </Card>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
           {[
             { title: "Ask Chem-Shastri", href: "/ai-tutor", icon: BrainCircuit },
             { title: "Browse Class Resources", href: "/classes", icon: BookOpen },
             { title: "Continue Simulations", href: "/labs", icon: FlaskConical },
             { title: "Memory Cards", href: "/memory-cards", icon: Sparkles },
             { title: "Quick Drills", href: "/quick-drills", icon: Trophy },
+            { title: "Quiz Battles", href: "/public-quizzes", icon: Trophy },
           ].map((item) => {
             const Icon = item.icon;
             return (

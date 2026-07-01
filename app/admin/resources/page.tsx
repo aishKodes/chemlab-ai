@@ -18,6 +18,12 @@ const resourceTypes = [
   "teacher_note",
   "mistake_card_set",
   "exam_practice",
+  "explanation",
+  "visualization",
+  "external_resource",
+  "worksheet",
+  "reaction_map",
+  "video_link",
 ].map((value) => ({ label: value.replaceAll("_", " "), value }));
 
 export default function AdminResourcesPage() {
@@ -26,12 +32,12 @@ export default function AdminResourcesPage() {
       <PageHeader
         eyebrow="Admin / Resources"
         title="Learning resources."
-        description="Attach simulations, story labs, memory decks, quick drills, and notes to class-wise chemistry structure."
+        description="Attach simulations, story labs, memory decks, quick drills, and reviewed external resources to class-wise chemistry structure."
       />
       <Container className="pb-16">
         <AdminEntityManager<BackendResource & Record<string, unknown>>
           title="Resources"
-          description="Use route_url for existing Next.js labs. Use class, chapter, and topic IDs to place resources in the learning map."
+          description="Use route_url for existing Next.js labs. External resources need source URL, license, and attribution before publishing."
           listKey="resources"
           fetchItems={adminApi.getResources}
           createItem={adminApi.createResource}
@@ -41,6 +47,7 @@ export default function AdminResourcesPage() {
             { key: "title", label: "Title" },
             { key: "type", label: "Type" },
             { key: "route_url", label: "Route" },
+            { key: "quality_status", label: "Quality" },
             { key: "status", label: "Status" },
           ]}
           fields={[
@@ -56,9 +63,21 @@ export default function AdminResourcesPage() {
             { name: "content_json", label: "Content JSON", type: "json", placeholder: "{\"cta\":\"Open lab\"}" },
             { name: "source_type", label: "Source type", type: "select", options: ["CUSTOM", "SIMULATION", "NCERT", "AI_ASSISTED"].map((value) => ({ label: value, value })) },
             { name: "source_reference", label: "Source reference", type: "textarea" },
+            { name: "source_url", label: "Source URL" },
+            { name: "license_type", label: "License type" },
+            { name: "attribution_text", label: "Attribution text", type: "textarea" },
+            { name: "author", label: "Author" },
+            { name: "embed_url", label: "Embed URL" },
+            { name: "external_open_mode", label: "External open mode", type: "select", options: ["same_tab", "new_tab", "embed"].map((value) => ({ label: value.replaceAll("_", " "), value })) },
+            { name: "quality_status", label: "Quality status", type: "select", options: ["draft", "needs_review", "verified", "published", "archived"].map((value) => ({ label: value.replaceAll("_", " "), value })) },
+            { name: "accuracy_notes", label: "Accuracy notes", type: "textarea" },
+            { name: "why_useful", label: "Why this is useful", type: "textarea" },
+            { name: "student_instructions", label: "Student instructions", type: "textarea" },
+            { name: "student_level", label: "Student level", type: "select", options: ["beginner", "intermediate", "advanced"].map((value) => ({ label: value, value })) },
+            { name: "estimated_minutes", label: "Estimated minutes", type: "number" },
             { name: "status", label: "Status", type: "select", options: ["draft", "published", "archived"].map((value) => ({ label: value, value })) },
           ]}
-          defaultValues={{ source_type: "CUSTOM", status: "draft" }}
+          defaultValues={{ source_type: "CUSTOM", status: "draft", quality_status: "needs_review", external_open_mode: "new_tab", student_level: "beginner" }}
           extraActions={(item, refresh) => (
             <>
               <Button

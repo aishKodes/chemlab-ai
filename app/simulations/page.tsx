@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Atom, BatteryCharging, FlaskConical, Hexagon, Waves } from "lucide-react";
+import { Atom, BatteryCharging, FlaskConical, Hexagon, Trophy, Waves } from "lucide-react";
 import type { LabCatalogEntry } from "@/data/labs/labCatalog";
 import { getLabsByStatus } from "@/data/labs/labCatalog";
 import { simulations } from "@/data/chemistry-modules";
@@ -74,6 +74,21 @@ export default function SimulationsPage() {
             </p>
           </div>
           <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <Card interactive className="bg-gradient-to-br from-amber-100 via-white to-cyan-100">
+              <div className="flex items-start justify-between gap-4">
+                <span className="grid h-14 w-14 place-items-center rounded-3xl border-2 border-white bg-amber-500 text-white shadow-lg">
+                  <Trophy className="h-7 w-7" aria-hidden="true" />
+                </span>
+                <Badge tone="amber">Quiz Battles</Badge>
+              </div>
+              <h3 className="mt-5 text-2xl font-black text-slate-950">Public Chemistry Battles</h3>
+              <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">
+                Try short redox and IUPAC battles, then compare your run on the leaderboard.
+              </p>
+              <Button href="/public-quizzes" className="mt-5" variant="secondary">
+                Open battles
+              </Button>
+            </Card>
             {simulations
               .filter((simulation) => ["periodic-table", "equation-balancer", "mole-visualizer"].includes(simulation.slug))
               .map((simulation) => (
@@ -109,11 +124,13 @@ function getLabIcon(lab: LabCatalogEntry) {
   if (lab.thumbnailType === "electrochem") return <BatteryCharging className="h-7 w-7" aria-hidden="true" />;
   if (lab.thumbnailType === "molecule") return <Hexagon className="h-7 w-7" aria-hidden="true" />;
   if (lab.thumbnailType === "acid-base") return <Waves className="h-7 w-7" aria-hidden="true" />;
+  if (lab.thumbnailType === "basic-concepts") return <FlaskConical className="h-7 w-7" aria-hidden="true" />;
   return <Atom className="h-7 w-7" aria-hidden="true" />;
 }
 
 function getLabGradient(lab: LabCatalogEntry) {
   if (lab.thumbnailType === "electrochem") return "from-cyan-100 via-white to-amber-100";
   if (lab.thumbnailType === "molecule") return "from-violet-100 via-white to-cyan-100";
+  if (lab.thumbnailType === "basic-concepts") return "from-emerald-100 via-white to-violet-100";
   return "from-amber-100 via-white to-sky-100";
 }

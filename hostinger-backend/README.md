@@ -9,13 +9,41 @@ The Next.js frontend remains on Vercel at `chemlearning.in`. This backend stores
 - PHP 8.1+
 - MySQL / InnoDB
 - PDO prepared statements
-- PHPMailer
+- PHPMailer optional; built-in SMTP fallback available
 - Composer autoload
 - JSON API responses
 - CORS allowlist
 - Hashed passwords and hashed bearer tokens
 
-## Install
+## Simple Hostinger public_html Install
+
+Build the upload package from the project root:
+
+```bash
+php scripts/build-hostinger-publichtml-package.php
+```
+
+Upload the contents of:
+
+```txt
+dist/chemlab-hostinger-publichtml/
+```
+
+into:
+
+```txt
+api.chemlearning.in/public_html/
+```
+
+Then rename `config.example.php` to `config.php`, fill Hostinger DB/SMTP/admin/JWT values, and open:
+
+```txt
+https://api.chemlearning.in/install.php
+```
+
+The installer can check requirements, import `database/schema.sql`, import `database/seed.sql`, and create the first admin with `password_hash()`.
+
+## Advanced CLI Install
 
 ```bash
 cd hostinger-backend
@@ -25,7 +53,7 @@ php src/database/migrate.php
 php src/database/seed.php
 ```
 
-Composer is only needed to install PHPMailer. If Composer is unavailable on Hostinger, run Composer locally and upload `vendor/`.
+Composer is only needed if you want PHPMailer. If Composer is unavailable on Hostinger, Chemlab can still send through the built-in SMTP sender using your Hostinger SMTP settings.
 
 ## Required Env Values
 
@@ -182,7 +210,7 @@ Stage 6 also adds editable draft NCERT skeleton records for Class 9-12. Keep the
 - `admin_new_signup`
 - `test_email`
 
-Templates are read from `email_templates`; fallback templates are used if a DB template is missing. Every attempt is written to `email_logs`. If SMTP or PHPMailer is unavailable, the send fails gracefully with a clear error and a snapshot in `storage/mail/`.
+Templates are read from `email_templates`; fallback templates are used if a DB template is missing. Every attempt is written to `email_logs`. If PHPMailer is unavailable, Chemlab uses the built-in SMTP sender. If SMTP itself is not configured or the server rejects the message, the send fails gracefully with a clear error and a snapshot in `storage/mail/`.
 
 ## Verification
 

@@ -23,6 +23,11 @@
 # misc
 .DS_Store
 *.pem
+config.php
+hostinger-backend/config.php
+**/config.php
+!config.example.php
+!**/config.example.php
 
 # debug
 npm-debug.log*

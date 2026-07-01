@@ -29,6 +29,8 @@ const adminSections = [
   { title: "Users", href: "/admin/users", icon: Users, detail: "Students, teachers, and admins" },
   { title: "Class Structure", href: "/admin/resources/structure", icon: Layers3, detail: "Classes, books, chapters, topics" },
   { title: "Resources", href: "/admin/resources", icon: BookOpen, detail: "Learning resource foundation" },
+  { title: "Content Factory", href: "/admin/content-factory", icon: Sparkles, detail: "Chapter packs and coverage grids" },
+  { title: "Roadmap", href: "/admin/roadmap", icon: Map, detail: "Class-wise production coverage" },
   { title: "Memory Cards", href: "/admin/memory-cards", icon: Boxes, detail: "Decks and recall cards" },
   { title: "Quick Drills", href: "/admin/quick-drills", icon: Sparkles, detail: "Practice sets and questions" },
   { title: "Concept Maps", href: "/admin/concept-maps", icon: Map, detail: "Visual knowledge links" },
@@ -59,7 +61,7 @@ export function AdminShell() {
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Backend API" value={isBackendConfigured() ? "Configured" : "Missing"} detail={getBackendBaseUrl() || "NEXT_PUBLIC_BACKEND_URL not set"} icon={<MonitorCheck className="h-5 w-5" aria-hidden="true" />} />
-        <StatCard label="Resources" value="Seeded" detail="Redox and Hydrocarbon labs available" icon={<BookOpen className="h-5 w-5" aria-hidden="true" />} />
+        <StatCard label="Resources" value="Seeded" detail="Redox, Hydrocarbon, and Unit 1 pack available" icon={<BookOpen className="h-5 w-5" aria-hidden="true" />} />
         <StatCard label="Email" value="SMTP" detail="Test route available in backend" icon={<Mail className="h-5 w-5" aria-hidden="true" />} />
         <StatCard label="Chem-Shastri" value="Named" detail="Frontend mentor surface updated" icon={<BrainCircuit className="h-5 w-5" aria-hidden="true" />} />
       </div>
@@ -68,9 +70,9 @@ export function AdminShell() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <Badge tone={settingsReady ? "green" : "amber"}>{settingsReady ? "Backend reachable" : "Backend check"}</Badge>
-            <h2 className="mt-3 text-2xl font-black text-slate-950">Stage 3 admin control room</h2>
+            <h2 className="mt-3 text-2xl font-black text-slate-950">Chemlab admin control room</h2>
             <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-slate-600">
-              Manage users, class structure, resources, memory cards, quick drills, content, media, email, notifications, and settings from the Hostinger backend.
+              Manage users, class structure, resources, memory cards, quick drills, content factory coverage, media, email, notifications, and settings from the Hostinger backend.
             </p>
             {settingsError ? <p className="mt-3 text-sm font-bold text-amber-800">{settingsError}</p> : null}
           </div>

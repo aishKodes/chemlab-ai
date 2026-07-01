@@ -11,7 +11,7 @@ npm run test:chem-shastri-context
 npm run lint
 npm run build
 find hostinger-backend -name '*.php' -print0 | xargs -0 -n1 php -l
-cd hostinger-backend && composer validate
+php scripts/build-hostinger-publichtml-package.php
 ```
 
 ## Local Command Results
@@ -23,16 +23,17 @@ Run on 2026-07-01:
 - `npm run build`: passed. Next.js warned about multiple lockfiles and inferred `/Users/aishwaryam/package-lock.json` as workspace root.
 - `find hostinger-backend -path 'hostinger-backend/vendor' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l`: passed.
 - `composer validate`: not run locally because Composer is not installed in this shell.
+- `php scripts/build-hostinger-publichtml-package.php`: created `dist/chemlab-hostinger-publichtml/` and `dist/chemlab-hostinger-publichtml.zip`.
 - `php scripts/check-backend.php`: passed without hard failures; warned that `.env`, DB, CORS, and SMTP are not configured locally.
 - `php scripts/smoke-test.php`: exited safely with env/DB warnings because local Hostinger credentials are not present.
 
-Backend deployment checks:
+Backend public_html checks:
 
-```bash
-cd hostinger-backend
-php scripts/check-backend.php
-php scripts/smoke-test.php
-```
+- [ ] Upload contents of `dist/chemlab-hostinger-publichtml/` into `api.chemlearning.in/public_html/`.
+- [ ] Rename `config.example.php` to `config.php`.
+- [ ] Open `https://api.chemlearning.in/install.php`.
+- [ ] Run requirement check.
+- [ ] Run full install.
 
 ## Frontend QA
 
@@ -71,6 +72,11 @@ php scripts/smoke-test.php
 ## Backend QA
 
 - [ ] `https://api.chemlearning.in/api/health` returns ok.
+- [ ] `https://api.chemlearning.in/health.php` returns ok.
+- [ ] `https://api.chemlearning.in/install.php` opens before installation and locks after full install.
+- [ ] `config.php` exists on Hostinger and is not publicly readable.
+- [ ] `database/schema.sql` imports in phpMyAdmin.
+- [ ] `database/seed.sql` imports after schema.
 - [ ] Public classes endpoint returns Class 9-12.
 - [ ] Public resources endpoint returns seeded simulations.
 - [ ] Migrations run once and record in `schema_migrations`.

@@ -22,6 +22,7 @@ export function MemoryCardPlayer({ deck, cards }: { deck: BackendMemoryDeck; car
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [done, setDone] = useState(false);
+  const [scheduleNote, setScheduleNote] = useState<string | null>(null);
   const { getElapsedSeconds } = useTimeOnTask(!done);
   const card = cards[index];
   const progress = useMemo(() => (cards.length ? Math.round((index / cards.length) * 100) : 0), [cards.length, index]);
@@ -35,13 +36,16 @@ export function MemoryCardPlayer({ deck, cards }: { deck: BackendMemoryDeck; car
       anonymous_id: getLearningAnonymousId(),
       response_time_ms: getElapsedSeconds() * 1000,
       metadata: { deckSlug: deck.slug },
-    });
+    }).then((payload) => {
+      if (payload.next_review_at) setScheduleNote(`Next review: ${new Date(payload.next_review_at).toLocaleString()}`);
+    }).catch(() => undefined);
     if (index + 1 >= cards.length) {
       setDone(true);
       return;
     }
     setIndex((current) => current + 1);
     setRevealed(false);
+    setScheduleNote(null);
   }
 
   if (!cards.length) {
@@ -59,6 +63,7 @@ export function MemoryCardPlayer({ deck, cards }: { deck: BackendMemoryDeck; car
         <Sparkles className="mx-auto h-10 w-10 text-emerald-600" aria-hidden="true" />
         <h2 className="mt-4 text-3xl font-black text-slate-950">Review complete</h2>
         <p className="mt-3 text-sm font-bold leading-6 text-slate-600">Nice work. Your brain just got a cleaner pathway through this concept.</p>
+        {scheduleNote ? <p className="mt-3 text-sm font-black text-blue-700">{scheduleNote}</p> : null}
         <Button
           className="mt-6"
           icon={<RotateCcw className="h-4 w-4" aria-hidden="true" />}
@@ -101,6 +106,7 @@ export function MemoryCardPlayer({ deck, cards }: { deck: BackendMemoryDeck; car
             ))
           )}
         </div>
+        {scheduleNote ? <p className="mt-4 text-center text-xs font-black text-blue-700">{scheduleNote}</p> : null}
       </Card>
     </div>
   );
