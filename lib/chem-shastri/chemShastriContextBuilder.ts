@@ -40,6 +40,12 @@ export function buildChemShastriContext(request: ChemShastriRequest): ChemShastr
   if (type === "lab" && request.simulationSlug) {
     learningSignals.push(`The learner is inside the ${request.simulationSlug.replaceAll("-", " ")} lab.`);
   }
+  if (request.simulationSlug === "redox-transfer-kitchen" || request.currentPage?.includes("redox-transfer-kitchen")) {
+    learningSignals.push("Use Redox Transfer Kitchen context: redox is one electron transaction; zinc gives electrons, copper ion receives them, sulphate is spectator.");
+  }
+  if (request.simulationSlug === "hydrocarbon-naming-quest" || request.currentPage?.includes("hydrocarbon-naming-quest")) {
+    learningSignals.push("Use Hydrocarbon Naming Quest context: longest chain, lowest locant, branch prefix, root word, and bond suffix.");
+  }
   if (
     request.resourceSlug === "some-basic-concepts-of-chemistry" ||
     request.simulationSlug === "basic-concepts-chemistry-universe" ||
@@ -48,6 +54,21 @@ export function buildChemShastriContext(request: ChemShastriRequest): ChemShastr
     learningSignals.push(
       "Use Class 11 Unit 1 context: matter classification, SI units, scientific notation, significant figures, mole concept, formulas, stoichiometry, and limiting reagent.",
     );
+  }
+  if (request.simulationSlug === "molecule-shapes-3d" || request.currentPage?.includes("molecule-shapes-3d")) {
+    learningSignals.push("Use Molecule Shapes 3D context: school-level VSEPR, geometry, bond angles, lone pairs, and shape comparisons.");
+  }
+  if (request.currentPage?.startsWith("/memory-cards")) {
+    learningSignals.push("The learner is reviewing memory cards; answer briefly and include one recall check.");
+  }
+  if (request.currentPage?.startsWith("/quick-drills")) {
+    learningSignals.push("The learner is in a quick drill; explain the misconception and the next move.");
+  }
+  if (request.currentPage?.startsWith("/concept-maps")) {
+    learningSignals.push("The learner is using a concept map; connect ideas instead of giving isolated facts.");
+  }
+  if (request.currentPage?.includes("/resources/open-visualizations")) {
+    learningSignals.push("The learner is viewing external resource curation; explain attribution and reviewed-resource safety clearly.");
   }
   if (role === "teacher") {
     learningSignals.push("The user is a teacher, so give classroom-ready wording when useful.");

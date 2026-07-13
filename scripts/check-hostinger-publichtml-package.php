@@ -41,6 +41,11 @@ foreach ($targets as $label => $root) {
         check(!preg_match('/SELECT\s+b\.id,\s*c\.id,\s*s\.id,\s*title\b/i', $sql), "{$label}: {$relativePath} qualifies seeded title columns");
         check(!preg_match('/SELECT\s+ch\.id,\s*ch\.class_id,\s*ch\.subject_id,\s*topic_title\b/i', $sql), "{$label}: {$relativePath} qualifies seeded topic columns");
         check(!preg_match('/status\s*=\s*IF\s*\(\s*status\b/i', $sql), "{$label}: {$relativePath} qualifies status updates");
+
+        if ($relativePath === 'database/seed.sql') {
+            check(!str_contains($sql, 'LEFT JOIN memory_cards existing_card'), "{$label}: {$relativePath} upserts duplicate memory cards safely");
+            check(!str_contains($sql, 'WHERE existing_card.id IS NULL'), "{$label}: {$relativePath} does not rely on fragile memory-card skip logic");
+        }
     }
 }
 

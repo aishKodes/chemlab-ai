@@ -24,9 +24,9 @@ return function (PDO $pdo): void {
     $chapterId = upsertChapter($pdo, $bookId, $classId, $subjectId, $now);
 
     $topics = stage8Topics();
-    foreach ($topics as $topic) {
+    foreach ($topics as $index => $topic) {
         $topicId = upsertTopic($pdo, $chapterId, $classId, $subjectId, $topic, $now);
-        $topic['id'] = $topicId;
+        $topics[$index]['id'] = $topicId;
         upsertMistakePatterns($pdo, $classId, $subjectId, $chapterId, $topicId, $topic, $now);
     }
 
@@ -355,8 +355,12 @@ function upsertDrillsAndQuestions(PDO $pdo, int $classId, int $subjectId, int $c
             if (!in_array($topic['slug'], $topicSlugs, true)) {
                 continue;
             }
+            $topicId = isset($topic['id']) && $topic['id'] !== null
+                ? (int) $topic['id']
+                : fetchId($pdo, 'SELECT id FROM topics WHERE chapter_id = ? AND slug = ? LIMIT 1', [$chapterId, $topic['slug']]);
+
             foreach (questionsForTopic($topic) as $question) {
-                upsertQuizQuestion($pdo, $drillId, $classId, $subjectId, $chapterId, $topic['id'], $question, $sourceReference, $order++, $now);
+                upsertQuizQuestion($pdo, $drillId, $classId, $subjectId, $chapterId, $topicId, $question, $sourceReference, $order++, $now);
             }
         }
     }
@@ -373,7 +377,7 @@ function questionsForTopic(array $topic): array
     ];
 }
 
-function upsertQuizQuestion(PDO $pdo, int $drillId, int $classId, int $subjectId, int $chapterId, int $topicId, array $question, string $sourceReference, int $order, string $now): void
+function upsertQuizQuestion(PDO $pdo, int $drillId, int $classId, int $subjectId, int $chapterId, ?int $topicId, array $question, string $sourceReference, int $order, string $now): void
 {
     $id = fetchId($pdo, 'SELECT id FROM quiz_questions WHERE drill_id = ? AND question_text = ? LIMIT 1', [$drillId, $question['q']]);
     $params = [

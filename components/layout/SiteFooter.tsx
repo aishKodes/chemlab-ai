@@ -6,6 +6,7 @@ const columns = [
   {
     title: "Study",
     links: [
+      { href: "/showcase", label: "Showcase" },
       { href: "/learn/chemistry", label: "Chemistry curriculum" },
       { href: "/simulations", label: "Simulations" },
       { href: "/quiz", label: "Mastery quizzes" },

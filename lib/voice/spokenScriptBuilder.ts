@@ -1,7 +1,5 @@
+import { cleanTextForSpeech } from "./browserSpeech";
+
 export function buildSpokenScript(text: string) {
-  return text
-    .replace(/\nSources:\n[\s\S]*$/u, "")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, 700);
+  return cleanTextForSpeech(text.replace(/\nSources:\n[\s\S]*$/u, ""));
 }

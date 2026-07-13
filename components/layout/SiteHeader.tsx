@@ -11,6 +11,7 @@ import { Container } from "@/components/ui/Container";
 import { dashboardPathForRole } from "@/lib/auth/authTypes";
 
 const navigation = [
+  { href: "/showcase", label: "Showcase" },
   { href: "/learn", label: "Learn" },
   { href: "/classes", label: "Classes" },
   { href: "/resources", label: "Resources" },

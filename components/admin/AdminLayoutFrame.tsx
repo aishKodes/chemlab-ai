@@ -27,6 +27,7 @@ const links = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/resources/structure", label: "Class Structure", icon: Layers3 },
   { href: "/admin/resources", label: "Resources", icon: BookOpen },
+  { href: "/admin/open-resources", label: "Open Resources", icon: BookOpen },
   { href: "/admin/content-factory", label: "Content Factory", icon: Sparkles },
   { href: "/admin/roadmap", label: "Roadmap", icon: Map },
   { href: "/admin/memory-cards", label: "Memory Cards", icon: Boxes },

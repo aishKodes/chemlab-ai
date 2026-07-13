@@ -39,6 +39,7 @@ Do not publish an external resource unless:
 - Do not call external resources Chemlab originals.
 - Open in a new tab unless the license explicitly allows embedding.
 - If embedding is allowed, still show source and attribution.
+- For live demos, unreviewed PhET, Mol*, Jmol/JSmol, video, worksheet, or external visualization candidates must stay in admin review only. Do not publish or iframe them until `license_reviewed` is true and accuracy review is at least reviewed.
 
 ## NCERT-Aligned Content
 

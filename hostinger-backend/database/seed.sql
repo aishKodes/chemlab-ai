@@ -713,11 +713,17 @@ JOIN (
   UNION ALL SELECT 'class-12-electrochemistry-starter', 2, 'In Daniell cell, which electrode is anode?', 'Zinc electrode.', 'Oxidation happens there.', 'Zinc loses electrons at the anode.', 'intermediate', 'application', 'anode_cathode'
   UNION ALL SELECT 'class-12-electrochemistry-starter', 3, 'In Daniell cell, which electrode is cathode?', 'Copper electrode.', 'Reduction happens there.', 'Copper ions gain electrons at the cathode.', 'intermediate', 'application', 'anode_cathode'
 ) seed ON seed.deck_slug = d.slug
-LEFT JOIN memory_cards existing_card
-  ON existing_card.deck_id = d.id
-  AND existing_card.order_index = seed.order_index
-  AND existing_card.front = seed.front
-WHERE existing_card.id IS NULL;
+ON DUPLICATE KEY UPDATE
+  back = VALUES(back),
+  hint = VALUES(hint),
+  explanation = VALUES(explanation),
+  difficulty = VALUES(difficulty),
+  card_type = VALUES(card_type),
+  mistake_type = VALUES(mistake_type),
+  source_reference = VALUES(source_reference),
+  order_index = VALUES(order_index),
+  status = VALUES(status),
+  updated_at = NOW();
 
 INSERT INTO quiz_questions
   (drill_id, class_id, subject_id, chapter_id, topic_id, question_text, question_type, options_json, correct_answer_json, explanation, hint, difficulty, mistake_type, source_reference, order_index, status, created_at, updated_at)

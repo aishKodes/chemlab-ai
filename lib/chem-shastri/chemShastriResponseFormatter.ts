@@ -1,4 +1,5 @@
 import type { ChemShastriLanguage } from "./chemShastriTypes";
+import { findCuratedFallbackAnswer } from "./curatedFallbackAnswers";
 
 const DIRECT_ANSWERS: Array<{ pattern: RegExp; answer: string }> = [
   {
@@ -34,7 +35,7 @@ const DIRECT_ANSWERS: Array<{ pattern: RegExp; answer: string }> = [
 ];
 
 export function directChemistryAnswer(message: string) {
-  return DIRECT_ANSWERS.find((entry) => entry.pattern.test(message))?.answer ?? null;
+  return findCuratedFallbackAnswer(message)?.answer ?? DIRECT_ANSWERS.find((entry) => entry.pattern.test(message))?.answer ?? null;
 }
 
 export function languageNotice(language: ChemShastriLanguage) {

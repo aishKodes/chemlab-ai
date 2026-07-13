@@ -63,6 +63,20 @@ export default function ResourcesPage() {
             ))}
           </div>
         </Card>
+        <Card className="bg-gradient-to-br from-white via-amber-50 to-cyan-50">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <Badge tone="amber">Open resources</Badge>
+              <h2 className="mt-3 text-2xl font-black text-slate-950">Reviewed external visualizations</h2>
+              <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-600">
+                Chemlab keeps PhET, Mol*, and other public resources in review until license, attribution, and accuracy checks are complete.
+              </p>
+            </div>
+            <Button href="/resources/open-visualizations" variant="secondary">
+              Open curation page
+            </Button>
+          </div>
+        </Card>
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {visibleResources.map((resource) => (
             <Card key={resource.slug} interactive className="bg-gradient-to-br from-white via-sky-50 to-violet-50">

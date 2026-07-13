@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, BrainCircuit, FlaskConical, Languages, Loader2, PlusCircle, Send, Sparkles, Volume2 } from "lucide-react";
+import { BookOpen, BrainCircuit, FlaskConical, Languages, Loader2, PlusCircle, Send, Sparkles } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { chemistryModules } from "@/data/chemistry-modules";
 import { AI_MENTOR_MODES } from "@/data/constants";
@@ -9,6 +9,8 @@ import { MasterAlchem } from "@/components/master-alchem/MasterAlchem";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { ChemShastriSpeakButton } from "@/components/voice/ChemShastriSpeakButton";
+import { useVoiceSettings, VoiceSettingsMiniPanel } from "@/components/voice/VoiceSettingsMiniPanel";
 import type { AiMentorMode } from "@/lib/ai/types";
 import { learningApi } from "@/lib/api/learningApi";
 import { cn } from "@/lib/utils";
@@ -64,7 +66,7 @@ export function MasterAlchemChat() {
   const [preferredLanguage, setPreferredLanguage] = useState<"en" | "hi" | "bn" | "or">("en");
   const [usePageContext, setUsePageContext] = useState(true);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
-  const [voiceLanguage, setVoiceLanguage] = useState("en-IN");
+  const [voiceSettings, setVoiceSettings] = useVoiceSettings();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [remaining, setRemaining] = useState<number | null>(null);
@@ -192,35 +194,6 @@ export function MasterAlchemChat() {
     void submitPrompt(input);
   }
 
-  async function speak(message: ChatMessage) {
-    if (typeof window === "undefined") return;
-    const response = await fetch("/api/voice/speak", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: message.spokenText || message.content, language: voiceLanguage }),
-    });
-    const data = (await response.json()) as { mode?: string; text?: string; language?: string; audioUrl?: string };
-    if (data.mode === "browser" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(data.text || message.spokenText || message.content);
-      utterance.lang = data.language || voiceLanguage;
-      window.speechSynthesis.speak(utterance);
-      void fetch("/api/analytics/event", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          eventType: "ai_message",
-          eventName: "voice_play_clicked",
-          anonymousId: getAnonymousId(),
-          pagePath: window.location.pathname,
-          metadata: { mode: "browser" },
-        }),
-      });
-    } else if (data.audioUrl) {
-      new Audio(data.audioUrl).play().catch(() => undefined);
-    }
-  }
-
   return (
     <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
       <Card className="h-fit bg-gradient-to-br from-violet-100 via-white to-sky-100">
@@ -326,15 +299,19 @@ export function MasterAlchemChat() {
         <label className="mt-4 block">
           <span className="text-sm font-black text-slate-700">Voice language</span>
           <select
-            value={voiceLanguage}
-            onChange={(event) => setVoiceLanguage(event.target.value)}
+            value={voiceSettings.language}
+            onChange={(event) => setVoiceSettings({ ...voiceSettings, language: event.target.value })}
             className="focus-ring mt-2 h-11 w-full rounded-2xl border border-blue-100 bg-white/85 px-3 text-sm font-bold text-slate-800"
           >
             <option value="en-IN">English (India)</option>
             <option value="en-US">English (US)</option>
             <option value="hi-IN">Hindi</option>
+            <option value="bn-IN">Bengali</option>
+            <option value="or-IN">Odia</option>
           </select>
         </label>
+
+        {voiceEnabled ? <VoiceSettingsMiniPanel settings={voiceSettings} onChange={setVoiceSettings} /> : null}
 
         <label className="mt-4 block">
           <span className="text-sm font-black text-slate-700">Chapter context</span>
@@ -480,14 +457,23 @@ export function MasterAlchemChat() {
                       </span>
                     ) : null}
                     {voiceEnabled ? (
-                      <button
-                        type="button"
-                        className="rounded-full border border-blue-100 bg-blue-50 px-2 py-1 text-[11px] font-black text-blue-700 hover:bg-blue-100"
-                        onClick={() => void speak(message)}
-                      >
-                        <Volume2 className="mr-1 inline h-3 w-3" aria-hidden="true" />
-                        speak
-                      </button>
+                      <ChemShastriSpeakButton
+                        text={message.spokenText || message.content}
+                        settings={voiceSettings}
+                        onSpoken={(metadata) => {
+                          void fetch("/api/analytics/event", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              eventType: "ai_message",
+                              eventName: "voice_play_clicked",
+                              anonymousId: getAnonymousId(),
+                              pagePath: window.location.pathname,
+                              metadata: { mode: "browser", voiceName: metadata.voiceName },
+                            }),
+                          });
+                        }}
+                      />
                     ) : null}
                     {["helpful", "not_helpful", "wrong_answer", "too_hard", "too_long"].map((rating) => (
                       <button

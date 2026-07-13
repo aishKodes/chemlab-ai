@@ -8,6 +8,7 @@ import { buildChemShastriPromptPrefix, followUpsForMode, mergePromptWithContext 
 import { buildRetrievalContext, retrieveChemShastriResources } from "./chemShastriResourceRetriever";
 import { directChemistryAnswer, languageNotice } from "./chemShastriResponseFormatter";
 import { checkChemShastriSafety } from "./chemShastriSafety";
+import { findCuratedFallbackAnswer, genericCuratedFallback } from "./curatedFallbackAnswers";
 import type { ChemShastriRequest, ChemShastriResponse } from "./chemShastriTypes";
 import { getBudgetSnapshot } from "@/lib/ai/budgetGuard";
 import { answerMasterAlchem } from "@/lib/master-alchem/masterAlchemService";
@@ -25,6 +26,8 @@ function localResponse({
   suggestedResources = [],
   shouldClarify = false,
   clarificationQuestion,
+  spokenText,
+  followUpQuestions,
 }: {
   answer: string;
   request: ChemShastriRequest;
@@ -33,6 +36,8 @@ function localResponse({
   suggestedResources?: ChemShastriResponse["suggestedResources"];
   shouldClarify?: boolean;
   clarificationQuestion?: string;
+  spokenText?: string;
+  followUpQuestions?: string[];
 }): Promise<ChemShastriResponse> {
   return getBudgetSnapshot().then((budget) => {
     const mode = resolveChemShastriMode(request.mode);
@@ -55,12 +60,12 @@ function localResponse({
       mock: false,
       estimatedCostInr: 0,
       budgetRemainingInr: budget.remainingInr,
-      spokenText: answer.slice(0, 900),
+      spokenText: spokenText ?? answer.slice(0, 900),
       shouldClarify,
       clarificationQuestion,
       contextChips: context.chips,
       suggestedResources,
-      followUpQuestions: followUpsForMode(mode),
+      followUpQuestions: followUpQuestions ?? followUpsForMode(mode),
       adminSignals: {
         providerConfigured: chemShastriConfig.geminiConfigured() || chemShastriConfig.openaiConfigured(),
         budgetBlocked: false,
@@ -82,14 +87,24 @@ function normalizeRequest(raw: ChemShastriRequest): ChemShastriRequest {
 }
 
 export async function answerChemShastri(rawRequest: ChemShastriRequest, httpRequest?: Request): Promise<ChemShastriResponse> {
-  if (!chemShastriConfig.enabled()) {
-    throw Object.assign(new Error("Chem-Shastri is currently disabled."), { status: 503 });
-  }
-
   const request = normalizeRequest(rawRequest);
   const mode = resolveChemShastriMode(request.mode);
   const context = buildChemShastriContext(request);
   const intent = detectChemShastriIntent(request.message, mode);
+
+  if (!chemShastriConfig.enabled()) {
+    const fallback = findCuratedFallbackAnswer(request.message, context) ?? genericCuratedFallback(request.message, context);
+    return localResponse({
+      answer: fallback.answer,
+      spokenText: fallback.spokenText,
+      request,
+      intent,
+      source: "fallback",
+      suggestedResources: fallback.resource ? [{ ...fallback.resource, source: "fallback" }] : [],
+      followUpQuestions: [fallback.followUp],
+    });
+  }
+
   const safety = checkChemShastriSafety(request.message);
   const suggestions = await retrieveChemShastriResources({ query: request.message, context, limit: 4 }).catch(() => []);
 
@@ -140,19 +155,22 @@ export async function answerChemShastri(rawRequest: ChemShastriRequest, httpRequ
     return response;
   }
 
-  const direct = directChemistryAnswer(request.message);
+  const curated = findCuratedFallbackAnswer(request.message, context);
+  const direct = curated?.answer ?? directChemistryAnswer(request.message);
   if (direct && mode !== "step_by_step" && mode !== "check_my_answer" && mode !== "exam_mode") {
     const languageLine = languageNotice(context.preferredLanguage);
-    const answer = [direct, languageLine, "Try the next step: tell me the example from your textbook, and I will map each part."]
+    const answer = [direct, languageLine, curated?.followUp ? `Next: ${curated.followUp}` : "Try the next step: tell me the example from your textbook, and I will map each part."]
       .filter(Boolean)
       .join("\n\n");
     saveChemShastriCachedAnswer(cacheKey, answer, { source: "direct" });
     const response = await localResponse({
       answer,
+      spokenText: curated?.spokenText,
       request,
       intent: "direct_answer",
       source: "fallback",
-      suggestedResources: suggestions,
+      suggestedResources: curated?.resource ? [{ ...curated.resource, source: "fallback" }, ...suggestions] : suggestions,
+      followUpQuestions: curated?.followUp ? [curated.followUp, ...followUpsForMode(mode).slice(0, 2)] : undefined,
     });
     void logChemShastriQuestionToBackend(request, response);
     return response;
@@ -177,7 +195,23 @@ export async function answerChemShastri(rawRequest: ChemShastriRequest, httpRequ
     mode: toMasterAlchemMode(mode),
   };
 
-  const masterResponse = await answerMasterAlchem(masterRequest, httpRequest);
+  let masterResponse: Awaited<ReturnType<typeof answerMasterAlchem>>;
+  try {
+    masterResponse = await answerMasterAlchem(masterRequest, httpRequest);
+  } catch {
+    const fallback = findCuratedFallbackAnswer(request.message, context) ?? genericCuratedFallback(request.message, context);
+    const response = await localResponse({
+      answer: fallback.answer,
+      spokenText: fallback.spokenText,
+      request,
+      intent,
+      source: "fallback",
+      suggestedResources: fallback.resource ? [{ ...fallback.resource, source: "fallback" }, ...retrieval.suggestions] : retrieval.suggestions,
+      followUpQuestions: [fallback.followUp, ...followUpsForMode(mode).slice(0, 2)],
+    });
+    void logChemShastriQuestionToBackend(request, response);
+    return response;
+  }
   const response: ChemShastriResponse = {
     ...masterResponse,
     answer: masterResponse.answer,

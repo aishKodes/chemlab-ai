@@ -1,0 +1,27 @@
+# Stage 9 Real Site Demo Readiness QA
+
+- [ ] Chem-Shastri answers simple questions directly.
+- [ ] Chem-Shastri fallback works without AI provider.
+- [ ] Chem-Shastri uses page context.
+- [ ] Voice selector works.
+- [ ] Speak button uses cleaned spokenText.
+- [ ] Voice does not autoplay.
+- [ ] `/showcase` opens.
+- [ ] `/admin/roadmap` opens.
+- [ ] `/roadmap/chemistry` opens.
+- [ ] `/admin/open-resources` exists.
+- [ ] `/resources/open-visualizations` exists.
+- [ ] External resources require license before publish.
+- [ ] PhET candidates are draft/needs-review only.
+- [ ] `/labs/molecule-shapes-3d` opens.
+- [ ] Redox lab still opens.
+- [ ] Hydrocarbon lab still opens.
+- [ ] Basic Concepts lab still opens.
+- [ ] Teacher quiz system still works.
+- [ ] Smart memory cards still work.
+- [ ] No `/presentation` route was added.
+- [ ] `npm run test:chem-shastri-live` passes.
+- [ ] `npm run test:chem-shastri-page-context` passes.
+- [ ] `npm run lint` passes.
+- [ ] `npm run build` passes.
+- [ ] PHP syntax check passes if backend changed.
