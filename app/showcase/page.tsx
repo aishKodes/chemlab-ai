@@ -13,6 +13,24 @@ export const metadata: Metadata = {
 
 const showcaseItems = [
   {
+    title: "Chem-Shastri",
+    classLevel: "All learners",
+    concept: "Guided chemistry help",
+    why: "Curated fallback answers keep the mentor useful even when provider APIs are unavailable.",
+    href: "/ai-tutor",
+    status: "ready",
+    icon: BrainCircuit,
+  },
+  {
+    title: "Electrochemistry Power Grid Studio",
+    classLevel: "Class 12",
+    concept: "Galvanic cells and Nernst equation",
+    why: "Students build a Daniell cell, trace electron and ion flow, then change voltage with concentration.",
+    href: "/labs/electrochemistry-power-grid",
+    status: "ready",
+    icon: FlaskConical,
+  },
+  {
     title: "Redox Transfer Kitchen",
     classLevel: "Class 10-12",
     concept: "Redox reactions",
@@ -84,15 +102,6 @@ const showcaseItems = [
     status: "needs_review",
     icon: BookOpenCheck,
   },
-  {
-    title: "Chem-Shastri",
-    classLevel: "All learners",
-    concept: "Guided chemistry help",
-    why: "Curated fallback answers keep the mentor useful even when provider APIs are unavailable.",
-    href: "/ai-tutor",
-    status: "ready",
-    icon: BrainCircuit,
-  },
 ];
 
 const statusMeta = {
@@ -121,7 +130,7 @@ export default function ShowcasePage() {
             Open a story lab, a 3D molecule view, and Chem-Shastri. These show the product direction without hiding behind a separate mode.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Button href="/labs/redox-transfer-kitchen">Open Redox</Button>
+            <Button href="/labs/electrochemistry-power-grid">Open Electrochemistry</Button>
             <Button href="/labs/molecule-shapes-3d" variant="secondary">Open Molecules</Button>
             <Button href="/ai-tutor" variant="secondary">Ask Chem-Shastri</Button>
           </div>

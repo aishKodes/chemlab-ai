@@ -47,6 +47,14 @@ const shapesResource = {
   reason: "It lets you rotate school-level molecule shapes and compare bond angles.",
 };
 
+const electrochemistryResource = {
+  title: "Electrochemistry Power Grid Studio",
+  slug: "electrochemistry-power-grid",
+  type: "simulation",
+  routeUrl: "/labs/electrochemistry-power-grid",
+  reason: "It lets you build a Daniell cell, trace electron flow, and test the Nernst equation.",
+};
+
 export const curatedFallbackAnswers: CuratedFallbackAnswer[] = [
   {
     id: "oxidation",
@@ -255,6 +263,66 @@ export const curatedFallbackAnswers: CuratedFallbackAnswer[] = [
     followUp: "Want to compare water with carbon dioxide?",
     resource: shapesResource,
   },
+  {
+    id: "zinc-anode-electrochemistry",
+    patterns: [/\bwhy.*zinc.*anode\b/i, /\bzinc.*anode\b/i, /\banode.*zinc\b/i],
+    answer:
+      "Zinc is the anode in the Daniell cell because zinc atoms lose electrons: Zn(s) -> Zn²⁺(aq) + 2e⁻. Oxidation happens at the anode, so the zinc half-cell is the anode.",
+    spokenText:
+      "Zinc is the anode because zinc loses electrons. Oxidation happens at the anode, so zinc is the anode in a Daniell cell.",
+    followUp: "Want to trace the electron path next?",
+    resource: electrochemistryResource,
+  },
+  {
+    id: "electron-flow-zinc-copper",
+    patterns: [/\belectrons?.*flow.*zinc.*copper\b/i, /\bwhy.*electrons?.*zinc.*copper\b/i, /\belectron flow\b/i],
+    answer:
+      "Electrons flow from zinc to copper because zinc has the stronger tendency to lose electrons, while Cu²⁺ has a tendency to gain them. The external wire gives those electrons a path from the zinc anode to the copper cathode.",
+    spokenText:
+      "Electrons flow from zinc to copper. Zinc gives electrons at the anode, and copper two plus receives them at the cathode.",
+    followUp: "Want the anode-cathode shortcut?",
+    resource: electrochemistryResource,
+  },
+  {
+    id: "salt-bridge",
+    patterns: [/\bsalt bridge\b/i, /\bwhat.*bridge.*doing\b/i, /\bwhy.*salt.*bridge\b/i],
+    answer:
+      "The salt bridge completes the internal circuit by allowing ions to move. It prevents charge buildup: anions move toward the anode side where Zn²⁺ builds up, and cations move toward the cathode side. Electrons do not travel through the salt bridge.",
+    spokenText:
+      "The salt bridge carries ions, not electrons. It balances charge so the cell can keep working.",
+    followUp: "Want to compare ion flow with electron flow?",
+    resource: electrochemistryResource,
+  },
+  {
+    id: "nernst-equation",
+    patterns: [/\bnernst\b/i, /\bwhy.*voltage.*concentration\b/i, /\bconcentration.*voltage\b/i],
+    answer:
+      "The Nernst equation shows how concentration changes cell voltage. For the Daniell cell at 298 K: Ecell = 1.10 - (0.0591/2) log([Zn²⁺]/[Cu²⁺]). Increasing Cu²⁺ increases voltage; increasing Zn²⁺ decreases voltage.",
+    spokenText:
+      "The Nernst equation connects concentration to voltage. For Daniell cell, more copper two plus raises voltage, while more zinc two plus lowers voltage.",
+    followUp: "Want a one-slider example?",
+    resource: electrochemistryResource,
+  },
+  {
+    id: "cell-notation",
+    patterns: [/\bcell notation\b/i, /\bzn.*zn.*cu.*cu\b/i],
+    answer:
+      "Cell notation writes the galvanic cell in a compact order: Zn | Zn²⁺ || Cu²⁺ | Cu. The left side is the anode, the right side is the cathode, a single line separates phases, and the double line represents the salt bridge.",
+    spokenText:
+      "Cell notation is zinc, zinc two plus, salt bridge, copper two plus, copper. Left is anode, right is cathode.",
+    followUp: "Want to decode another cell notation?",
+    resource: electrochemistryResource,
+  },
+  {
+    id: "standard-cell-potential",
+    patterns: [/\be.*1\.10\b/i, /\bwhy.*1\.10\b/i, /\bstandard cell potential\b/i, /\be.?cell\b/i],
+    answer:
+      "E°cell for the Daniell cell is about 1.10 V because E°cell = E°cathode - E°anode. For Cu²⁺/Cu, E° is about +0.34 V; for Zn²⁺/Zn, E° is about -0.76 V. So 0.34 - (-0.76) = 1.10 V.",
+    spokenText:
+      "Standard cell potential is cathode potential minus anode potential. For Daniell cell, zero point three four minus negative zero point seven six gives one point one zero volts.",
+    followUp: "Want to see what changes away from standard state?",
+    resource: electrochemistryResource,
+  },
 ];
 
 export function findCuratedFallbackAnswer(message: string, context?: ChemShastriContext): CuratedFallbackAnswer | null {
@@ -269,6 +337,11 @@ export function findCuratedFallbackAnswer(message: string, context?: ChemShastri
     if (/water|h2o|bent|shape/i.test(text)) {
       return curatedFallbackAnswers.find((answer) => answer.id === "water-bent") ?? null;
     }
+  }
+
+  if (/electrochemistry-power-grid|daniell-cell-studio|electrochemistry/i.test(contextual)) {
+    const electrochem = curatedFallbackAnswers.find((answer) => answer.patterns.some((pattern) => pattern.test(text)) && answer.resource?.slug === "electrochemistry-power-grid");
+    if (electrochem) return electrochem;
   }
 
   return curatedFallbackAnswers.find((answer) => answer.patterns.some((pattern) => pattern.test(text))) ?? null;

@@ -58,6 +58,11 @@ export function buildChemShastriContext(request: ChemShastriRequest): ChemShastr
   if (request.simulationSlug === "molecule-shapes-3d" || request.currentPage?.includes("molecule-shapes-3d")) {
     learningSignals.push("Use Molecule Shapes 3D context: school-level VSEPR, geometry, bond angles, lone pairs, and shape comparisons.");
   }
+  if (request.simulationSlug === "electrochemistry-power-grid" || request.currentPage?.includes("electrochemistry-power-grid")) {
+    learningSignals.push(
+      "Use Electrochemistry Power Grid context: Daniell cell, zinc anode, copper cathode, electron flow through wire, ion flow through salt bridge, cell notation, Ecell about 1.10 V, and Nernst concentration effect.",
+    );
+  }
   if (request.currentPage?.startsWith("/memory-cards")) {
     learningSignals.push("The learner is reviewing memory cards; answer briefly and include one recall check.");
   }

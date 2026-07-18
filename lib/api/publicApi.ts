@@ -10,6 +10,20 @@ export const fallbackClasses: BackendClass[] = [
 
 export const fallbackResources: BackendResource[] = [
   {
+    type: "simulation",
+    title: "Electrochemistry Power Grid Studio",
+    slug: "electrochemistry-power-grid",
+    description: "Build a Daniell cell, watch electrons flow, and control voltage with the Nernst equation.",
+    route_url: "/labs/electrochemistry-power-grid",
+    class_level: "12",
+    source_type: "SIMULATION",
+    source_reference: "NCERT Class 12 Chemistry Electrochemistry, Galvanic Cells and Nernst Equation",
+    status: "published",
+    quality_status: "needs_review",
+    student_level: "advanced",
+    estimated_minutes: 18,
+  },
+  {
     type: "explanation",
     title: "Some Basic Concepts of Chemistry",
     slug: "some-basic-concepts-of-chemistry",

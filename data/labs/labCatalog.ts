@@ -17,6 +17,20 @@ export type LabCatalogEntry = {
 
 export const labCatalog: LabCatalogEntry[] = [
   {
+    slug: "electrochemistry-power-grid",
+    title: "Electrochemistry Power Grid Studio",
+    description: "Build a Daniell cell, watch electrons flow, and control voltage with the Nernst equation.",
+    classLevel: "Class 12",
+    topic: "Electrochemistry",
+    status: "featured",
+    route: "/labs/electrochemistry-power-grid",
+    xp: 490,
+    difficulty: "Advanced",
+    estimatedMinutes: 18,
+    concepts: ["galvanic cell", "Daniell cell", "anode", "cathode", "salt bridge", "Nernst equation"],
+    thumbnailType: "electrochem",
+  },
+  {
     slug: "basic-concepts-chemistry-universe",
     title: "Chemistry Scale Universe",
     description: "Explore matter, measurement, mole concept, and stoichiometry as a multi-zone Class 11 universe.",

@@ -4,6 +4,8 @@ These resources are candidates for Chemlab curation. They are not automatically 
 
 | Name | Topic | Class mapping | Source URL | Likely usage | License status | Attribution required | Why useful | Chemlab enhancement idea |
 |---|---|---:|---|---|---|---|---|---|
+| PhET Battery Voltage | Battery voltage and electron flow | 12 | https://phet.colorado.edu/en/simulations/battery-voltage | Link first | Needs review | PhET Interactive Simulations, University of Colorado Boulder | Useful conceptual bridge between batteries, charge separation, and voltage | Review as an external extension after Electrochemistry Power Grid Studio |
+| PhET Circuit Construction Kit: DC | Circuits, voltage, current, and meters | 10, 12 | https://phet.colorado.edu/en/simulations/circuit-construction-kit-dc | Link first | Needs review | PhET Interactive Simulations, University of Colorado Boulder | Helps separate circuit current intuition from electrochemistry details | Link only as a companion after galvanic-cell learning |
 | PhET Chemistry simulations landing | General chemistry simulations | 9-12 | https://phet.colorado.edu/en/simulations/filter?subjects=chemistry&type=html | Link first | Needs review | PhET Interactive Simulations, University of Colorado Boulder | Large collection of school-level interactive chemistry sims | Curate chapter-wise links with Chemlab prompts and mistake checks |
 | PhET Build an Atom | Atomic structure | 9, 11 | https://phet.colorado.edu/en/simulations/build-an-atom | Link first | Needs review | PhET Interactive Simulations, University of Colorado Boulder | Strong protons/neutrons/electrons/isotopes intuition | Pair with Chemlab atom-builder and quick drills |
 | PhET Molecule Shapes | VSEPR | 11 | https://phet.colorado.edu/en/simulations/molecule-shapes | Link first | Needs review | PhET Interactive Simulations, University of Colorado Boulder | Excellent for lone pairs and bond-pair geometry | Add after Chemlab Molecule Shapes 3D as extension |
@@ -18,5 +20,6 @@ These resources are candidates for Chemlab curation. They are not automatically 
 
 Notes:
 - PhET candidates remain draft until license and embed terms are reviewed.
+- PhET HTML simulations are not copied into Chemlab. Treat them as link-only candidates unless an admin explicitly verifies license, attribution, and embedding terms.
 - Mol* and JSmol are open-source candidates, but integration obligations still need review before adaptation.
 - When unsure, link externally with attribution instead of embedding or adapting.
