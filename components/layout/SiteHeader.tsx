@@ -95,9 +95,20 @@ export function SiteHeader() {
             href={isAuthenticated ? dashboardHref : "/login"}
             className="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-blue-100 bg-white/80 text-blue-700 shadow-sm transition hover:bg-blue-50"
             aria-label={isAuthenticated ? "Open dashboard" : "Open login"}
+            onClick={() => setMobileOpen(false)}
           >
             {isAuthenticated ? <LayoutDashboard className="h-5 w-5" aria-hidden="true" /> : <LogIn className="h-5 w-5" aria-hidden="true" />}
           </Link>
+          {!isLoading && !isAuthenticated ? (
+            <Link
+              href="/signup"
+              className="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 text-white shadow-sm transition hover:bg-blue-500"
+              aria-label="Open sign up"
+              onClick={() => setMobileOpen(false)}
+            >
+              <UserPlus className="h-5 w-5" aria-hidden="true" />
+            </Link>
+          ) : null}
           <button
             type="button"
             className="focus-ring grid h-10 w-10 place-items-center rounded-2xl border border-blue-100 bg-white/80 text-slate-700 shadow-sm"
@@ -144,12 +155,22 @@ export function SiteHeader() {
               </>
             ) : (
               <div className="grid gap-2 px-1 pt-2 sm:grid-cols-2">
-                <Button href="/login" variant="secondary" size="sm">
+                <Link
+                  href="/login"
+                  className="focus-ring inline-flex h-10 items-center justify-center gap-2 rounded-2xl border border-violet-200 bg-white px-4 text-sm font-extrabold text-violet-800 shadow-sm transition hover:bg-violet-50"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <LogIn className="h-4 w-4" aria-hidden="true" />
                   Login
-                </Button>
-                <Button href="/signup" size="sm">
+                </Link>
+                <Link
+                  href="/signup"
+                  className="focus-ring inline-flex h-10 items-center justify-center gap-2 rounded-2xl border border-blue-500 bg-blue-600 px-4 text-sm font-extrabold text-white shadow-sm transition hover:bg-blue-500"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <UserPlus className="h-4 w-4" aria-hidden="true" />
                   Sign up
-                </Button>
+                </Link>
               </div>
             )}
           </nav>
