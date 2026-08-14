@@ -1,5 +1,10 @@
-import { AdminAnalyticsSection } from "@/components/admin/AdminAnalyticsSection";
+import { RoleGuard } from "@/components/auth/RoleGuard";
+import { ChemShastriQuestionAnalytics } from "@/components/admin/ChemShastriQuestionAnalytics";
 
 export default function AdminAnalyticsChemShastriPage() {
-  return <AdminAnalyticsSection kind="chemShastri" />;
+  return (
+    <RoleGuard allowed={["admin"]}>
+      <ChemShastriQuestionAnalytics />
+    </RoleGuard>
+  );
 }

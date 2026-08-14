@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { getReadableApiError } from "@/lib/api/apiErrors";
+import { trackEvent } from "@/lib/analytics/trackEvent";
 import { dashboardPathForRole } from "@/lib/auth/authTypes";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Badge } from "@/components/ui/Badge";
@@ -30,6 +31,7 @@ export function SignupForm() {
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    void trackEvent({ event_type: "auth", event_name: "signup_started", page_path: "/signup", metadata: { role } });
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -43,8 +45,14 @@ export function SignupForm() {
         school_or_institute: role === "teacher" ? school : undefined,
         preferred_language: preferredLanguage,
       });
-      setSuccess("Your chemlearning account is ready. Please verify email if your inbox receives a code.");
-      router.push(dashboardPathForRole(session.user.role));
+      setSuccess("Your Chemlab account is ready. Taking you to your dashboard...");
+      void trackEvent({
+        event_type: "auth",
+        event_name: "signup_completed",
+        page_path: "/signup",
+        metadata: { role: session.user.role },
+      });
+      router.replace(dashboardPathForRole(session.user.role));
     } catch (caught) {
       setError(getReadableApiError(caught));
     } finally {

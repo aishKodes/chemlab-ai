@@ -2,27 +2,34 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
-import { Activity, BookOpen, FlaskConical, MailWarning, MessageSquareText, Users } from "lucide-react";
-import { AdminTable } from "@/components/admin/AdminTable";
+import { Activity, BrainCircuit, FlaskConical, MessageSquareText, Users } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { LoadingState } from "@/components/ui/LoadingState";
-import { adminApi } from "@/lib/api/adminApi";
+import { analyticsAdminApi } from "@/lib/api/analyticsAdminApi";
 import { getReadableApiError } from "@/lib/api/apiErrors";
-import type { BackendAdminAnalyticsSummary, BackendLearningEvent } from "@/lib/api/backendTypes";
+import type { BackendAdminAnalyticsSummary } from "@/lib/api/backendTypes";
+import { dedupeQuestionRows, type AnalyticsRow } from "@/lib/analytics/studentAdminAnalytics";
 
 export default function AdminAnalyticsPage() {
   const [data, setData] = useState<BackendAdminAnalyticsSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [studentCount, setStudentCount] = useState(0);
+  const [activeStudents, setActiveStudents] = useState(0);
+  const [questionCount, setQuestionCount] = useState(0);
 
   useEffect(() => {
-    adminApi
-      .getAdminAnalyticsSummary()
-      .then(setData)
+    Promise.all([analyticsAdminApi.summary(), analyticsAdminApi.students(), analyticsAdminApi.chemShastri()])
+      .then(([summaryPayload, studentPayload, questionPayload]) => {
+        setData(summaryPayload);
+        setStudentCount(studentPayload.students.length);
+        setActiveStudents(studentPayload.active_students);
+        setQuestionCount(dedupeQuestionRows(questionPayload.questions as AnalyticsRow[]).length);
+      })
       .catch((caught) => setError(getReadableApiError(caught)))
       .finally(() => setLoading(false));
   }, []);
@@ -33,8 +40,8 @@ export default function AdminAnalyticsPage() {
     <>
       <PageHeader
         eyebrow="Admin / Analytics"
-        title="Learning event summary."
-        description="Stage 3 stores and summarizes events. Deeper mastery intelligence comes in Stage 4."
+        title="See how students are really learning."
+        description="Move from platform totals into each learner's labs, mistakes, feedback, and exact Chem-Shastri questions."
       />
       <Container className="space-y-6 pb-16">
         {error ? <ErrorState description={error} /> : null}
@@ -43,21 +50,36 @@ export default function AdminAnalyticsPage() {
         ) : (
           <>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              <Metric label="Users" value={summary.users ?? 0} icon={<Users className="h-5 w-5" />} />
-              <Metric label="Published resources" value={summary.published_resources ?? 0} icon={<BookOpen className="h-5 w-5" />} />
-              <Metric label="Memory decks" value={summary.memory_decks ?? 0} icon={<Activity className="h-5 w-5" />} />
-              <Metric label="Email failures" value={summary.email_failures ?? 0} icon={<MailWarning className="h-5 w-5" />} />
+              <Metric label="Student accounts" value={studentCount} icon={<Users className="h-5 w-5" />} />
+              <Metric label="Active students" value={activeStudents} icon={<Activity className="h-5 w-5" />} />
+              <Metric label="Simulation sessions" value={summary.simulation_sessions ?? 0} icon={<FlaskConical className="h-5 w-5" />} />
+              <Metric label="Chem-Shastri questions" value={questionCount} icon={<BrainCircuit className="h-5 w-5" />} />
             </div>
+            <Card className="bg-gradient-to-br from-white via-blue-50 to-violet-50">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-black uppercase text-blue-700">Student intelligence</p>
+                  <h2 className="mt-2 text-2xl font-black text-slate-950">Open a complete learner profile</h2>
+                  <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-600">
+                    Search students, compare engagement, inspect lab sessions and mistakes, read dashboard feedback, and see the chemistry questions they asked.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button href="/admin/analytics/students" icon={<Users className="h-4 w-4" aria-hidden="true" />}>Student analytics</Button>
+                  <Button href="/admin/analytics/chem-shastri" variant="secondary" icon={<MessageSquareText className="h-4 w-4" aria-hidden="true" />}>Exact questions</Button>
+                </div>
+              </div>
+            </Card>
             <Card>
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h2 className="text-xl font-black text-slate-950">Stage 4 analytics areas</h2>
-                  <p className="mt-1 text-sm font-bold text-slate-600">Open deeper learning intelligence views.</p>
+                  <h2 className="text-xl font-black text-slate-950">Analytics areas</h2>
+                  <p className="mt-1 text-sm font-bold text-slate-600">Move from overall activity into the learning signal you need.</p>
                 </div>
               </div>
               <div className="mt-4 grid gap-3 md:grid-cols-3">
                 {[
-                  { href: "/admin/analytics/resources", label: "Resources", icon: BookOpen },
+                  { href: "/admin/analytics/resources", label: "Resources", icon: Activity },
                   { href: "/admin/analytics/simulations", label: "Simulations", icon: FlaskConical },
                   { href: "/admin/analytics/mistakes", label: "Mistakes", icon: Activity },
                   { href: "/admin/analytics/chem-shastri", label: "Chem-Shastri", icon: MessageSquareText },
@@ -73,28 +95,6 @@ export default function AdminAnalyticsPage() {
                 })}
               </div>
             </Card>
-            <Card>
-              <h2 className="text-xl font-black text-slate-950">Top events</h2>
-              <div className="mt-4 grid gap-3 md:grid-cols-2">
-                {(data?.top_events ?? []).map((event) => (
-                  <div key={event.event_name} className="rounded-2xl border border-blue-100 bg-blue-50/70 p-4">
-                    <p className="font-black text-slate-950">{event.event_name}</p>
-                    <p className="text-sm font-bold text-blue-700">{event.total} events</p>
-                  </div>
-                ))}
-              </div>
-            </Card>
-            <AdminTable<BackendLearningEvent & Record<string, unknown>>
-              items={(data?.recent_events ?? []) as (BackendLearningEvent & Record<string, unknown>)[]}
-              columns={[
-                { key: "id", label: "ID" },
-                { key: "event_type", label: "Type" },
-                { key: "event_name", label: "Name" },
-                { key: "page_path", label: "Page" },
-                { key: "created_at", label: "Created" },
-              ]}
-              emptyTitle="No events stored yet"
-            />
           </>
         )}
       </Container>

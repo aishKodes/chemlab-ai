@@ -14,6 +14,7 @@ import { ErrorState } from "@/components/ui/ErrorState";
 import { StatCard } from "@/components/ui/StatCard";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { ClassroomJoinCard } from "@/components/learning/ClassroomJoinCard";
+import { StudentFeedbackSurvey } from "@/components/feedback/StudentFeedbackSurvey";
 import { publicApi, fallbackResources, unwrapResources } from "@/lib/api/publicApi";
 import { teacherApi } from "@/lib/api/teacherApi";
 import { userApi } from "@/lib/api/userApi";
@@ -180,6 +181,7 @@ function StudentDashboard() {
             </div>
           </Card>
         </section>
+        <StudentFeedbackSurvey />
       </Container>
     </>
   );
