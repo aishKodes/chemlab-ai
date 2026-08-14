@@ -203,7 +203,7 @@ export function MoleculeShapes3D() {
           ) : null}
 
           <div className="mt-5 grid gap-2">
-            <Button href={`/ai-tutor?prompt=${encodeURIComponent(`Why is ${selected.name} ${selected.geometry.toLowerCase()}?`)}`}>
+            <Button href={`/ai-tutor?prompt=${encodeURIComponent(`For ${selected.name} (${selected.formula}), explain why its geometry is ${selected.geometry.toLowerCase()} and why its bond angle is ${selected.bondAngles.join(", ")}. Connect this to ${selected.topics[0] ?? "molecular geometry"}.`)}`}>
               Ask Chem-Shastri
             </Button>
             <Button href="/resources/open-visualizations" variant="secondary">

@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/Container";
 export const metadata: Metadata = {
   title: "Neutralization Studio",
   description:
-    "Mix acid and base, watch pH change, find the neutral point, evaporate water, and reveal salt crystals in Chemlab.",
+    "Mix acid and base, watch pH change, find the neutral point, evaporate water, and reveal salt crystals in chemlearning.",
 };
 
 export default function NeutralizationStudioPage() {

@@ -17,6 +17,20 @@ export type LabCatalogEntry = {
 
 export const labCatalog: LabCatalogEntry[] = [
   {
+    slug: "si-units-battle",
+    title: "SI Units Battle",
+    description: "Power the seven SI base units, cross conversion bridges, and defeat the significant-figures boss.",
+    classLevel: "Class 11",
+    topic: "SI Units and Measurement",
+    status: "featured",
+    route: "/labs/si-units-battle",
+    xp: 380,
+    difficulty: "Intermediate",
+    estimatedMinutes: 4,
+    concepts: ["SI base units", "symbols", "unit conversion", "precision", "accuracy", "significant figures"],
+    thumbnailType: "basic-concepts",
+  },
+  {
     slug: "electrochemistry-power-grid",
     title: "Electrochemistry Power Grid Studio",
     description: "Build a Daniell cell, watch electrons flow, and control voltage with the Nernst equation.",
@@ -84,20 +98,6 @@ export const labCatalog: LabCatalogEntry[] = [
     difficulty: "Intermediate",
     estimatedMinutes: 9,
     concepts: ["VSEPR", "bond angle", "lone pair", "linear", "bent", "tetrahedral"],
-    thumbnailType: "molecule",
-  },
-  {
-    slug: "molecule-explorer",
-    title: "Molecule Explorer",
-    description: "Rotate molecules, compare shapes, and see why chemistry is 3D.",
-    classLevel: "Class 11-12",
-    topic: "Molecular geometry",
-    status: "featured",
-    route: "/simulations/molecule-explorer",
-    xp: 140,
-    difficulty: "Intermediate",
-    estimatedMinutes: 8,
-    concepts: ["geometry", "bond angle", "lone pair", "VSEPR", "ionic lattice"],
     thumbnailType: "molecule",
   },
   {

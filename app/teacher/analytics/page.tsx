@@ -34,7 +34,7 @@ function TeacherAnalytics() {
 
   return (
     <>
-      <PageHeader eyebrow="Teacher Analytics" title="Classroom learning pulse." description="Watch early Chemlab learning signals for your classrooms." />
+      <PageHeader eyebrow="Teacher Analytics" title="Classroom learning pulse." description="Watch early chemlearning learning signals for your classrooms." />
       <Container className="space-y-6 pb-16">
         {error ? <ErrorState description={error} /> : null}
         {loading ? (

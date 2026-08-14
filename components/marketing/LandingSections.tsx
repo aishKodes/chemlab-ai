@@ -59,7 +59,7 @@ const differentiators = [
 const storySteps = [
   ["Scene dialogue", "A practical begins with a mystery and Chem-Shastri's briefing."],
   ["Lab action", "Students choose variables, tools, observations, and predictions."],
-  ["Evidence check", "Chemlab connects the visual result to the chemistry principle."],
+  ["Evidence check", "chemlearning connects the visual result to the chemistry principle."],
   ["Boss moment", "A short challenge locks in the concept before the next scene."],
 ];
 
@@ -85,7 +85,7 @@ const featuredLabs = [
   {
     title: "Molecule Explorer",
     description: "Rotate real 3D molecules and understand shape by seeing it.",
-    href: "/simulations/molecule-explorer",
+    href: "/labs/molecule-shapes-3d",
     icon: <Atom className="h-6 w-6 text-violet-700" aria-hidden="true" />,
   },
 ];
@@ -97,7 +97,7 @@ export function LandingSections() {
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow="Why Chemlab is different"
+              eyebrow="Why chemlearning is different"
               title="A learning universe you can actually explore."
               description="Pick a mission, make a prediction, test it in a virtual lab, and let Chem-Shastri help you understand what changed."
             />
@@ -314,7 +314,7 @@ export function LandingSections() {
                 <div>
                   <Badge tone="cyan">Future of learning</Badge>
                   <h2 className="mt-5 text-4xl font-black text-slate-950">
-                    Chemlab grows with every quest students unlock.
+                    chemlearning grows with every quest students unlock.
                   </h2>
                   <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-slate-700">
                     More worlds, practicals, teacher-guided missions, and challenge paths are coming.
@@ -348,13 +348,13 @@ export function LandingSections() {
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-black">
                     <Atom className="h-4 w-4" aria-hidden="true" />
-                    Ready to enter Chemlab?
+                    Ready to enter chemlearning?
                   </div>
                   <h2 className="mt-5 text-4xl font-black text-white">
                     Start a quest. Meet Chem-Shastri. Make chemistry visible.
                   </h2>
                   <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-blue-50">
-                    Chemlab turns chemistry into a colourful interactive world where students learn by
+                    chemlearning turns chemistry into a colourful interactive world where students learn by
                     playing, simulating, experimenting, explaining, and trying again.
                   </p>
                 </div>

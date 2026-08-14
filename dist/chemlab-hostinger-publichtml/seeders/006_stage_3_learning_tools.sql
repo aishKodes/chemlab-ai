@@ -1,4 +1,4 @@
--- Chemlab Stage 3 sample learning-tool content
+-- chemlearning Stage 3 sample learning-tool content
 
 INSERT INTO site_settings (setting_key, setting_value, type, is_public, created_at, updated_at)
 VALUES
@@ -33,12 +33,12 @@ FROM content_blocks WHERE block_key = 'homepage.hero.title'
 ON DUPLICATE KEY UPDATE title = VALUES(title), body = VALUES(body), updated_at = NOW();
 
 INSERT INTO content_translations (block_id, language, title, body, created_at, updated_at)
-SELECT id, 'en', 'Enter virtual labs', 'Build reactions, trace molecules, answer challenges, and unlock mastery through guided Chemlab simulations.', NOW(), NOW()
+SELECT id, 'en', 'Enter virtual labs', 'Build reactions, trace molecules, answer challenges, and unlock mastery through guided chemlearning simulations.', NOW(), NOW()
 FROM content_blocks WHERE block_key = 'homepage.hero.subtitle'
 ON DUPLICATE KEY UPDATE title = VALUES(title), body = VALUES(body), updated_at = NOW();
 
 INSERT INTO content_translations (block_id, language, title, body, created_at, updated_at)
-SELECT id, 'en', 'Chemlab labs', 'Choose an experiment and learn by doing. Each lab turns a chemistry idea into a clear action.', NOW(), NOW()
+SELECT id, 'en', 'chemlearning labs', 'Choose an experiment and learn by doing. Each lab turns a chemistry idea into a clear action.', NOW(), NOW()
 FROM content_blocks WHERE block_key = 'labs.page.title'
 ON DUPLICATE KEY UPDATE title = VALUES(title), body = VALUES(body), updated_at = NOW();
 
@@ -58,7 +58,7 @@ FROM content_blocks WHERE block_key = 'chem_shastri.welcome_message'
 ON DUPLICATE KEY UPDATE title = VALUES(title), body = VALUES(body), updated_at = NOW();
 
 INSERT INTO content_translations (block_id, language, title, body, created_at, updated_at)
-SELECT id, 'en', 'Chemlab', 'A free chemistry learning universe with simulations, quests, resources, and a patient guide.', NOW(), NOW()
+SELECT id, 'en', 'chemlearning', 'A free chemistry learning universe with simulations, quests, resources, and a patient guide.', NOW(), NOW()
 FROM content_blocks WHERE block_key = 'footer.description'
 ON DUPLICATE KEY UPDATE title = VALUES(title), body = VALUES(body), updated_at = NOW();
 
@@ -76,7 +76,7 @@ SELECT
   'beginner',
   'published',
   'CUSTOM',
-  'Original Chemlab review content aligned to the Redox Transfer Kitchen simulation.',
+  'Original chemlearning review content aligned to the Redox Transfer Kitchen simulation.',
   NOW(),
   NOW()
 FROM classes
@@ -124,7 +124,7 @@ SELECT
   'beginner',
   'published',
   'CUSTOM',
-  'Original Chemlab review content aligned to Hydrocarbon Naming Quest.',
+  'Original chemlearning review content aligned to Hydrocarbon Naming Quest.',
   NOW(),
   NOW()
 FROM classes
@@ -173,7 +173,7 @@ SELECT
   5,
   'published',
   'CUSTOM',
-  'Original Chemlab quick drill.',
+  'Original chemlearning quick drill.',
   NOW(),
   NOW()
 FROM classes
@@ -216,7 +216,7 @@ SELECT
   5,
   'published',
   'CUSTOM',
-  'Original Chemlab quick drill.',
+  'Original chemlearning quick drill.',
   NOW(),
   NOW()
 FROM classes
@@ -255,7 +255,7 @@ SELECT
   'A concept map connecting electron transfer, oxidation, reduction, and agents.',
   JSON_OBJECT('nodes', JSON_ARRAY('Electron transfer', 'Oxidation', 'Reduction', 'Reducing agent', 'Oxidizing agent'), 'edges', JSON_ARRAY(JSON_OBJECT('from', 'Electron transfer', 'to', 'Oxidation'), JSON_OBJECT('from', 'Electron transfer', 'to', 'Reduction'))),
   'published',
-  'Original Chemlab concept map.',
+  'Original chemlearning concept map.',
   NOW(),
   NOW()
 FROM classes

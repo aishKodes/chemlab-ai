@@ -10,7 +10,7 @@ export default function ForgotPasswordPage() {
   return (
     <AuthShell
       eyebrow="Account help"
-      title="Get back into Chemlab."
+      title="Get back into chemlearning."
       description="Password recovery is calm and private. We do not reveal whether an email exists."
     >
       <ForgotPasswordForm />

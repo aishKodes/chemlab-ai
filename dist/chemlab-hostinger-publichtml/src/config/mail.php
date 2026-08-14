@@ -11,5 +11,5 @@ return [
     'username' => Config::get('SMTP_USERNAME', ''),
     'password' => Config::get('SMTP_PASSWORD', ''),
     'from_email' => Config::get('SMTP_FROM_EMAIL', ''),
-    'from_name' => Config::get('SMTP_FROM_NAME', 'Chemlab'),
+    'from_name' => Config::get('SMTP_FROM_NAME', 'chemlearning'),
 ];

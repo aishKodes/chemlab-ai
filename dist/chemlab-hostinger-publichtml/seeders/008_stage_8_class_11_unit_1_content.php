@@ -42,7 +42,7 @@ return function (PDO $pdo): void {
         'description' => 'Class 11 Unit 1 learning pack for matter, measurement, mole concept, formula work, and stoichiometry.',
         'route_url' => '/resources/some-basic-concepts-of-chemistry',
         'content_json' => json_encode([
-            'summary' => 'Original Chemlab explanations, memory cards, quick drills, concept map and lab links for Unit 1.',
+            'summary' => 'Original chemlearning explanations, memory cards, quick drills, concept map and lab links for Unit 1.',
             'source_policy' => 'NCERT-aligned source backbone. Do not copy textbook paragraphs into public pages.',
         ], JSON_UNESCAPED_SLASHES),
         'source_type' => 'CUSTOM',

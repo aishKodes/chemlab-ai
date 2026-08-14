@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/Card";
 
 export const metadata: Metadata = {
   title: "Admin Roadmap",
-  description: "Chemlab admin roadmap for Class 9-12 chemistry content production.",
+  description: "chemlearning admin roadmap for Class 9-12 chemistry content production.",
 };
 
 export default function AdminRoadmapPage() {

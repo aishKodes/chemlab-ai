@@ -41,7 +41,7 @@ export function LoginForm() {
       <div>
         <h2 className="text-2xl font-black text-slate-950">Welcome back</h2>
         <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-          Log in once and Chemlab will send you to the right learning space.
+          Log in once and chemlearning will send you to the right learning space.
         </p>
       </div>
       {error ? <ErrorState description={error} /> : null}
@@ -78,7 +78,7 @@ export function LoginForm() {
       <p className="text-center text-sm font-semibold text-slate-600">
         New here?{" "}
         <Link href="/signup" className="font-black text-blue-700">
-          Create a Chemlab account
+          Create a chemlearning account
         </Link>
       </p>
     </form>

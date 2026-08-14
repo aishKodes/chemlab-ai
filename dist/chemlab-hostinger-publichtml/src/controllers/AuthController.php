@@ -24,6 +24,8 @@ final class AuthController
     public function signup(Request $request): Response
     {
         $input = $request->json();
+        $input['email'] = AuthService::normalizeEmail((string) ($input['email'] ?? ''));
+        $input['name'] = trim((string) ($input['name'] ?? ''));
         $errors = Validator::required($input, ['role', 'name', 'email', 'password']);
         $role = (string) ($input['role'] ?? '');
 
@@ -61,6 +63,7 @@ final class AuthController
     public function login(Request $request): Response
     {
         $input = $request->json();
+        $input['email'] = AuthService::normalizeEmail((string) ($input['email'] ?? ''));
         $errors = Validator::required($input, ['email', 'password']);
         if ($errors !== []) {
             return Response::error('VALIDATION_ERROR', 'Email and password are required.', 422, $errors);
@@ -98,13 +101,24 @@ final class AuthController
 
     public function verifyEmail(Request $request): Response
     {
-        $user = AuthMiddleware::requireUser($request, $this->pdo);
+        $service = new AuthService($this->pdo);
+        $user = AuthMiddleware::user($request, $this->pdo);
+        if ($user === null) {
+            $email = AuthService::normalizeEmail((string) $request->input('email', ''));
+            if (!Validator::email($email)) {
+                return Response::error('VALIDATION_ERROR', 'Email and verification code are required.', 422);
+            }
+            $user = $service->publicUserByEmail($email);
+        }
         $code = trim((string) $request->input('code', ''));
         if ($code === '') {
             return Response::error('VALIDATION_ERROR', 'Verification code is required.', 422);
         }
+        if ($user === null) {
+            return Response::error('INVALID_CODE', 'Verification code is invalid or expired.', 422);
+        }
 
-        $ok = (new AuthService($this->pdo))->verifyEmail((int) $user['id'], $code);
+        $ok = $service->verifyEmail((int) $user['id'], $code);
         if (!$ok) {
             return Response::error('INVALID_CODE', 'Verification code is invalid or expired.', 422);
         }
@@ -114,8 +128,18 @@ final class AuthController
 
     public function resendVerification(Request $request): Response
     {
-        $user = AuthMiddleware::requireUser($request, $this->pdo);
         $service = new AuthService($this->pdo);
+        $user = AuthMiddleware::user($request, $this->pdo);
+        if ($user === null) {
+            $email = AuthService::normalizeEmail((string) $request->input('email', ''));
+            if (!Validator::email($email)) {
+                return Response::ok(['message' => 'If this email has a chemlearning account, a verification code will be sent.']);
+            }
+            $user = $service->publicUserByEmail($email);
+        }
+        if ($user === null || !empty($user['email_verified_at'])) {
+            return Response::ok(['message' => 'If this email has a chemlearning account, a verification code will be sent.']);
+        }
         $code = $service->createVerificationCode((int) $user['id'], (string) $user['email'], 'signup', 15);
         (new MailService($this->pdo))->sendVerificationEmail($user, $code);
 
@@ -124,7 +148,7 @@ final class AuthController
 
     public function forgotPassword(Request $request): Response
     {
-        $email = (string) $request->input('email', '');
+        $email = AuthService::normalizeEmail((string) $request->input('email', ''));
         if (!Validator::email($email)) {
             return Response::error('VALIDATION_ERROR', 'A valid email is required.', 422);
         }

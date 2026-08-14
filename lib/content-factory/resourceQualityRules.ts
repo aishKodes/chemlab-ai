@@ -43,7 +43,7 @@ export function getCoverageLabel(score: number) {
 
 export const resourceQualityChecklist = [
   "Scientifically accurate and NCERT-aligned",
-  "Original Chemlab explanation, not copied textbook text",
+  "Original chemlearning explanation, not copied textbook text",
   "One clear learning goal per screen",
   "Mobile usable with readable labels",
   "Wrong answers explain the misconception",

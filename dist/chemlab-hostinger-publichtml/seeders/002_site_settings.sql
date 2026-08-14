@@ -1,6 +1,6 @@
 INSERT INTO site_settings (setting_key, setting_value, type, is_public, created_at, updated_at)
 VALUES
-  ('site_name', 'Chemlab', 'string', 1, NOW(), NOW()),
+  ('site_name', 'chemlearning', 'string', 1, NOW(), NOW()),
   ('ai_name', 'Chem-Shastri', 'string', 1, NOW(), NOW()),
   ('default_language', 'en', 'string', 1, NOW(), NOW()),
   ('signup_enabled', 'true', 'boolean', 1, NOW(), NOW()),

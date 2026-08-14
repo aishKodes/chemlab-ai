@@ -20,3 +20,7 @@
 - [ ] Notifications component handles empty or unavailable state.
 - [ ] Analytics event calls do not break UI.
 - [ ] `npm run build` passes.
+- [ ] `/dev/auth-test` runs safe auth probes in development and returns not found in production.
+- [ ] `npm run test:auth-endpoints` passes against the configured backend without creating accounts.
+- [ ] Email verification works with email + code even if the user is not currently logged in.
+- [ ] Browser CORS allows profile/admin `PUT` requests from the configured frontend origin.

@@ -62,7 +62,7 @@ function TeacherDashboard() {
         {!user?.school_or_institute ? (
           <ErrorState
             title="Complete your teacher profile"
-            description="Add school or institute details so Chemlab can prepare classroom workflows later."
+            description="Add school or institute details so chemlearning can prepare classroom workflows later."
             action={<Button href="/profile">Complete profile</Button>}
           />
         ) : null}

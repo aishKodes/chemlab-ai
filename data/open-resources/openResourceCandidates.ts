@@ -81,7 +81,7 @@ export const openResourceCandidates: OpenResourceCandidate[] = [
     qualityStatus: "needs_review",
     publicStatus: "draft",
     whyUseful: "Large collection of strong school-level interactive chemistry simulations.",
-    chemlabEnhancementIdea: "Curate exact sims chapter-wise and wrap each link with Chemlab prompts, memory cards, and mistake checks.",
+    chemlabEnhancementIdea: "Curate exact sims chapter-wise and wrap each link with chemlearning prompts, memory cards, and mistake checks.",
     notes: "Do not embed or adapt until license and terms are reviewed by admin.",
   },
   {
@@ -101,7 +101,7 @@ export const openResourceCandidates: OpenResourceCandidate[] = [
     qualityStatus: "needs_review",
     publicStatus: "draft",
     whyUseful: "Excellent for protons, neutrons, electrons, ions, and isotopes.",
-    chemlabEnhancementIdea: "Pair with Chemlab atom-builder questions and misconception tracking.",
+    chemlabEnhancementIdea: "Pair with chemlearning atom-builder questions and misconception tracking.",
     notes: "Candidate only. Keep draft until reviewed.",
   },
   {
@@ -121,7 +121,7 @@ export const openResourceCandidates: OpenResourceCandidate[] = [
     qualityStatus: "needs_review",
     publicStatus: "draft",
     whyUseful: "Strong visual support for bond pairs, lone pairs, and shapes.",
-    chemlabEnhancementIdea: "Link from Molecule Shapes 3D as an optional external exploration after Chemlab’s school-level view.",
+    chemlabEnhancementIdea: "Link from Molecule Shapes 3D as an optional external exploration after chemlearning’s school-level view.",
     notes: "No embedding until license review.",
   },
   {
@@ -141,7 +141,7 @@ export const openResourceCandidates: OpenResourceCandidate[] = [
     qualityStatus: "needs_review",
     publicStatus: "draft",
     whyUseful: "Good practice for conservation of atoms before stoichiometry.",
-    chemlabEnhancementIdea: "Use as a recommended practice link after Chemlab Reaction Rescue.",
+    chemlabEnhancementIdea: "Use as a recommended practice link after chemlearning Reaction Rescue.",
     notes: "Candidate only.",
   },
   {

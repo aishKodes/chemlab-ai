@@ -47,7 +47,7 @@ async function uploadMultipart<T>(path: string, body: FormData): Promise<T> {
   const baseUrl = getBackendBaseUrl();
   if (!baseUrl) {
     throw new BackendApiError(
-      "Chemlab account services are not connected yet. Media upload needs the Hostinger backend.",
+      "chemlearning account services are not connected yet. Media upload needs the Hostinger backend.",
       "BACKEND_NOT_CONFIGURED",
     );
   }

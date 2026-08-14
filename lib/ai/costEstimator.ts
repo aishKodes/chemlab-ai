@@ -7,6 +7,8 @@ const PRICE_PER_MILLION_TOKENS: Record<string, { input: number; output: number }
   "text-embedding-004": { input: 0.01, output: 0 },
   "gemini-2.0-flash": { input: 0.1, output: 0.4 },
   "gemini-2.5-flash": { input: 0.3, output: 2.5 },
+  "gemini-3.6-flash": { input: 0.5, output: 3 },
+  "openai/gpt-oss-20b": { input: 0.075, output: 0.3 },
 };
 
 export function estimateAiCostUsd(model: string, inputTokens: number, outputTokens: number) {

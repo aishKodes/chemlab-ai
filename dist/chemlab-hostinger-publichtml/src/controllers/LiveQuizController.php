@@ -82,7 +82,7 @@ final class LiveQuizController
             'show_correct_after_each' => array_key_exists('show_correct_after_each', $input) ? (!empty($input['show_correct_after_each']) ? 1 : 0) : 1,
             'show_leaderboard' => array_key_exists('show_leaderboard', $input) ? (!empty($input['show_leaderboard']) ? 1 : 0) : 1,
             'quality_status' => $input['quality_status'] ?? 'needs_review',
-            'source_reference' => $input['source_reference'] ?? ($sourceDrill ? 'Copied from quick drill: ' . $sourceDrill['slug'] : 'Teacher-created Chemlab quiz.'),
+            'source_reference' => $input['source_reference'] ?? ($sourceDrill ? 'Copied from quick drill: ' . $sourceDrill['slug'] : 'Teacher-created chemlearning quiz.'),
         ]);
         $quizId = (int) $this->pdo->lastInsertId();
 

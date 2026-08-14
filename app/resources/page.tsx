@@ -38,7 +38,7 @@ export default function ResourcesPage() {
     <>
       <PageHeader
         eyebrow="Resources"
-        title="Open a Chemlab learning resource."
+        title="Open a chemlearning learning resource."
         description="Find simulations and class resources that help chemistry become visible and playable."
       />
       <Container className="space-y-6 pb-16">
@@ -69,7 +69,7 @@ export default function ResourcesPage() {
               <Badge tone="amber">Open resources</Badge>
               <h2 className="mt-3 text-2xl font-black text-slate-950">Reviewed external visualizations</h2>
               <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-slate-600">
-                Chemlab keeps PhET, Mol*, and other public resources in review until license, attribution, and accuracy checks are complete.
+                chemlearning keeps PhET, Mol*, and other public resources in review until license, attribution, and accuracy checks are complete.
               </p>
             </div>
             <Button href="/resources/open-visualizations" variant="secondary">

@@ -8,7 +8,7 @@ import { FeatureCard } from "@/components/ui/FeatureCard";
 
 export const metadata: Metadata = {
   title: "Learn",
-  description: "Browse Chemlab learning paths and chemistry curriculum modules.",
+  description: "Browse chemlearning learning paths and chemistry curriculum modules.",
 };
 
 export default function LearnPage() {
@@ -43,7 +43,7 @@ export default function LearnPage() {
         <Card className="mt-6">
           <h2 className="text-xl font-black text-slate-950">Chemistry first</h2>
           <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
-            Chemlab starts with chemistry so atoms, reactions, moles, bonding,
+            chemlearning starts with chemistry so atoms, reactions, moles, bonding,
             and lab evidence all connect inside one learning adventure.
           </p>
         </Card>

@@ -135,7 +135,7 @@ export async function retrieveChemShastriResources({
       toSuggestion(
         entry.item,
         entry.source === "backend"
-          ? "This Chemlab resource matches the question and current context."
+          ? "This chemlearning resource matches the question and current context."
           : "This practice tool can reinforce the same idea after the answer.",
         entry.source,
       ),

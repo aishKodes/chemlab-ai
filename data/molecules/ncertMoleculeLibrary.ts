@@ -117,6 +117,30 @@ const water = vsepr({
   lonePairs: [{ atomId: "O", count: 2, positions: [[-0.38, 0.48, 0.22], [0.38, 0.48, -0.22]] }],
 });
 
+const hydrogenPeroxide = simple({
+  id: "hydrogen-peroxide",
+  name: "Hydrogen peroxide",
+  formula: "H2O2",
+  classLevels: ["11", "12"],
+  chapters: ["Chemical Bonding and Molecular Structure", "Hydrogen"],
+  topics: ["Lone pairs", "Non-planar molecular shape", "Peroxides"],
+  categories: ["inorganic"],
+  coordinateSource: "hand_curated",
+  accuracyLevel: "school_level",
+  geometry: "Non-planar skew conformation",
+  hybridization: "sp3 on each oxygen",
+  bondAngles: ["H-O-O about 95°", "H-O-O-H dihedral about 111°"],
+  atoms: [
+    atom("O1", "O", [-0.58, 0, 0], { role: "central" }),
+    atom("O2", "O", [0.58, 0, 0], { role: "central" }),
+    atom("H1", "H", [-1.02, 0.58, 0.34]),
+    atom("H2", "H", [1.02, -0.58, 0.34]),
+  ],
+  bonds: [bond("O1", "O2"), bond("O1", "H1"), bond("O2", "H2")],
+  lonePairs: [{ atomId: "O1", count: 2 }, { atomId: "O2", count: 2 }],
+  notes: "Hand-curated school-level skew model. Angles are approximate and are not presented as a measured conformer.",
+});
+
 const ammonia = vsepr({
   id: "ammonia",
   name: "Ammonia",
@@ -251,6 +275,7 @@ export const ncertMoleculeLibrary: NcertMolecule[] = [
   linearDiatomic("nitrogen", "Nitrogen", "N2", "N", 3, ["10", "11"], ["Diatomic molecules"]),
   linearDiatomic("chlorine", "Chlorine", "Cl2", "Cl", 1, ["10"], ["Diatomic molecules"]),
   water,
+  hydrogenPeroxide,
   carbonDioxide,
   methane,
   ammonia,

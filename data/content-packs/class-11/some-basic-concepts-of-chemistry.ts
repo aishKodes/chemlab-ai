@@ -356,7 +356,7 @@ function makeQuickDrills(seed: TopicSeed): QuickDrillQuestionSeed[] {
         "Skip the source reference.",
       ],
       correctAnswer: "Show the idea, one example, and one trap.",
-      explanation: "Chemlab resources should teach the concept and the misconception together.",
+      explanation: "chemlearning resources should teach the concept and the misconception together.",
       hint: "Pick the learning-friendly option.",
       difficulty: seed.difficulty,
       mistakeKey,

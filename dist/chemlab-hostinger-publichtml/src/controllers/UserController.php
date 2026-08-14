@@ -25,6 +25,22 @@ final class UserController
     {
         $user = AuthMiddleware::requireUser($request, $this->pdo);
         $input = $request->json();
+        $errors = [];
+        if (array_key_exists('name', $input) && trim((string) $input['name']) === '') {
+            $errors['name'] = 'Name cannot be empty.';
+        }
+        if (array_key_exists('preferred_language', $input) && !in_array((string) $input['preferred_language'], ['en', 'hi', 'bn', 'or'], true)) {
+            $errors['preferred_language'] = 'Choose a supported language.';
+        }
+        if (array_key_exists('class_level', $input) && $input['class_level'] !== null && $input['class_level'] !== '' && !in_array((string) $input['class_level'], ['9', '10', '11', '12'], true)) {
+            $errors['class_level'] = 'Class level must be 9, 10, 11, or 12.';
+        }
+        if (array_key_exists('phone', $input) && (string) $input['phone'] !== '' && strlen((string) $input['phone']) > 30) {
+            $errors['phone'] = 'Phone is too long.';
+        }
+        if ($errors !== []) {
+            return Response::error('VALIDATION_ERROR', 'Please fix the highlighted fields.', 422, $errors);
+        }
 
         $this->pdo->beginTransaction();
         try {

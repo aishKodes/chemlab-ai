@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/Card";
 
 export const metadata: Metadata = {
   title: "Open Resource Curation",
-  description: "Review external simulations and visualizations before Chemlab publishes or embeds them.",
+  description: "Review external simulations and visualizations before chemlearning publishes or embeds them.",
 };
 
 export default function AdminOpenResourcesPage() {
@@ -22,7 +22,7 @@ export default function AdminOpenResourcesPage() {
         <Badge tone="amber">Admin review only</Badge>
         <h1 className="mt-3 text-3xl font-black text-slate-950">Open simulation curation queue</h1>
         <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-slate-600">
-          These are high-quality external candidates for Chemlab, but they stay draft until license, attribution, and accuracy are reviewed.
+          These are high-quality external candidates for chemlearning, but they stay draft until license, attribution, and accuracy are reviewed.
         </p>
         <div className="mt-5 grid gap-3 md:grid-cols-3">
           <Metric label="Candidates" value={openResourceCandidates.length} />
@@ -56,7 +56,7 @@ export default function AdminOpenResourcesPage() {
               <p><span className="text-slate-950">Classes:</span> {resource.classMapping.join(", ")}</p>
               <p><span className="text-slate-950">License:</span> {resource.licenseType}</p>
               <p><span className="text-slate-950">Attribution:</span> {resource.attributionText}</p>
-              <p><span className="text-slate-950">Chemlab idea:</span> {resource.chemlabEnhancementIdea}</p>
+              <p><span className="text-slate-950">chemlearning idea:</span> {resource.chemlabEnhancementIdea}</p>
             </div>
             <div className="mt-5 flex flex-wrap gap-2">
               <Button href={resource.sourceUrl} variant="secondary" icon={<ExternalLink className="h-4 w-4" aria-hidden="true" />}>

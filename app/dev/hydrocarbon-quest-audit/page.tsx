@@ -5,7 +5,7 @@ import { calculateFormulaCounts, formatChemicalFormula, formulaCountsToString, p
 import { hydrocarbonQuestLevels } from "@/components/labs/hydrocarbon-quest/hydrocarbonQuestData";
 
 export const metadata = {
-  title: "Hydrocarbon Quest Audit | Chemlab",
+  title: "Hydrocarbon Quest Audit | chemlearning",
   description: "Development audit for Hydrocarbon Naming Quest labels, validation, and sound readiness.",
 };
 

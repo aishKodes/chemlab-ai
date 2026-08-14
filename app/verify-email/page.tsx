@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function VerifyEmailPage() {
   return (
-    <AuthShell eyebrow="Verify email" title="Confirm your Chemlab email." description="A verified email keeps your account and learning progress safer.">
+    <AuthShell eyebrow="Verify email" title="Confirm your chemlearning email." description="A verified email keeps your account and learning progress safer.">
       <Suspense fallback={null}>
         <VerifyEmailForm />
       </Suspense>

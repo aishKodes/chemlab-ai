@@ -93,8 +93,8 @@ final class MailService
     public function sendTestEmail(string $to): array
     {
         return $this->sendTemplate($to, 'test_email', [
-            'name' => 'Chemlab admin',
-            'message' => 'SMTP test from Chemlab Hostinger backend.',
+            'name' => 'chemlearning admin',
+            'message' => 'SMTP test from the chemlearning account service.',
         ]);
     }
 
@@ -110,12 +110,12 @@ final class MailService
     private function fallbackTemplate(string $templateKey): array
     {
         $templates = [
-            'verify_email' => ['subject' => 'Verify your Chemlab email', 'body_html' => '<h1>Your Chemlab code</h1><p>Hello {{name}}, your verification code is <strong>{{code}}</strong>.</p>', 'body_text' => 'Your Chemlab verification code is {{code}}.'],
-            'welcome_student' => ['subject' => 'Welcome to Chemlab', 'body_html' => '<h1>Welcome, {{name}}</h1><p>Your chemistry learning universe is ready.</p>', 'body_text' => 'Welcome to Chemlab, {{name}}.'],
-            'welcome_teacher' => ['subject' => 'Welcome to Chemlab for Teachers', 'body_html' => '<h1>Welcome, {{name}}</h1><p>Your teacher account foundation is ready.</p>', 'body_text' => 'Welcome to Chemlab, {{name}}.'],
-            'password_reset' => ['subject' => 'Reset your Chemlab password', 'body_html' => '<h1>Password reset</h1><p>Use this reset token: <strong>{{reset_code}}</strong></p>', 'body_text' => 'Use this reset token: {{reset_code}}'],
-            'admin_new_signup' => ['subject' => 'New Chemlab signup', 'body_html' => '<p>{{name}} ({{email}}) signed up as {{role}}.</p>', 'body_text' => '{{name}} signed up as {{role}}.'],
-            'test_email' => ['subject' => 'Chemlab SMTP test', 'body_html' => '<p>{{message}}</p>', 'body_text' => '{{message}}'],
+            'verify_email' => ['subject' => 'Verify your chemlearning email', 'body_html' => '<h1>Your chemlearning code</h1><p>Hello {{name}}, your verification code is <strong>{{code}}</strong>.</p>', 'body_text' => 'Your chemlearning verification code is {{code}}.'],
+            'welcome_student' => ['subject' => 'Welcome to chemlearning', 'body_html' => '<h1>Welcome, {{name}}</h1><p>Your chemistry learning universe is ready.</p>', 'body_text' => 'Welcome to chemlearning, {{name}}.'],
+            'welcome_teacher' => ['subject' => 'Welcome to chemlearning for Teachers', 'body_html' => '<h1>Welcome, {{name}}</h1><p>Your teacher account foundation is ready.</p>', 'body_text' => 'Welcome to chemlearning, {{name}}.'],
+            'password_reset' => ['subject' => 'Reset your chemlearning password', 'body_html' => '<h1>Password reset</h1><p>Use this reset token: <strong>{{reset_code}}</strong></p>', 'body_text' => 'Use this reset token: {{reset_code}}'],
+            'admin_new_signup' => ['subject' => 'New chemlearning signup', 'body_html' => '<p>{{name}} ({{email}}) signed up as {{role}}.</p>', 'body_text' => '{{name}} signed up as {{role}}.'],
+            'test_email' => ['subject' => 'chemlearning SMTP test', 'body_html' => '<p>{{message}}</p>', 'body_text' => '{{message}}'],
         ];
 
         return $templates[$templateKey] ?? $templates['test_email'];

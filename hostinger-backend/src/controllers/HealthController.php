@@ -24,7 +24,7 @@ final class HealthController
         }
 
         return Response::ok([
-            'service' => 'chemlab-hostinger-api',
+            'service' => 'chemlearning-hostinger-api',
             'status' => 'ok',
             'database' => $database,
             'time' => gmdate('c'),

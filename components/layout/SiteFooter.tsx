@@ -42,7 +42,7 @@ export function SiteFooter() {
                 <Atom className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
-                <p className="font-black text-slate-950">Chemlab</p>
+                <p className="font-black text-slate-950">chemlearning</p>
                 <p className="text-sm font-bold text-blue-600">Chemistry, but alive.</p>
               </div>
             </div>
@@ -76,7 +76,7 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="mt-10 border-t border-blue-100 pt-6 text-xs font-semibold text-slate-500">
-          © {new Date().getFullYear()} Chemlab. Built for curious students learning chemistry by doing.
+          © {new Date().getFullYear()} chemlearning. Built for curious students learning chemistry by doing.
         </div>
       </Container>
     </footer>

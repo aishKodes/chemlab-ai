@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Progress",
-  description: "Chemlab progress tracking page.",
+  description: "chemlearning progress tracking page.",
 };
 
 export default function ProgressPage() {

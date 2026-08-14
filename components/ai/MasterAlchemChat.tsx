@@ -10,9 +10,10 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ChemShastriSpeakButton } from "@/components/voice/ChemShastriSpeakButton";
-import { useVoiceSettings, VoiceSettingsMiniPanel } from "@/components/voice/VoiceSettingsMiniPanel";
+import { useVoiceSettings } from "@/components/voice/VoiceSettingsMiniPanel";
 import type { AiMentorMode } from "@/lib/ai/types";
 import { learningApi } from "@/lib/api/learningApi";
+import { createBrowserId } from "@/lib/client/browserId";
 import { cn } from "@/lib/utils";
 
 type ChatMessage = {
@@ -20,9 +21,6 @@ type ChatMessage = {
   content: string;
   mock?: boolean;
   source?: string;
-  provider?: string;
-  estimatedCostInr?: number;
-  budgetRemainingInr?: number;
   spokenText?: string;
   citations?: Array<{ label: string; pageStart?: number | null }>;
   contextChips?: string[];
@@ -63,14 +61,12 @@ export function MasterAlchemChat() {
   const [mode, setMode] = useState<AiMentorMode>("explain");
   const [classLevel, setClassLevel] = useState<"8" | "9" | "10" | "11" | "12">("10");
   const [chapterSlug, setChapterSlug] = useState("atomic-structure");
-  const [preferredLanguage, setPreferredLanguage] = useState<"en" | "hi" | "bn" | "or">("en");
+  const [preferredLanguage, setPreferredLanguage] = useState<"en" | "hi" | "bn">("en");
   const [usePageContext, setUsePageContext] = useState(true);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
-  const [voiceSettings, setVoiceSettings] = useVoiceSettings();
+  const [voiceSettings] = useVoiceSettings();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [remaining, setRemaining] = useState<number | null>(null);
-  const [unlimited, setUnlimited] = useState(process.env.NEXT_PUBLIC_DEV_MODE === "true");
 
   useEffect(() => {
     if (user?.class_level && ["9", "10", "11", "12"].includes(user.class_level)) {
@@ -79,15 +75,15 @@ export function MasterAlchemChat() {
   }, [user?.class_level]);
 
   useEffect(() => {
-    if (user?.preferred_language && ["en", "hi", "bn", "or"].includes(user.preferred_language)) {
-      queueMicrotask(() => setPreferredLanguage(user.preferred_language as "en" | "hi" | "bn" | "or"));
+    if (user?.preferred_language && ["en", "hi", "bn"].includes(user.preferred_language)) {
+      queueMicrotask(() => setPreferredLanguage(user.preferred_language as "en" | "hi" | "bn"));
     }
   }, [user?.preferred_language]);
 
   function getAnonymousId() {
     const existing = window.localStorage.getItem("chemlab_anonymous_id");
     if (existing) return existing;
-    const next = crypto.randomUUID();
+    const next = createBrowserId("guest");
     window.localStorage.setItem("chemlab_anonymous_id", next);
     return next;
   }
@@ -146,13 +142,7 @@ export function MasterAlchemChat() {
         detail?: string;
         mock?: boolean;
         source?: string;
-        provider?: string;
-        providerUsed?: string;
-        estimatedCostInr?: number;
-        budgetRemainingInr?: number;
         spokenText?: string;
-        remaining?: number | null;
-        unlimited?: boolean;
         citations?: Array<{ label: string; pageStart?: number | null }>;
         contextChips?: string[];
         suggestedResources?: Array<{ title: string; slug: string; type: string; routeUrl?: string | null; reason?: string }>;
@@ -170,9 +160,6 @@ export function MasterAlchemChat() {
           content: data.answer ?? data.message ?? "I could not respond.",
           mock: data.mock,
           source: data.source,
-          provider: data.providerUsed ?? data.provider,
-          estimatedCostInr: data.estimatedCostInr,
-          budgetRemainingInr: data.budgetRemainingInr,
           spokenText: data.spokenText,
           citations: data.citations,
           contextChips: data.contextChips,
@@ -180,8 +167,6 @@ export function MasterAlchemChat() {
           followUpQuestions: data.followUpQuestions,
         },
       ]);
-      setRemaining(typeof data.remaining === "number" ? data.remaining : null);
-      setUnlimited(Boolean(data.unlimited));
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : "Chem-Shastri request failed.");
     } finally {
@@ -202,8 +187,8 @@ export function MasterAlchemChat() {
             <BrainCircuit className="h-5 w-5" aria-hidden="true" />
           </div>
           <div>
-            <h2 className="font-black text-slate-950">Mentor modes</h2>
-            <p className="text-sm font-semibold text-slate-600">Choose how Chem-Shastri helps.</p>
+            <h2 className="font-black text-slate-950">Chem-Shastri</h2>
+            <p className="text-sm font-semibold text-slate-600">Your NCERT Chemistry Guide</p>
           </div>
         </div>
 
@@ -237,10 +222,10 @@ export function MasterAlchemChat() {
           </select>
         </label>
 
-        <div className="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 p-3">
-          <p className="text-sm font-black text-emerald-800">Low-cost mode active</p>
-          <p className="mt-1 text-xs font-semibold leading-5 text-emerald-700">
-            FAQ, cache, and NCERT notes are checked before AI. Voice stays off unless you tap the speaker.
+        <div className="mt-4 rounded-2xl border border-cyan-100 bg-cyan-50 p-3">
+          <p className="text-sm font-black text-cyan-800">Testing Mode</p>
+          <p className="mt-1 text-xs font-semibold leading-5 text-cyan-700">
+            Answers use approved NCERT-aligned learning material and simple student language.
           </p>
         </div>
 
@@ -252,9 +237,8 @@ export function MasterAlchemChat() {
             className="focus-ring mt-2 h-11 w-full rounded-2xl border border-blue-100 bg-white/85 px-3 text-sm font-bold text-slate-800"
           >
             <option value="en">English</option>
-            <option value="hi">Hindi / Hinglish</option>
-            <option value="bn">Bengali</option>
-            <option value="or">Odia</option>
+            <option value="hi">हिन्दी</option>
+            <option value="bn">বাংলা</option>
           </select>
         </label>
 
@@ -274,7 +258,7 @@ export function MasterAlchemChat() {
         <label className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-blue-100 bg-white/75 p-3">
           <span>
             <span className="block text-sm font-black text-slate-700">Voice</span>
-            <span className="block text-xs font-semibold text-slate-500">Browser speech, no paid TTS</span>
+            <span className="block text-xs font-semibold text-slate-500">Speak answers aloud</span>
           </span>
           <input
             type="checkbox"
@@ -295,23 +279,6 @@ export function MasterAlchemChat() {
             className="h-5 w-5 accent-blue-600"
           />
         </label>
-
-        <label className="mt-4 block">
-          <span className="text-sm font-black text-slate-700">Voice language</span>
-          <select
-            value={voiceSettings.language}
-            onChange={(event) => setVoiceSettings({ ...voiceSettings, language: event.target.value })}
-            className="focus-ring mt-2 h-11 w-full rounded-2xl border border-blue-100 bg-white/85 px-3 text-sm font-bold text-slate-800"
-          >
-            <option value="en-IN">English (India)</option>
-            <option value="en-US">English (US)</option>
-            <option value="hi-IN">Hindi</option>
-            <option value="bn-IN">Bengali</option>
-            <option value="or-IN">Odia</option>
-          </select>
-        </label>
-
-        {voiceEnabled ? <VoiceSettingsMiniPanel settings={voiceSettings} onChange={setVoiceSettings} /> : null}
 
         <label className="mt-4 block">
           <span className="text-sm font-black text-slate-700">Chapter context</span>
@@ -343,15 +310,6 @@ export function MasterAlchemChat() {
           </div>
         </div>
 
-        {unlimited ? (
-          <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-100 p-3 text-sm font-black text-cyan-800">
-            Practice mode is open, so you can keep asking while you explore.
-          </p>
-        ) : remaining !== null ? (
-          <p className="mt-5 rounded-2xl border border-lime-200 bg-lime-100 p-3 text-sm font-black text-lime-800">
-            {remaining} Chem-Shastri messages remaining today.
-          </p>
-        ) : null}
       </Card>
 
       <Card className="glass-panel-strong flex min-h-[620px] flex-col overflow-hidden p-0">
@@ -361,14 +319,10 @@ export function MasterAlchemChat() {
               <MasterAlchem mood={loading ? "thinking" : "guide"} size="sm" />
               <div>
                 <h1 className="text-xl font-black text-slate-950">Chem-Shastri</h1>
-                <p className="text-sm font-semibold text-slate-600">
-                  Ask, test an idea, or request a hint.
-                </p>
+                <p className="text-sm font-semibold text-slate-600">Your NCERT Chemistry Guide</p>
               </div>
             </div>
-            <Badge tone={unlimited ? "cyan" : "green"}>
-              {unlimited ? "practice mode" : "ready"}
-            </Badge>
+            <Badge tone="cyan">Testing Mode</Badge>
           </div>
         </div>
 
@@ -441,19 +395,9 @@ export function MasterAlchemChat() {
                 ) : null}
                 {message.role === "assistant" ? (
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {message.source ? (
+                    {message.source === "rag" ? (
                       <span className="rounded-full border border-cyan-100 bg-cyan-50 px-2 py-1 text-[11px] font-black uppercase tracking-wide text-cyan-700">
-                        {message.source === "rag" ? "NCERT" : message.source}
-                      </span>
-                    ) : null}
-                    {typeof message.estimatedCostInr === "number" ? (
-                      <span className="rounded-full border border-emerald-100 bg-emerald-50 px-2 py-1 text-[11px] font-black text-emerald-700">
-                        ₹{message.estimatedCostInr.toFixed(3)}
-                      </span>
-                    ) : null}
-                    {typeof message.budgetRemainingInr === "number" ? (
-                      <span className="rounded-full border border-slate-200 bg-white/70 px-2 py-1 text-[11px] font-black text-slate-500">
-                        ₹{message.budgetRemainingInr.toFixed(1)} left
+                        NCERT source
                       </span>
                     ) : null}
                     {voiceEnabled ? (
@@ -496,7 +440,7 @@ export function MasterAlchemChat() {
                 {message.mock ? (
                   <div className="mt-3 inline-flex items-center gap-1 rounded-md border border-amber-200/25 bg-amber-300/10 px-2 py-1 text-xs text-amber-100">
                     <Sparkles className="h-3 w-3" aria-hidden="true" />
-                    Mock response
+                    Testing Mode
                   </div>
                 ) : null}
               </div>

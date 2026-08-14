@@ -48,7 +48,7 @@ export default function ClassesPage() {
               </Badge>
               <h2 className="mt-3 text-2xl font-black text-slate-950">{item.display_name}</h2>
               <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-                Browse Chemlab resources and simulations for Class {item.class_level}.
+                Browse chemlearning resources and simulations for Class {item.class_level}.
               </p>
               <Button href={`/classes/${item.class_level}`} className="mt-5" icon={<BookOpen className="h-4 w-4" aria-hidden="true" />}>
                 Open class

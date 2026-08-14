@@ -5,13 +5,13 @@ import { LoginForm } from "@/components/auth/LoginForm";
 
 export const metadata: Metadata = {
   title: "Login",
-  description: "Login to Chemlab and continue your chemistry quests.",
+  description: "Login to chemlearning and continue your chemistry quests.",
 };
 
 export default function LoginPage() {
   return (
     <AuthShell
-      eyebrow="Chemlab login"
+      eyebrow="chemlearning login"
       title="Return to your chemistry universe."
       description="Your labs, resources, and dashboard open from one safe account."
     >

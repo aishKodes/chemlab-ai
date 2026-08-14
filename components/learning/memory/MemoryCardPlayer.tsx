@@ -52,7 +52,7 @@ export function MemoryCardPlayer({ deck, cards }: { deck: BackendMemoryDeck; car
     return (
       <Card>
         <h2 className="text-xl font-black text-slate-950">No cards yet</h2>
-        <p className="mt-2 text-sm font-semibold text-slate-600">This deck is waiting for cards from the Chemlab backend.</p>
+        <p className="mt-2 text-sm font-semibold text-slate-600">This deck is waiting for cards from the chemlearning backend.</p>
       </Card>
     );
   }

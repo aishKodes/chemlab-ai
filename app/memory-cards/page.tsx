@@ -39,7 +39,7 @@ export default function MemoryCardsPage() {
       <PageHeader
         eyebrow="Memory Cards"
         title="Review small ideas until they stick."
-        description="Flip compact chemistry cards, rate how it felt, and let Chemlab schedule better practice later."
+        description="Flip compact chemistry cards, rate how it felt, and let chemlearning schedule better practice later."
       />
       <Container className="space-y-6 pb-16">
         {error ? <ErrorState title="Using local memory decks" description={error} /> : null}
@@ -49,7 +49,7 @@ export default function MemoryCardsPage() {
               <Badge tone="amber">Smart review</Badge>
               <h2 className="mt-3 text-2xl font-black text-slate-950">Today&apos;s memory mission</h2>
               <p className="mt-2 text-sm font-bold leading-6 text-slate-600">
-                Chemlab brings hard cards back sooner and spaces easy cards farther apart.
+                chemlearning brings hard cards back sooner and spaces easy cards farther apart.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 text-center sm:grid-cols-4">

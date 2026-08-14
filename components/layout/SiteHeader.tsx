@@ -36,12 +36,12 @@ export function SiteHeader() {
             <Atom className="h-5 w-5" aria-hidden="true" />
           </span>
           <span>
-            <span className="block text-base font-black text-slate-950">Chemlab</span>
+            <span className="block text-base font-black text-slate-950">chemlearning</span>
             <span className="hidden text-xs font-bold text-blue-600 sm:block">Colourful chemistry universe</span>
           </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 xl:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-1 2xl:flex">
           {navigation.map((item) => (
             <Link
               key={item.href}
@@ -53,7 +53,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden items-center gap-2 2xl:flex">
           <Button
             href="/ai-tutor"
             variant="secondary"
@@ -89,7 +89,7 @@ export function SiteHeader() {
           ) : null}
         </div>
 
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-2 2xl:hidden">
           {isAuthenticated ? <NotificationBell /> : null}
           <Link
             href={isAuthenticated ? dashboardHref : "/login"}
@@ -110,7 +110,7 @@ export function SiteHeader() {
       </Container>
 
       {mobileOpen ? (
-        <div className="border-t border-blue-100 bg-white/95 px-4 py-4 shadow-xl lg:hidden">
+        <div className="border-t border-blue-100 bg-white/95 px-4 py-4 shadow-xl 2xl:hidden">
           <nav aria-label="Mobile primary" className="grid gap-2">
             {navigation.map((item) => (
               <Link

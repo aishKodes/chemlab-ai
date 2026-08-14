@@ -78,7 +78,7 @@ export default function AdminUsersPage() {
     <>
       <PageHeader
         eyebrow="Admin / Users"
-        title="Manage Chemlab accounts."
+        title="Manage chemlearning accounts."
         description="Review students, teachers, admins, account status, and teacher verification from one protected surface."
       />
       <Container className="space-y-6 pb-16">

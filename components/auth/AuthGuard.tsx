@@ -16,6 +16,6 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }, [isAuthenticated, isLoading, pathname, router]);
 
-  if (isLoading || !isAuthenticated) return <LoadingState label="Opening your Chemlab space" />;
+  if (isLoading || !isAuthenticated) return <LoadingState label="Opening your chemlearning space" />;
   return <>{children}</>;
 }

@@ -11,7 +11,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 
 export const metadata: Metadata = {
   title: "Content Factory",
-  description: "Plan and review Chemlab chapter packs before publishing.",
+  description: "Plan and review chemlearning chapter packs before publishing.",
 };
 
 export default function ContentFactoryPage() {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { HydrocarbonStoryboardDebug } from "@/components/labs/hydrocarbon-quest/HydrocarbonStoryboardDebug";
 
 export const metadata: Metadata = {
-  title: "Hydrocarbon Storyboard | Chemlab",
+  title: "Hydrocarbon Storyboard | chemlearning",
 };
 
 export default function HydrocarbonStoryboardPage() {

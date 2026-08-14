@@ -25,7 +25,7 @@ function RoleGate({ allowed, children }: { allowed: UserRole[]; children: React.
       <div className="mx-auto max-w-2xl px-4 py-16">
         <EmptyState
           title="This area needs a different role"
-          description="Your Chemlab account is safe, but this page is reserved for another workspace."
+          description="Your chemlearning account is safe, but this page is reserved for another workspace."
           icon={<LockKeyhole className="h-6 w-6" aria-hidden="true" />}
           action={<Button href={dashboardPathForRole(user?.role)}>Go to my dashboard</Button>}
         />

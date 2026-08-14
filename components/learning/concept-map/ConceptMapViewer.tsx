@@ -47,7 +47,7 @@ export function ConceptMapViewer({ conceptMap }: { conceptMap: BackendConceptMap
                 </div>
               ))
             ) : (
-              <p className="text-sm font-bold text-white/70">Admin can add map connections from the Chemlab backend.</p>
+              <p className="text-sm font-bold text-white/70">Admin can add map connections from the chemlearning backend.</p>
             )}
           </div>
         </div>

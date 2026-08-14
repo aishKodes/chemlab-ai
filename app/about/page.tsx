@@ -8,7 +8,7 @@ import { FeatureCard } from "@/components/ui/FeatureCard";
 
 export const metadata: Metadata = {
   title: "Academic Mission",
-  description: "The academic mission behind Chemlab.",
+  description: "The academic mission behind chemlearning.",
 };
 
 export default function AboutPage() {
@@ -17,7 +17,7 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="Academic mission"
         title="Delightful chemistry can still be rigorous."
-        description="Chemlab turns models, quantities, evidence, and careful reasoning into a colourful world students want to explore."
+        description="chemlearning turns models, quantities, evidence, and careful reasoning into a colourful world students want to explore."
       />
       <Container className="pb-16">
         <div className="grid gap-4 lg:grid-cols-3">
@@ -46,7 +46,7 @@ export default function AboutPage() {
         <Card className="mt-6">
           <h2 className="text-2xl font-black text-slate-950">Built for access</h2>
           <p className="mt-4 max-w-3xl text-sm font-medium leading-6 text-slate-600">
-            Chemlab is designed to be useful before a school buys anything:
+            chemlearning is designed to be useful before a school buys anything:
             students can explore worlds, run labs, practice quizzes, and ask for
             guidance as the learning universe grows.
           </p>

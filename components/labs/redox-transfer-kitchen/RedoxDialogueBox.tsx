@@ -3,7 +3,7 @@ import type { RedoxSpeaker } from "./redoxTypes";
 const speakerTone: Record<RedoxSpeaker, string> = {
   Karthik: "from-sky-500/90 to-cyan-500/80",
   "Jaya Paati": "from-amber-400/90 to-orange-500/85",
-  Chemlab: "from-violet-500/90 to-cyan-500/85",
+  chemlearning: "from-violet-500/90 to-cyan-500/85",
 };
 
 export function RedoxDialogueBox({

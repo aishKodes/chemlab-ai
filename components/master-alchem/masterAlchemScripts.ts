@@ -72,7 +72,7 @@ const scripts: MasterAlchemRouteScript[] = [
     message: "Virtual labs are safe places to experiment. Let's learn by doing.",
     nextLabel: "Open Redox Transfer Kitchen",
     nextHref: "/labs/redox-transfer-kitchen",
-    explainPrompt: "Explain how Chemlab labs help me learn by doing.",
+    explainPrompt: "Explain how chemlearning labs help me learn by doing.",
   },
   {
     route: "/ai-tutor",
@@ -125,10 +125,10 @@ export const homeMasterAlchemScript: MasterAlchemRouteScript = {
   route: "/",
   label: "Welcome",
   mood: "hero",
-  message: "Welcome to Chemlab. Choose a world, enter a lab, or ask me a chemistry question.",
+  message: "Welcome to chemlearning. Choose a world, enter a lab, or ask me a chemistry question.",
   nextLabel: "Start your first quest",
   nextHref: "/learn/chemistry",
-  explainPrompt: "Explain how Chemlab helps me learn chemistry.",
+  explainPrompt: "Explain how chemlearning helps me learn chemistry.",
 };
 
 export function getMasterAlchemScript(pathname: string): MasterAlchemRouteScript {

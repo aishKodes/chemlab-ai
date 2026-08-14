@@ -72,7 +72,7 @@ export default function AdminResourceStructurePage() {
 
         <AdminEntityManager<BackendBook & Record<string, unknown>>
           title="Books"
-          description="Reference books or original Chemlab collections."
+          description="Reference books or original chemlearning collections."
           listKey="books"
           fetchItems={adminApi.getBooks}
           createItem={adminApi.createBook}

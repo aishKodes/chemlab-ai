@@ -9,6 +9,7 @@ import { getReadableApiError } from "@/lib/api/apiErrors";
 import { BackendStatusBanner } from "@/components/ui/BackendStatusBanner";
 import { Button } from "@/components/ui/Button";
 import { ErrorState } from "@/components/ui/ErrorState";
+import { normalizeAuthEmail } from "@/lib/auth/authClient";
 
 const inputClass =
   "mt-2 w-full rounded-2xl border border-blue-100 bg-white px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-100";
@@ -24,8 +25,8 @@ export function ForgotPasswordForm() {
     setLoading(true);
     setError(null);
     try {
-      await authApi.forgotPassword({ email });
-      setMessage("If this email has a Chemlab account, a reset code will arrive shortly.");
+      await authApi.forgotPassword({ email: normalizeAuthEmail(email) });
+      setMessage("If this email has a chemlearning account, a reset code will arrive shortly.");
     } catch (caught) {
       setError(getReadableApiError(caught));
     } finally {
@@ -68,13 +69,17 @@ export function ResetPasswordForm() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
     if (password !== confirm) {
       setError("Passwords do not match yet.");
       return;
     }
     setLoading(true);
     try {
-      await authApi.resetPassword({ email, code, token: code, password });
+      await authApi.resetPassword({ email: normalizeAuthEmail(email), code: code.trim(), token: code.trim(), password });
       setMessage("Password updated. You can login with the new password now.");
     } catch (caught) {
       setError(getReadableApiError(caught));
@@ -89,7 +94,7 @@ export function ResetPasswordForm() {
       <div>
         <h2 className="text-2xl font-black text-slate-950">Choose a new password</h2>
         <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-          Use the code from your email, then return to Chemlab.
+          Use the code from your email, then return to chemlearning.
         </p>
       </div>
       {error ? <ErrorState description={error} /> : null}
@@ -132,8 +137,8 @@ export function VerifyEmailForm() {
     setLoading(true);
     setError(null);
     try {
-      await authApi.verifyEmail({ email, code });
-      setMessage("Email verified. Your Chemlab account is ready.");
+      await authApi.verifyEmail({ email: normalizeAuthEmail(email), code: code.trim() });
+      setMessage("Email verified. Your chemlearning account is ready.");
     } catch (caught) {
       setError(getReadableApiError(caught));
     } finally {
@@ -145,7 +150,7 @@ export function VerifyEmailForm() {
     setLoading(true);
     setError(null);
     try {
-      await authApi.resendVerification({ email });
+      await authApi.resendVerification({ email: normalizeAuthEmail(email) });
       setMessage("A fresh verification code has been sent if this email is registered.");
     } catch (caught) {
       setError(getReadableApiError(caught));
@@ -160,7 +165,7 @@ export function VerifyEmailForm() {
       <div>
         <h2 className="text-2xl font-black text-slate-950">Verify your email</h2>
         <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-          Enter the 6-digit code sent by Chemlab.
+          Enter the 6-digit code sent by chemlearning.
         </p>
       </div>
       {error ? <ErrorState description={error} /> : null}

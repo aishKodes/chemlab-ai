@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 
 export const metadata: Metadata = {
   title: "Showcase",
-  description: "The strongest real Chemlab experiences for students, teachers, and demos.",
+  description: "The strongest real chemlearning experiences for students, teachers, and demos.",
 };
 
 const showcaseItems = [
@@ -119,13 +119,13 @@ export default function ShowcasePage() {
     <>
       <PageHeader
         eyebrow="Showcase"
-        title="The strongest Chemlab experiences, live on the real site."
+        title="The strongest chemlearning experiences, live on the real site."
         description="No presentation shell. These are the actual student and teacher experiences to open during a demo."
       />
       <Container className="space-y-10 pb-16">
         <Card className="bg-gradient-to-br from-blue-950 via-violet-950 to-slate-950 text-white">
           <Badge tone="green">Must show first</Badge>
-          <h2 className="mt-3 text-3xl font-black">Start with the experiences that already feel like Chemlab.</h2>
+          <h2 className="mt-3 text-3xl font-black">Start with the experiences that already feel like chemlearning.</h2>
           <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-blue-100">
             Open a story lab, a 3D molecule view, and Chem-Shastri. These show the product direction without hiding behind a separate mode.
           </p>

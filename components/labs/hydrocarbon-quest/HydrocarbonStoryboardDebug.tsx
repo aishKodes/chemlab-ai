@@ -11,7 +11,7 @@ export function HydrocarbonStoryboardDebug() {
       <Badge tone="amber">Development only</Badge>
       <h1 className="mt-3 text-4xl font-black text-slate-950">Hydrocarbon Storyboard</h1>
       <p className="mt-3 max-w-3xl text-sm font-bold leading-6 text-slate-700">
-        This page shows every selected cinematic frame in the order Chemlab uses it. Baked image text is treated as visual texture only; student-facing lesson text is rendered by code.
+        This page shows every selected cinematic frame in the order chemlearning uses it. Baked image text is treated as visual texture only; student-facing lesson text is rendered by code.
       </p>
 
       <div className="mt-8 grid gap-5">
@@ -87,13 +87,13 @@ const storyboardSequence = [
   {
     id: "quest map",
     src: hydrocarbonStoryboardFrames[6].src,
-    speaker: "Chemlab",
+    speaker: "chemlearning",
     text: "The roadmap continues toward senior-secondary mastery.",
   },
   {
     id: "completion celebration",
     src: hydrocarbonStoryboardFrames[7].src,
-    speaker: "Chemlab",
+    speaker: "chemlearning",
     text: "Hydrocarbon Name Master.",
   },
 ];

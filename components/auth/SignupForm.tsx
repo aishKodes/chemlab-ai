@@ -43,7 +43,7 @@ export function SignupForm() {
         school_or_institute: role === "teacher" ? school : undefined,
         preferred_language: preferredLanguage,
       });
-      setSuccess("Your Chemlab account is ready. Please verify email if your inbox receives a code.");
+      setSuccess("Your chemlearning account is ready. Please verify email if your inbox receives a code.");
       router.push(dashboardPathForRole(session.user.role));
     } catch (caught) {
       setError(getReadableApiError(caught));
@@ -56,9 +56,9 @@ export function SignupForm() {
     <form className="space-y-5" onSubmit={onSubmit}>
       <BackendStatusBanner />
       <div>
-        <h2 className="text-2xl font-black text-slate-950">Create your Chemlab account</h2>
+        <h2 className="text-2xl font-black text-slate-950">Create your chemlearning account</h2>
         <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-          Choose the path that matches how you will use Chemlab.
+          Choose the path that matches how you will use chemlearning.
         </p>
       </div>
 
@@ -96,7 +96,7 @@ export function SignupForm() {
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Name" value={name} onChange={setName} autoComplete="name" required />
+        <Field label="Name" value={name} onChange={setName} autoComplete="name" placeholder="Aishwaryam" required />
         <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" required />
       </div>
       <Field label="Password" type="password" value={password} onChange={setPassword} autoComplete="new-password" required />
@@ -156,6 +156,7 @@ function Field({
   onChange,
   type = "text",
   autoComplete,
+  placeholder,
   required,
 }: {
   label: string;
@@ -163,6 +164,7 @@ function Field({
   onChange: (value: string) => void;
   type?: string;
   autoComplete?: string;
+  placeholder?: string;
   required?: boolean;
 }) {
   return (
@@ -173,6 +175,7 @@ function Field({
         type={type}
         value={value}
         autoComplete={autoComplete}
+        placeholder={placeholder}
         required={required}
         onChange={(event) => onChange(event.target.value)}
       />

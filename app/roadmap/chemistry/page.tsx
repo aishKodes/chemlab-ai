@@ -10,7 +10,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 
 export const metadata: Metadata = {
   title: "Chemistry Roadmap",
-  description: "Chemlab class-wise chemistry roadmap for Class 9 to 12.",
+  description: "chemlearning class-wise chemistry roadmap for Class 9 to 12.",
 };
 
 export default function ChemistryRoadmapPage() {
@@ -25,7 +25,7 @@ export default function ChemistryRoadmapPage() {
     <>
       <PageHeader
         eyebrow="Roadmap"
-        title="Chemlab chemistry worlds are growing."
+        title="chemlearning chemistry worlds are growing."
         description="A serious Class 9-12 map for simulations, memory cards, quick drills, concept maps, teacher quizzes, and Chem-Shastri context."
       />
       <Container className="space-y-8 pb-16">

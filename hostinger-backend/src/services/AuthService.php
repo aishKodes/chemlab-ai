@@ -16,6 +16,7 @@ final class AuthService
     public function signup(array $input, string $ip, string $userAgent): array
     {
         $role = (string) ($input['role'] ?? 'student');
+        $email = self::normalizeEmail((string) ($input['email'] ?? ''));
         if (!in_array($role, ['student', 'teacher'], true)) {
             throw new RuntimeException('Only student and teacher signup is allowed.');
         }
@@ -30,7 +31,7 @@ final class AuthService
                 'uuid' => self::uuid(),
                 'role' => $role,
                 'name' => trim((string) $input['name']),
-                'email' => strtolower((string) $input['email']),
+                'email' => $email,
                 'password_hash' => password_hash((string) $input['password'], PASSWORD_DEFAULT),
                 'preferred_language' => (string) ($input['preferred_language'] ?? 'en'),
             ]);
@@ -54,7 +55,7 @@ final class AuthService
                 ]);
             }
 
-            $code = $this->createVerificationCode($userId, strtolower((string) $input['email']), 'signup', 15);
+            $code = $this->createVerificationCode($userId, $email, 'signup', 15);
             $token = (new TokenService($this->pdo))->create($userId, 'signup', $ip, $userAgent);
             $user = $this->publicUser($userId);
             $this->pdo->commit();
@@ -80,7 +81,7 @@ final class AuthService
     public function login(string $email, string $password, string $ip, string $userAgent): ?array
     {
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email AND status IN ("active", "pending") LIMIT 1');
-        $stmt->execute(['email' => strtolower($email)]);
+        $stmt->execute(['email' => self::normalizeEmail($email)]);
         $user = $stmt->fetch();
 
         if (!$user || !password_verify($password, (string) $user['password_hash'])) {
@@ -123,15 +124,31 @@ final class AuthService
         return $user;
     }
 
+    public function publicUserByEmail(string $email): ?array
+    {
+        $stmt = $this->pdo->prepare('SELECT id FROM users WHERE email = :email AND status IN ("active", "pending") LIMIT 1');
+        $stmt->execute(['email' => self::normalizeEmail($email)]);
+        $id = $stmt->fetchColumn();
+        return $id ? $this->publicUser((int) $id) : null;
+    }
+
     public function createVerificationCode(int $userId, string $email, string $purpose, int $minutes): string
     {
         $code = (string) random_int(100000, 999999);
+        $this->pdo->prepare(
+            'UPDATE email_verification_codes
+             SET used_at = COALESCE(used_at, NOW())
+             WHERE user_id = :user_id AND purpose = :purpose AND used_at IS NULL'
+        )->execute([
+            'user_id' => $userId,
+            'purpose' => $purpose,
+        ]);
         $this->pdo->prepare(
             'INSERT INTO email_verification_codes (user_id, email, code_hash, purpose, expires_at, created_at)
              VALUES (:user_id, :email, :code_hash, :purpose, :expires_at, NOW())'
         )->execute([
             'user_id' => $userId,
-            'email' => $email,
+            'email' => self::normalizeEmail($email),
             'code_hash' => password_hash($code, PASSWORD_DEFAULT),
             'purpose' => $purpose,
             'expires_at' => date('Y-m-d H:i:s', time() + ($minutes * 60)),
@@ -145,6 +162,7 @@ final class AuthService
         $stmt = $this->pdo->prepare(
             'SELECT * FROM email_verification_codes
              WHERE user_id = :user_id AND purpose = "signup" AND used_at IS NULL AND expires_at > NOW()
+               AND attempts < 5
              ORDER BY id DESC LIMIT 1'
         );
         $stmt->execute(['user_id' => $userId]);
@@ -167,7 +185,7 @@ final class AuthService
     public function createPasswordReset(string $email): ?array
     {
         $stmt = $this->pdo->prepare('SELECT id, uuid, role, name, email FROM users WHERE email = :email AND status IN ("active", "pending") LIMIT 1');
-        $stmt->execute(['email' => strtolower($email)]);
+        $stmt->execute(['email' => self::normalizeEmail($email)]);
         $user = $stmt->fetch();
         if (!$user) {
             return null;
@@ -212,5 +230,10 @@ final class AuthService
     public static function uuid(): string
     {
         return bin2hex(random_bytes(16));
+    }
+
+    public static function normalizeEmail(string $email): string
+    {
+        return strtolower(trim($email));
     }
 }

@@ -1,4 +1,4 @@
--- Chemlab Stage 7 starter quiz, memory, and resource curation content.
+-- chemlearning Stage 7 starter quiz, memory, and resource curation content.
 
 INSERT INTO memory_decks
   (uuid, class_id, subject_id, chapter_id, topic_id, title, slug, description, language, difficulty, status, source_type, source_reference, created_at, updated_at)
@@ -6,7 +6,7 @@ SELECT 'stage7-deck-class9-atoms', c.id, s.id, ch.id, t.id,
   'Class 9 Atoms and Molecules Starter Deck',
   'class-9-atoms-molecules-starter',
   'Core cards for atoms, molecules, ions, formulae, and conservation of mass.',
-  'en', 'beginner', 'published', 'CUSTOM', 'Chemlab original, NCERT-aligned. Verify before final publishing.', NOW(), NOW()
+  'en', 'beginner', 'published', 'CUSTOM', 'chemlearning original, NCERT-aligned. Verify before final publishing.', NOW(), NOW()
 FROM classes c
 JOIN subjects s ON s.class_id = c.id
 LEFT JOIN chapters ch ON ch.class_id = c.id AND ch.slug = 'atoms-and-molecules'
@@ -21,7 +21,7 @@ SELECT 'stage7-deck-class12-electrochemistry', c.id, s.id, ch.id, t.id,
   'Class 12 Electrochemistry Starter Deck',
   'class-12-electrochemistry-starter',
   'Core cards for Daniell cell, electrodes, electron flow, and cell notation.',
-  'en', 'intermediate', 'published', 'CUSTOM', 'Chemlab original, NCERT-aligned. Verify before final publishing.', NOW(), NOW()
+  'en', 'intermediate', 'published', 'CUSTOM', 'chemlearning original, NCERT-aligned. Verify before final publishing.', NOW(), NOW()
 FROM classes c
 JOIN subjects s ON s.class_id = c.id
 LEFT JOIN chapters ch ON ch.class_id = c.id AND ch.slug = 'electrochemistry'
@@ -36,7 +36,7 @@ SELECT 'stage7-drill-class9-atoms', c.id, s.id, ch.id, t.id,
   'Class 9 Atoms and Molecules Starter Drill',
   'class-9-atoms-molecules-starter-drill',
   'Ten quick checks on atoms, molecules, ions, and formula basics.',
-  'en', 'beginner', 6, 'published', 'CUSTOM', 'Chemlab original, NCERT-aligned. Verify before final publishing.', NOW(), NOW()
+  'en', 'beginner', 6, 'published', 'CUSTOM', 'chemlearning original, NCERT-aligned. Verify before final publishing.', NOW(), NOW()
 FROM classes c
 JOIN subjects s ON s.class_id = c.id
 LEFT JOIN chapters ch ON ch.class_id = c.id AND ch.slug = 'atoms-and-molecules'
@@ -51,7 +51,7 @@ SELECT 'stage7-drill-class12-electrochemistry', c.id, s.id, ch.id, t.id,
   'Class 12 Electrochemistry Starter Drill',
   'class-12-electrochemistry-starter-drill',
   'Ten quick checks on galvanic cells, electrodes, voltage, and cell notation.',
-  'en', 'intermediate', 7, 'published', 'CUSTOM', 'Chemlab original, NCERT-aligned. Verify before final publishing.', NOW(), NOW()
+  'en', 'intermediate', 7, 'published', 'CUSTOM', 'chemlearning original, NCERT-aligned. Verify before final publishing.', NOW(), NOW()
 FROM classes c
 JOIN subjects s ON s.class_id = c.id
 LEFT JOIN chapters ch ON ch.class_id = c.id AND ch.slug = 'electrochemistry'
@@ -62,7 +62,7 @@ ON DUPLICATE KEY UPDATE description = VALUES(description), status = VALUES(statu
 
 INSERT INTO memory_cards (deck_id, front, back, hint, explanation, difficulty, card_type, mistake_type, source_reference, order_index, status, created_at, updated_at)
 SELECT d.id, seed.front, seed.back, seed.hint, seed.explanation, seed.difficulty, seed.card_type, seed.mistake_type,
-  'Chemlab original, NCERT-aligned. Verify before final publishing.', seed.order_index, 'published', NOW(), NOW()
+  'chemlearning original, NCERT-aligned. Verify before final publishing.', seed.order_index, 'published', NOW(), NOW()
 FROM memory_decks d
 JOIN (
   SELECT 'redox-leo-ger-memory' AS deck_slug, 1 AS order_index, 'What does LEO mean?' AS front, 'Loss of Electrons is Oxidation.' AS back, 'Look for the species giving electrons.' AS hint, 'Oxidation is identified by electron loss, not by oxygen only.' AS explanation, 'beginner' AS difficulty, 'definition' AS card_type, 'oxidation_vs_reduction' AS mistake_type
@@ -99,7 +99,7 @@ JOIN (
   UNION ALL SELECT 'iupac-starter-memory', 17, 'What comes first in the name: branch or root?', 'Branch prefix comes before root.', 'First name before middle name.', 'Example: methyl plus pentane gives methylpentane with locant.', 'beginner', 'concept', 'name_order'
   UNION ALL SELECT 'iupac-starter-memory', 18, 'Why not name a branch as the main chain?', 'The main chain should be the longest continuous chain.', 'Branches distract.', 'Wrong chain selection changes the root word.', 'intermediate', 'mistake', 'longest_chain'
   UNION ALL SELECT 'iupac-starter-memory', 19, 'What does dimethyl mean?', 'Two methyl branches.', 'Di means two.', 'Use di when the same substituent appears twice.', 'intermediate', 'definition', 'substituent'
-  UNION ALL SELECT 'iupac-starter-memory', 20, 'IUPAC name analogy in Chemlab?', 'First name is branch, middle name is root, surname is bond type.', 'Indian full name analogy.', 'This makes name assembly predictable.', 'beginner', 'concept', 'name_order'
+  UNION ALL SELECT 'iupac-starter-memory', 20, 'IUPAC name analogy in chemlearning?', 'First name is branch, middle name is root, surname is bond type.', 'Indian full name analogy.', 'This makes name assembly predictable.', 'beginner', 'concept', 'name_order'
   UNION ALL SELECT 'class-9-atoms-molecules-starter', 1, 'What is an atom?', 'The smallest unit of an element that keeps its chemical identity.', 'Elements are made of atoms.', 'Atoms combine to form molecules and compounds.', 'beginner', 'definition', NULL
   UNION ALL SELECT 'class-9-atoms-molecules-starter', 2, 'What is a molecule?', 'A group of atoms chemically bonded together.', 'Think H2 or H2O.', 'Molecules may contain same or different elements.', 'beginner', 'definition', NULL
   UNION ALL SELECT 'class-9-atoms-molecules-starter', 3, 'What does a chemical formula show?', 'The elements and atom counts in a substance.', 'Read the symbols and subscripts.', 'H2O has two hydrogen atoms and one oxygen atom.', 'beginner', 'formula', NULL
@@ -123,7 +123,7 @@ INSERT INTO quiz_questions
   (drill_id, class_id, subject_id, chapter_id, topic_id, question_text, question_type, options_json, correct_answer_json, explanation, hint, difficulty, mistake_type, source_reference, order_index, status, created_at, updated_at)
 SELECT qd.id, qd.class_id, qd.subject_id, qd.chapter_id, qd.topic_id, seed.question_text, 'mcq',
   seed.options_json, seed.correct_answer_json, seed.explanation, seed.hint, seed.difficulty, seed.mistake_type,
-  'Chemlab original, NCERT-aligned. Verify before final publishing.', seed.order_index, 'published', NOW(), NOW()
+  'chemlearning original, NCERT-aligned. Verify before final publishing.', seed.order_index, 'published', NOW(), NOW()
 FROM quick_drills qd
 JOIN (
   SELECT 'redox-basics-5-minute-drill' AS drill_slug, 1 AS order_index, 'Which phrase defines oxidation?' AS question_text, JSON_ARRAY('Loss of electrons','Gain of electrons','No electron change') AS options_json, JSON_ARRAY('Loss of electrons') AS correct_answer_json, 'Oxidation means loss of electrons.' AS explanation, 'Use LEO.' AS hint, 'beginner' AS difficulty, 'oxidation_vs_reduction' AS mistake_type
@@ -145,7 +145,7 @@ JOIN (
   UNION ALL SELECT 'iupac-starter-drill', 7, 'In 2-methylpentane, the longest chain has:', JSON_ARRAY('five carbons','two carbons','six branches'), JSON_ARRAY('five carbons'), 'Pent means five in the main chain.', 'Do not let branch distract you.', 'intermediate', 'longest_chain'
   UNION ALL SELECT 'iupac-starter-drill', 8, 'Which name uses lowest branch numbering?', JSON_ARRAY('2-methylpentane','4-methylpentane','5-methylpentane'), JSON_ARRAY('2-methylpentane'), 'Choose the direction giving the branch the lowest locant.', 'Lowest locant wins.', 'intermediate', 'numbering_direction'
   UNION ALL SELECT 'iupac-starter-drill', 9, 'What does di mean in dimethyl?', JSON_ARRAY('two','three','double bond'), JSON_ARRAY('two'), 'Di means two same substituents.', 'Two methyl branches.', 'intermediate', 'substituent'
-  UNION ALL SELECT 'iupac-starter-drill', 10, 'In Chemlab full-name analogy, surname means:', JSON_ARRAY('bond type suffix','side branch','main chain'), JSON_ARRAY('bond type suffix'), 'The suffix tells ane, ene, or yne.', 'Surname is family type.', 'beginner', 'name_order'
+  UNION ALL SELECT 'iupac-starter-drill', 10, 'In chemlearning full-name analogy, surname means:', JSON_ARRAY('bond type suffix','side branch','main chain'), JSON_ARRAY('bond type suffix'), 'The suffix tells ane, ene, or yne.', 'Surname is family type.', 'beginner', 'name_order'
   UNION ALL SELECT 'class-9-atoms-molecules-starter-drill', 1, 'H2O contains how many hydrogen atoms?', JSON_ARRAY('2','1','3'), JSON_ARRAY('2'), 'The subscript 2 applies to hydrogen.', 'Read the subscript.', 'beginner', NULL
   UNION ALL SELECT 'class-9-atoms-molecules-starter-drill', 2, 'An atom is best described as:', JSON_ARRAY('smallest unit of an element','mixture of compounds','only a charged particle'), JSON_ARRAY('smallest unit of an element'), 'Atoms are the building blocks of elements.', 'Element identity.', 'beginner', NULL
   UNION ALL SELECT 'class-9-atoms-molecules-starter-drill', 3, 'A molecule is:', JSON_ARRAY('atoms chemically bonded','only one atom','a random mixture'), JSON_ARRAY('atoms chemically bonded'), 'Molecules have bonded atoms.', 'Bonded group.', 'beginner', NULL
@@ -173,7 +173,7 @@ INSERT INTO teacher_quizzes
    time_limit_minutes, shuffle_questions, show_correct_after_each, show_leaderboard, quality_status, source_reference, created_at, updated_at)
 SELECT CONCAT('stage7-public-quiz-', qd.slug), u.id, seed.title, seed.slug, seed.description, qd.class_id, qd.subject_id, qd.chapter_id, qd.topic_id,
   qd.id, 'published', 'public', qd.estimated_minutes, 0, 1, 1, 'needs_review',
-  'Chemlab public practice quiz copied from starter quick drill.', NOW(), NOW()
+  'chemlearning public practice quiz copied from starter quick drill.', NOW(), NOW()
 FROM quick_drills qd
 JOIN (SELECT id FROM users WHERE role = 'admin' ORDER BY id ASC LIMIT 1) u
 JOIN (
@@ -199,6 +199,6 @@ WHERE tq.slug IN ('redox-transfer-starter-battle', 'hydrocarbon-naming-starter-b
 
 UPDATE learning_resources
 SET quality_status = COALESCE(quality_status, 'needs_review'),
-    source_reference = COALESCE(source_reference, 'Chemlab original, NCERT-aligned. Verify before final publishing.'),
+    source_reference = COALESCE(source_reference, 'chemlearning original, NCERT-aligned. Verify before final publishing.'),
     updated_at = NOW()
 WHERE slug IN ('redox-transfer-kitchen', 'hydrocarbon-naming-quest');

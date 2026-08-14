@@ -4,7 +4,7 @@ import { redoxAgentQuestions, redoxLevels, redoxStoryFrames } from "@/components
 import { initialRedoxGameState, redoxSuccessConditions } from "@/components/labs/redox-transfer-kitchen/redoxGameState";
 
 export const metadata: Metadata = {
-  title: "Redox Game Audit | Chemlab",
+  title: "Redox Game Audit | chemlearning",
   robots: { index: false, follow: false },
 };
 

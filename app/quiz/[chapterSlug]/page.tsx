@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const chemistryModule = getModuleBySlug(chapterSlug);
   return {
     title: chemistryModule ? `${chemistryModule.title} Quiz` : "Chemistry Quiz",
-    description: chemistryModule ? `Practice quiz for ${chemistryModule.title}.` : "Chemlab quiz.",
+    description: chemistryModule ? `Practice quiz for ${chemistryModule.title}.` : "chemlearning quiz.",
   };
 }
 

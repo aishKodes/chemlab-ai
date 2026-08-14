@@ -27,7 +27,7 @@ export type RedoxAssetEntry = {
   note: string;
 };
 
-export type RedoxSpeaker = "Karthik" | "Jaya Paati" | "Chemlab";
+export type RedoxSpeaker = "Karthik" | "Jaya Paati" | "chemlearning";
 
 export type RedoxCameraMotion = "slow_zoom" | "pan_left" | "pan_right" | "none";
 

@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Asset Preview",
-  description: "Development-only Chemlab asset preview and processing audit.",
+  description: "Development-only chemlearning asset preview and processing audit.",
 };
 
 type ManifestAsset = {
@@ -56,7 +56,7 @@ export default function AssetPreviewPage() {
         <Container className="pb-16">
           <Card className="bg-white/85">
             <p className="text-sm font-semibold text-slate-700">
-              Run Chemlab locally to review clean, processed, and quarantined assets.
+              Run chemlearning locally to review clean, processed, and quarantined assets.
             </p>
           </Card>
         </Container>

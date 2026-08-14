@@ -28,7 +28,7 @@ function buildUrl(path: string, query?: RequestOptions["query"]) {
   const baseUrl = getBackendBaseUrl();
   if (!baseUrl) {
     throw new BackendApiError(
-      "Chemlab account services are not connected yet. Public labs still work while setup is completed.",
+      "chemlearning account services are not connected yet. Public labs still work while setup is completed.",
       "BACKEND_NOT_CONFIGURED",
     );
   }
@@ -88,7 +88,7 @@ export async function backendRequest<T>(path: string, options: RequestOptions = 
       throw new BackendApiError("The backend took too long to respond. Please try again.", "REQUEST_TIMEOUT");
     }
     throw new BackendApiError(
-      "Chemlab could not reach account services right now. You can keep exploring public labs.",
+      "chemlearning could not reach account services right now. You can keep exploring public labs.",
       "BACKEND_UNAVAILABLE",
     );
   } finally {

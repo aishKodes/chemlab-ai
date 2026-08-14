@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Admin",
-  description: "Chemlab admin dashboard foundation.",
+  description: "chemlearning admin dashboard foundation.",
 };
 
 export default function AdminPage() {
@@ -13,7 +13,7 @@ export default function AdminPage() {
     <>
       <PageHeader
         eyebrow="Admin"
-        title="Chemlab control room."
+        title="chemlearning control room."
         description="A simple place for future content, question, and classroom tools."
       />
       <Container className="pb-16">

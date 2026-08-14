@@ -74,7 +74,7 @@ function StudentDashboard() {
         {!user?.class_level ? (
           <ErrorState
             title="Complete your profile"
-            description="Add your class level so Chemlab can recommend the right resources."
+            description="Add your class level so chemlearning can recommend the right resources."
             action={<Button href="/profile">Complete profile</Button>}
           />
         ) : null}

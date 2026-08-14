@@ -51,7 +51,7 @@ function TeacherClassroomDetail() {
 
   async function createAssignment() {
     if (!assignmentTitle.trim()) return;
-    await teacherApi.createAssignment(params.id, { title: assignmentTitle, instructions: "Complete this Chemlab activity and review your mistakes." });
+    await teacherApi.createAssignment(params.id, { title: assignmentTitle, instructions: "Complete this chemlearning activity and review your mistakes." });
     setAssignmentTitle("");
     load();
   }

@@ -65,7 +65,7 @@ export function PublicQuizPlayer({
     return (
       <Card>
         <h2 className="text-xl font-black text-slate-950">Quiz questions are being prepared</h2>
-        <p className="mt-2 text-sm font-semibold text-slate-600">This public quiz is waiting for questions from the Chemlab backend.</p>
+        <p className="mt-2 text-sm font-semibold text-slate-600">This public quiz is waiting for questions from the chemlearning backend.</p>
       </Card>
     );
   }
@@ -107,7 +107,7 @@ export function PublicQuizPlayer({
               className="mt-2 w-full rounded-2xl border border-blue-100 bg-white px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100"
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="Your name"
+              placeholder="Aishwaryam"
             />
           </label>
         </div>

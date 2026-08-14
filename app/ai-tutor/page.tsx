@@ -6,22 +6,22 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Chem-Shastri",
-  description: "Meet Chem-Shastri, Chemlab's magical AI mentor for chemistry explanations, hints, lab guide mode, quizzes, and answer checking.",
+  description: "Meet Chem-Shastri, your NCERT Chemistry Guide for explanations, hints, quizzes, and lab guidance.",
 };
 
 export default function MasterAlchemPage() {
   return (
     <>
       <PageHeader
-        eyebrow="AI Mentor"
+        eyebrow="Testing Mode"
         title="Chem-Shastri"
-        description="A warm alchemical mentor who explains chemistry with hints, questions, lab thinking, and no-shame mistake repair."
+        description="Your NCERT Chemistry Guide. Ask a question in English, हिन्दी, or বাংলা and get a clear next step."
       />
       <Container className="pb-16">
         <MasterAlchemDock
           mood="idle"
-          title="Chem-Shastri is your guide through the chemistry universe."
-          message="Choose Explain, Hint, Step-by-Step, Quiz Me, Check My Answer, Exam Mode, or Lab Guide Mode. Ask in your own words, and Chem-Shastri will guide the next step."
+          title="Ask in your own words."
+          message="Chem-Shastri answers directly, uses your current topic when useful, and can explain, hint, quiz, or guide a lab."
           className="mb-6"
         />
         <MasterAlchemChat />

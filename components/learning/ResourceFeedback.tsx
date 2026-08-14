@@ -34,7 +34,7 @@ export function ResourceFeedback({ resourceId, resourceSlug, resourceType }: { r
   return (
     <Card className="bg-gradient-to-br from-white via-lime-50 to-amber-50">
       <h2 className="text-xl font-black text-slate-950">How did this feel?</h2>
-      <p className="mt-2 text-sm font-semibold text-slate-600">Your feedback helps Chemlab improve this resource.</p>
+      <p className="mt-2 text-sm font-semibold text-slate-600">Your feedback helps chemlearning improve this resource.</p>
       <div className="mt-4 flex flex-wrap gap-2">
         {reactions.map((reaction) => (
           <Button key={reaction.key} variant={selected === reaction.key ? "primary" : "secondary"} size="sm" onClick={() => submit(reaction.key)}>

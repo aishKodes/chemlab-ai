@@ -7,12 +7,12 @@ import { Container } from "@/components/ui/Container";
 export const metadata: Metadata = {
   title: "Lab Flow Preview",
   description:
-    "A Chemlab preview showing the story, experiment, challenge, and reward rhythm for future labs.",
+    "A chemlearning preview showing the story, experiment, challenge, and reward rhythm for future labs.",
 };
 
 const demoConfig: CinematicLessonConfig = {
   title: "Lab Flow Preview",
-  subtitle: "A polished structure preview for future Chemlab labs.",
+  subtitle: "A polished structure preview for future chemlearning labs.",
   badge: "Lab Preview",
   rewardTitle: "Lab Flow Builder",
   rewardDetail:
@@ -50,7 +50,7 @@ const demoConfig: CinematicLessonConfig = {
         "Future labs will begin with a short story moment so students know what they are trying to discover before touching the experiment.",
       masterAlchemMood: "guide",
       masterAlchemMessage:
-        "Welcome, young chemist. In Chemlab, every practical starts with a question you can actually test.",
+        "Welcome, young chemist. In chemlearning, every practical starts with a question you can actually test.",
     },
     {
       id: "experiment",
@@ -85,12 +85,12 @@ const demoConfig: CinematicLessonConfig = {
         "The final scene celebrates the completed loop and points the student toward the next mission.",
       masterAlchemMood: "celebrating",
       masterAlchemMessage:
-        "That is the Chemlab rhythm: story, action, evidence, challenge, reward.",
+        "That is the chemlearning rhythm: story, action, evidence, challenge, reward.",
       stageLabel: "Reward unlocked",
     },
   ],
   challenge: {
-    question: "What should a Chemlab lab help you do first?",
+    question: "What should a chemlearning lab help you do first?",
     correctOptionId: "test",
     hint: "The best lab action lets you make a prediction and then check it.",
     options: [
@@ -102,7 +102,7 @@ const demoConfig: CinematicLessonConfig = {
       {
         id: "memorize",
         label: "Memorize a paragraph before anything moves",
-        feedback: "Reading can help, but Chemlab labs should begin with active discovery.",
+        feedback: "Reading can help, but chemlearning labs should begin with active discovery.",
       },
       {
         id: "guess",
@@ -118,8 +118,8 @@ export default function DemoCinematicShellPage() {
     <>
       <PageHeader
         eyebrow="Lab Preview"
-        title="Chemlab Lab Flow"
-        description="A short preview of how Chemlab labs move from mission to experiment to challenge to reward."
+        title="chemlearning Lab Flow"
+        description="A short preview of how chemlearning labs move from mission to experiment to challenge to reward."
       />
       <Container className="pb-16">
         <CinematicLessonShell config={demoConfig} />

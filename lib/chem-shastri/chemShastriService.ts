@@ -10,7 +10,6 @@ import { directChemistryAnswer, languageNotice } from "./chemShastriResponseForm
 import { checkChemShastriSafety } from "./chemShastriSafety";
 import { findCuratedFallbackAnswer, genericCuratedFallback } from "./curatedFallbackAnswers";
 import type { ChemShastriRequest, ChemShastriResponse } from "./chemShastriTypes";
-import { getBudgetSnapshot } from "@/lib/ai/budgetGuard";
 import { answerMasterAlchem } from "@/lib/master-alchem/masterAlchemService";
 import type { MasterAlchemRequest } from "@/lib/master-alchem/types";
 
@@ -39,40 +38,38 @@ function localResponse({
   spokenText?: string;
   followUpQuestions?: string[];
 }): Promise<ChemShastriResponse> {
-  return getBudgetSnapshot().then((budget) => {
-    const mode = resolveChemShastriMode(request.mode);
-    const context = buildChemShastriContext(request);
-    return {
-      message: answer,
-      answer,
-      conversationId: request.conversationId ?? makeConversationId(),
-      provider: intent === "unsafe_chemistry" ? "safety" : "local",
-      model: intent === "unsafe_chemistry" ? "rule-based" : "chemlab-direct-answer",
-      source,
-      providerUsed: intent === "unsafe_chemistry" ? "safety" : "local",
-      modelUsed: intent === "unsafe_chemistry" ? "rule-based" : "chemlab-direct-answer",
-      mode: toMasterAlchemMode(mode),
-      intent,
-      citations: [],
+  const mode = resolveChemShastriMode(request.mode);
+  const context = buildChemShastriContext(request);
+  return Promise.resolve({
+    message: answer,
+    answer,
+    conversationId: request.conversationId ?? makeConversationId(),
+    provider: intent === "unsafe_chemistry" ? "safety" : "local",
+    model: intent === "unsafe_chemistry" ? "rule-based" : "chemlab-direct-answer",
+    source,
+    providerUsed: intent === "unsafe_chemistry" ? "safety" : "local",
+    modelUsed: intent === "unsafe_chemistry" ? "rule-based" : "chemlab-direct-answer",
+    mode: toMasterAlchemMode(mode),
+    intent,
+    citations: [],
+    cacheHit: source === "cache",
+    ragUsed: false,
+    safetyStatus: intent === "unsafe_chemistry" ? "unsafe_chemistry" : "safe",
+    mock: false,
+    estimatedCostInr: 0,
+    budgetRemainingInr: 0,
+    spokenText: spokenText ?? answer.slice(0, 900),
+    shouldClarify,
+    clarificationQuestion,
+    contextChips: context.chips,
+    suggestedResources,
+    followUpQuestions: followUpQuestions ?? followUpsForMode(mode),
+    adminSignals: {
+      providerConfigured: chemShastriConfig.geminiConfigured() || chemShastriConfig.groqConfigured(),
+      budgetBlocked: false,
       cacheHit: source === "cache",
-      ragUsed: false,
-      safetyStatus: intent === "unsafe_chemistry" ? "unsafe_chemistry" : "safe",
-      mock: false,
-      estimatedCostInr: 0,
-      budgetRemainingInr: budget.remainingInr,
-      spokenText: spokenText ?? answer.slice(0, 900),
-      shouldClarify,
-      clarificationQuestion,
-      contextChips: context.chips,
-      suggestedResources,
-      followUpQuestions: followUpQuestions ?? followUpsForMode(mode),
-      adminSignals: {
-        providerConfigured: chemShastriConfig.geminiConfigured() || chemShastriConfig.openaiConfigured(),
-        budgetBlocked: false,
-        cacheHit: source === "cache",
-        retrievalCount: suggestedResources.length,
-      },
-    };
+      retrievalCount: suggestedResources.length,
+    },
   });
 }
 
@@ -106,7 +103,6 @@ export async function answerChemShastri(rawRequest: ChemShastriRequest, httpRequ
   }
 
   const safety = checkChemShastriSafety(request.message);
-  const suggestions = await retrieveChemShastriResources({ query: request.message, context, limit: 4 }).catch(() => []);
 
   if (safety.safeResponse) {
     const response = await localResponse({
@@ -114,7 +110,7 @@ export async function answerChemShastri(rawRequest: ChemShastriRequest, httpRequ
       request,
       intent: "unsafe_chemistry",
       source: "safety",
-      suggestedResources: suggestions,
+      suggestedResources: [],
     });
     void logChemShastriQuestionToBackend(request, response);
     return response;
@@ -127,7 +123,7 @@ export async function answerChemShastri(rawRequest: ChemShastriRequest, httpRequ
       request,
       intent: "clarification_needed",
       source: "fallback",
-      suggestedResources: suggestions,
+      suggestedResources: [],
       shouldClarify: true,
       clarificationQuestion: clarification.question,
     });
@@ -149,14 +145,14 @@ export async function answerChemShastri(rawRequest: ChemShastriRequest, httpRequ
       request,
       intent,
       source: "cache",
-      suggestedResources: suggestions,
+      suggestedResources: [],
     });
     void logChemShastriQuestionToBackend(request, response);
     return response;
   }
 
   const curated = findCuratedFallbackAnswer(request.message, context);
-  const direct = curated?.answer ?? directChemistryAnswer(request.message);
+  const direct = directChemistryAnswer(request.message, context.preferredLanguage) ?? curated?.answer;
   if (direct && mode !== "step_by_step" && mode !== "check_my_answer" && mode !== "exam_mode") {
     const languageLine = languageNotice(context.preferredLanguage);
     const answer = [direct, languageLine, curated?.followUp ? `Next: ${curated.followUp}` : "Try the next step: tell me the example from your textbook, and I will map each part."]
@@ -169,14 +165,28 @@ export async function answerChemShastri(rawRequest: ChemShastriRequest, httpRequ
       request,
       intent: "direct_answer",
       source: "fallback",
-      suggestedResources: curated?.resource ? [{ ...curated.resource, source: "fallback" }, ...suggestions] : suggestions,
+      suggestedResources: curated?.resource ? [{ ...curated.resource, source: "fallback" }] : [],
       followUpQuestions: curated?.followUp ? [curated.followUp, ...followUpsForMode(mode).slice(0, 2)] : undefined,
     });
     void logChemShastriQuestionToBackend(request, response);
     return response;
   }
 
+  const suggestions = await retrieveChemShastriResources({ query: request.message, context, limit: 4 }).catch(() => []);
+
   const retrieval = await buildRetrievalContext(request.message, context).catch(() => ({ suggestions, notes: "" }));
+  if (chemShastriConfig.ncertOnly() && !retrieval.notes.trim() && !retrieval.suggestions.length) {
+    const response = await localResponse({
+      answer: "I don’t have this in the current NCERT learning material yet. Try asking about the exact chemistry concept, equation, or example shown on this page.",
+      request,
+      intent,
+      source: "fallback",
+      suggestedResources: suggestions,
+      followUpQuestions: ["Explain the topic on this page.", "Show one NCERT-aligned example."],
+    });
+    void logChemShastriQuestionToBackend(request, response);
+    return response;
+  }
   const prefix = buildChemShastriPromptPrefix({
     context,
     mode,
@@ -212,6 +222,20 @@ export async function answerChemShastri(rawRequest: ChemShastriRequest, httpRequ
     void logChemShastriQuestionToBackend(request, response);
     return response;
   }
+  if (masterResponse.provider === "mock") {
+    const fallback = findCuratedFallbackAnswer(request.message, context) ?? genericCuratedFallback(request.message, context);
+    const response = await localResponse({
+      answer: fallback.answer,
+      spokenText: fallback.spokenText,
+      request,
+      intent,
+      source: "fallback",
+      suggestedResources: fallback.resource ? [{ ...fallback.resource, source: "fallback" }, ...retrieval.suggestions] : retrieval.suggestions,
+      followUpQuestions: [fallback.followUp, ...followUpsForMode(mode).slice(0, 2)],
+    });
+    void logChemShastriQuestionToBackend(request, response);
+    return response;
+  }
   const response: ChemShastriResponse = {
     ...masterResponse,
     answer: masterResponse.answer,
@@ -220,7 +244,7 @@ export async function answerChemShastri(rawRequest: ChemShastriRequest, httpRequ
     suggestedResources: retrieval.suggestions,
     followUpQuestions: followUpsForMode(mode),
     adminSignals: {
-      providerConfigured: chemShastriConfig.geminiConfigured() || chemShastriConfig.openaiConfigured(),
+      providerConfigured: chemShastriConfig.geminiConfigured() || chemShastriConfig.groqConfigured(),
       budgetBlocked: masterResponse.provider === "budget_guard",
       cacheHit: masterResponse.cacheHit,
       retrievalCount: retrieval.suggestions.length,

@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/Container";
 export const metadata: Metadata = {
   title: "Neutralization Studio",
   description:
-    "A Chemlab story lab where students neutralize acid and base, track pH evidence, evaporate the solution, and reveal salt crystals with Chem-Shastri.",
+    "A chemlearning story lab where students neutralize acid and base, track pH evidence, evaporate the solution, and reveal salt crystals with Chem-Shastri.",
 };
 
 export default function CinematicSaltLabPage() {

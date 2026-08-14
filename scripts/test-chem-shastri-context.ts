@@ -13,7 +13,7 @@ const cases = [
   {
     message: "Explain",
     classLevel: "11" as const,
-    currentPage: "/simulations/molecule-explorer",
+    currentPage: "/labs/molecule-shapes-3d",
     expectedClarify: true,
   },
   {

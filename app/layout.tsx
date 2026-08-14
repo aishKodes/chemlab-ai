@@ -15,28 +15,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://chemlab.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.chemlearning.in";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Chemlab | Chemistry, but Alive",
-    template: "%s | Chemlab",
+    default: "chemlearning | Chemistry, but Alive",
+    template: "%s | chemlearning",
   },
   description:
     "A colourful interactive chemistry learning universe where students build atoms, run virtual labs, and learn with Chem-Shastri.",
-  applicationName: "Chemlab",
+  applicationName: "chemlearning",
   openGraph: {
-    title: "Chemlab",
+    title: "chemlearning",
     description:
       "Chemistry, but alive: quests, simulations, boss quizzes, mistake clues, and Chem-Shastri.",
     url: siteUrl,
-    siteName: "Chemlab",
+    siteName: "chemlearning",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chemlab",
+    title: "chemlearning",
     description:
       "Build atoms, battle misconceptions, run virtual labs, and master reactions through play.",
   },

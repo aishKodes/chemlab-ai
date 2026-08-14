@@ -355,9 +355,9 @@ export function genericCuratedFallback(message: string, context?: ChemShastriCon
     id: "generic",
     patterns: [],
     answer:
-      `I can still help from Chemlab’s local chemistry notes. Start with the main idea, then connect it to one example and one mistake to avoid.${pageHint}\n\nAsk me a specific chemistry question like “what is oxidation?”, “why is water bent?”, or “how do I calculate moles?”`,
+      `I can still help from chemlearning’s local chemistry notes. Start with the main idea, then connect it to one example and one mistake to avoid.${pageHint}\n\nAsk me a specific chemistry question like “what is oxidation?”, “why is water bent?”, or “how do I calculate moles?”`,
     spokenText:
-      "I can still help from Chemlab local notes. Ask one specific chemistry question, and I will explain the idea, one example, and one mistake to avoid.",
+      "I can still help from chemlearning local notes. Ask one specific chemistry question, and I will explain the idea, one example, and one mistake to avoid.",
     followUp: "Send the exact concept or question.",
   };
 }

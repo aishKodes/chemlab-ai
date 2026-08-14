@@ -94,7 +94,7 @@ export default function ResourceDetailPage({ params }: { params: Promise<{ slug:
               <Card>
                 <h3 className="text-xl font-black text-slate-950">Source note</h3>
                 <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-                  {resource.source_reference ?? "Original Chemlab resource. Admins can add approved references from the backend."}
+                  {resource.source_reference ?? "Original chemlearning resource. Admins can add approved references from the backend."}
                 </p>
                 {resource.attribution_text || resource.license_type || resource.author ? (
                   <div className="mt-4 rounded-2xl bg-white/75 p-4 text-xs font-bold leading-5 text-slate-600">

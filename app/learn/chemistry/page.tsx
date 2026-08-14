@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Chemistry Worlds",
-  description: "Choose colourful Chemlab chapter worlds with simulations, Chem-Shastri guidance, boss quizzes, and mistake objects.",
+  description: "Choose colourful chemlearning chapter worlds with simulations, Chem-Shastri guidance, boss quizzes, and mistake objects.",
 };
 
 export default function ChemistryCurriculumPage() {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Redox3DStage } from "@/components/labs/redox-transfer-kitchen/Redox3DStage";
 
 export const metadata: Metadata = {
-  title: "Redox 3D Debug | Chemlab",
+  title: "Redox 3D Debug | chemlearning",
   robots: { index: false, follow: false },
 };
 

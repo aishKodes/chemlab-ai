@@ -1,7 +1,19 @@
 import { backendClient } from "@/lib/api/backendClient";
 import type { BackendQuickDrill, BackendQuizAttempt, BackendQuizQuestion } from "@/lib/api/backendTypes";
+import { SI_NCERT_SOURCE, siUnitsQuickDrillQuestions } from "@/data/quizzes/siUnitsBattle";
 
 export const fallbackQuickDrills: BackendQuickDrill[] = [
+  {
+    id: 11,
+    title: "SI Units & Measurement Drill",
+    slug: "si-units-scientific-notation-drill",
+    description: "Source-backed Class 11 practice for SI units, conversions, precision, accuracy, and significant figures.",
+    difficulty: "intermediate",
+    estimated_minutes: 6,
+    status: "published",
+    source_type: "NCERT",
+    source_reference: SI_NCERT_SOURCE,
+  },
   {
     id: 1,
     title: "Redox Basics 5-Minute Drill",
@@ -23,6 +35,21 @@ export const fallbackQuickDrills: BackendQuickDrill[] = [
 ];
 
 export const fallbackQuickDrillQuestions: Record<string, BackendQuizQuestion[]> = {
+  "si-units-scientific-notation-drill": siUnitsQuickDrillQuestions.map((question, index) => ({
+    id: 1100 + index,
+    drill_id: 11,
+    question_text: question.prompt,
+    question_type: "mcq",
+    options_json: question.options,
+    correct_answer_json: [question.answer],
+    explanation: question.explanation,
+    hint: "Use the SI definition or operation rule before calculating.",
+    difficulty: "intermediate",
+    mistake_type: question.mistakeKey,
+    source_reference: `${question.sourceReference} (${question.exactOrAdapted})`,
+    order_index: index + 1,
+    status: "published",
+  })),
   "redox-basics-5-minute-drill": [
     {
       id: 1,

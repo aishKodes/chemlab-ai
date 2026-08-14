@@ -14,7 +14,7 @@ import { Container } from "@/components/ui/Container";
 export const metadata: Metadata = {
   title: "Virtual Labs",
   description:
-    "Chemlab virtual labs where students mix reactions, explore molecules, build atoms, and learn by doing.",
+    "chemlearning virtual labs where students mix reactions, explore molecules, build atoms, and learn by doing.",
 };
 
 const featuredLabs = getLabsByStatus("featured");

@@ -89,7 +89,7 @@ export function JoinQuizClient({ initialPin = "" }: { initialPin?: string }) {
               className="mt-2 w-full rounded-2xl border border-blue-100 bg-white px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100"
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="Name for leaderboard"
+              placeholder="Aishwaryam"
             />
           </label>
         </div>

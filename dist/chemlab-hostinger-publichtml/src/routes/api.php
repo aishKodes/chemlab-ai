@@ -20,7 +20,7 @@ use Chemlab\Routes\Router;
 
 return static function (Router $router, PDO $pdo): void {
     $router->get('/', static fn () => Response::ok([
-        'service' => 'Chemlab Hostinger API',
+        'service' => 'chemlearning Hostinger API',
         'version' => 'stage-1',
     ]));
 

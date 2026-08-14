@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Open Visualizations",
-  description: "Reviewed open chemistry visualizations and simulations curated by Chemlab.",
+  description: "Reviewed open chemistry visualizations and simulations curated by chemlearning.",
 };
 
 export default function OpenVisualizationsPage() {
@@ -20,7 +20,7 @@ export default function OpenVisualizationsPage() {
       <PageHeader
         eyebrow="Open Visualizations"
         title="Reviewed external chemistry tools will appear here."
-        description="Chemlab links external resources only after license, attribution, and accuracy review."
+        description="chemlearning links external resources only after license, attribution, and accuracy review."
       />
       <Container className="space-y-6 pb-16">
         <Card className="bg-gradient-to-br from-white via-amber-50 to-cyan-50">
@@ -54,10 +54,10 @@ export default function OpenVisualizationsPage() {
             <Badge tone="amber">Review in progress</Badge>
             <h2 className="mt-3 text-2xl font-black text-slate-950">External resources are not published yet.</h2>
             <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-              For the demo, use Chemlab’s own featured labs first. Admins can review PhET, Mol*, and JSmol candidates in the open-resource curation queue.
+              For the demo, use chemlearning’s own featured labs first. Admins can review PhET, Mol*, and JSmol candidates in the open-resource curation queue.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
-              <Button href="/showcase">Open Chemlab showcase</Button>
+              <Button href="/showcase">Open chemlearning showcase</Button>
               <Button href="/labs/molecule-shapes-3d" variant="secondary">Open Molecule Shapes 3D</Button>
             </div>
           </Card>

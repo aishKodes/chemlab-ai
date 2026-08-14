@@ -94,7 +94,7 @@ export default function AdminChemShastriPage() {
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Badge tone={summary?.provider.geminiConfigured ? "green" : "amber"}>Gemini {summary?.provider.geminiConfigured ? "set" : "missing"}</Badge>
-                  <Badge tone={summary?.provider.openaiConfigured ? "green" : "amber"}>OpenAI {summary?.provider.openaiConfigured ? "set" : "off"}</Badge>
+                  <Badge tone={summary?.provider.groqConfigured ? "green" : "amber"}>Groq {summary?.provider.groqConfigured ? "set" : "missing"}</Badge>
                 </div>
               </Card>
               <Card>

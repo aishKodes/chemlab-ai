@@ -1,7 +1,7 @@
 import { Molecule3DDebug } from "@/components/labs/hydrocarbon-quest/3d/Molecule3DDebug";
 
 export const metadata = {
-  title: "Molecule 3D Debug | Chemlab",
+  title: "Molecule 3D Debug | chemlearning",
   description: "Development inspection page for Hydrocarbon Naming Quest 3D molecule geometry.",
 };
 

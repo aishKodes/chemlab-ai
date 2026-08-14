@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { RedoxTransferKitchen } from "@/components/labs/redox-transfer-kitchen/RedoxTransferKitchen";
 
 export const metadata: Metadata = {
-  title: "Redox Transfer Kitchen | Chemlab",
+  title: "Redox Transfer Kitchen | chemlearning",
   description: "Learn oxidation and reduction through Paati’s murukku story and a 3D electron-transfer game.",
 };
 

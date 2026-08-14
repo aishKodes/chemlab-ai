@@ -42,7 +42,7 @@ export function MasterAlchemGuide() {
       <aside
         aria-label="Chem-Shastri compact guide"
         data-placement="simulation-compact"
-        className="pointer-events-none fixed bottom-[84px] right-3 z-30 sm:bottom-24"
+        className="pointer-events-none fixed right-3 top-[76px] z-30 sm:bottom-24 sm:top-auto"
       >
         <Link
           href={explainHref}
@@ -125,15 +125,17 @@ export function MasterAlchemGuide() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 14, scale: 0.9 }}
             className={cn(
-              "focus-ring pointer-events-auto flex items-center gap-2 rounded-full border-2 border-white bg-white/94 p-1.5 pr-3 text-sm font-black text-blue-700 shadow-2xl backdrop-blur",
+              "focus-ring group pointer-events-auto relative grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-white/94 text-blue-700 shadow-2xl backdrop-blur transition hover:-translate-y-0.5 sm:h-14 sm:w-14",
               !isLabRoute && "ml-auto",
             )}
             onClick={() => setGuideExpanded(true)}
             aria-label="Open Chem-Shastri guide"
           >
-            <MasterAlchem mood={script.mood} size="xs" showGlow={false} />
-            Ask Chem-Shastri
-            <ChevronDown className="h-4 w-4 rotate-180" aria-hidden="true" />
+            <MasterAlchem mood={script.mood} size="xs" showGlow={false} className="scale-90" />
+            <span className="pointer-events-none absolute right-full top-1/2 mr-2 hidden -translate-y-1/2 whitespace-nowrap rounded-full bg-slate-950 px-3 py-1 text-xs font-black text-white shadow-lg group-hover:block group-focus-visible:block">
+              Ask Chem-Shastri
+            </span>
+            <ChevronDown className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rotate-180 rounded-full bg-blue-600 p-0.5 text-white" aria-hidden="true" />
           </motion.button>
         )}
       </AnimatePresence>

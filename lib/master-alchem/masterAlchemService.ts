@@ -27,6 +27,7 @@ function limitForRequest(request: MasterAlchemRequest) {
 
 function sourceForProvider(provider: string): MasterAlchemResponse["source"] {
   if (provider === "gemini") return "gemini";
+  if (provider === "groq") return "groq";
   if (provider === "openai") return "openai";
   if (provider === "faq") return "faq";
   if (provider === "cache") return "cache";
@@ -69,8 +70,8 @@ function buildRagOnlyAnswer({
     })
     .filter(Boolean);
   const prefix = budgetBlocked
-    ? "Chem-Shastri is in low-cost mode today. Here is the best answer from Chemlab's verified notes."
-    : "From Chemlab's verified NCERT notes:";
+    ? "Chem-Shastri is in low-cost mode today. Here is the best answer from chemlearning's verified notes."
+    : "From chemlearning's verified NCERT notes:";
   return `${prefix}\n\n${notes.map((note) => `- ${note}`).join("\n")}`;
 }
 
@@ -282,7 +283,7 @@ export async function answerMasterAlchem(
       source: "faq",
       mode,
       intent,
-      citations: [{ label: "Chemlab verified FAQ", sourceType: "faq", classLevel: request.classLevel }],
+      citations: [{ label: "chemlearning verified FAQ", sourceType: "faq", classLevel: request.classLevel }],
       cacheHit: true,
       ragUsed: false,
       safetyStatus: safety.status,

@@ -166,7 +166,7 @@ SET lr.class_id = c.id,
     lr.subject_id = s.id,
     lr.chapter_id = ch.id,
     lr.topic_id = t.id,
-    lr.source_reference = 'Original Chemlab simulation mapped to NCERT structure placeholder. Verify before publishing.',
+    lr.source_reference = 'Original chemlearning simulation mapped to NCERT structure placeholder. Verify before publishing.',
     lr.updated_at = NOW()
 WHERE lr.slug = 'redox-transfer-kitchen';
 
@@ -179,7 +179,7 @@ SET lr.class_id = c.id,
     lr.subject_id = s.id,
     lr.chapter_id = ch.id,
     lr.topic_id = t.id,
-    lr.source_reference = 'Original Chemlab simulation mapped to NCERT structure placeholder. Verify before publishing.',
+    lr.source_reference = 'Original chemlearning simulation mapped to NCERT structure placeholder. Verify before publishing.',
     lr.updated_at = NOW()
 WHERE lr.slug = 'hydrocarbon-naming-quest';
 

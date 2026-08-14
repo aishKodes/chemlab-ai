@@ -7,7 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 
 export const metadata: Metadata = {
   title: "Question Manager",
-  description: "Chemlab admin question manager placeholder.",
+  description: "chemlearning admin question manager placeholder.",
 };
 
 export default function AdminQuestionsPage() {

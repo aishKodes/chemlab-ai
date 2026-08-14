@@ -70,7 +70,7 @@ export function AdminShell() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <Badge tone={settingsReady ? "green" : "amber"}>{settingsReady ? "Backend reachable" : "Backend check"}</Badge>
-            <h2 className="mt-3 text-2xl font-black text-slate-950">Chemlab admin control room</h2>
+            <h2 className="mt-3 text-2xl font-black text-slate-950">chemlearning admin control room</h2>
             <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-slate-600">
               Manage users, class structure, resources, memory cards, quick drills, content factory coverage, media, email, notifications, and settings from the Hostinger backend.
             </p>

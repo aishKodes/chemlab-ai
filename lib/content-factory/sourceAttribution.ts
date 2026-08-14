@@ -25,7 +25,7 @@ export function isExternalResourcePublishable(source: SourceAttribution) {
 
 export function buildSourceNote(source: SourceAttribution) {
   if (source.usageType === "original_ncert_aligned") {
-    return `${source.sourceReference}. Chemlab content is original and should be reviewed for accuracy before publishing.`;
+    return `${source.sourceReference}. chemlearning content is original and should be reviewed for accuracy before publishing.`;
   }
   return `${source.attributionText ?? "Attribution required"} Source: ${source.sourceUrl ?? "pending"}. License: ${source.licenseType ?? "pending"}.`;
 }

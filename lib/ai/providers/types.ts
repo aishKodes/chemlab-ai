@@ -1,4 +1,4 @@
-export type AiProviderName = "openai" | "gemini" | "mock";
+export type AiProviderName = "openai" | "gemini" | "groq" | "mock";
 
 export type AiChatMessage = {
   role: "system" | "user" | "assistant" | "tool";

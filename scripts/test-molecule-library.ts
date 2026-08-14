@@ -1,7 +1,28 @@
 import { ncertMoleculeLibrary } from "../data/molecules/ncertMoleculeLibrary";
 import { validateMoleculeLibrary } from "../data/molecules/moleculeValidation";
 
-const required = ["water", "carbon-dioxide", "methane", "ammonia", "boron-trifluoride", "ethene", "ethyne", "benzene"];
+const required = [
+  "water",
+  "carbon-dioxide",
+  "methane",
+  "ammonia",
+  "boron-trifluoride",
+  "beryllium-chloride",
+  "phosphorus-pentachloride",
+  "sulfur-hexafluoride",
+  "xenon-difluoride",
+  "xenon-tetrafluoride",
+  "ozone",
+  "sulfur-dioxide",
+  "sulfur-trioxide",
+  "hydrogen-peroxide",
+  "ethane",
+  "ethene",
+  "ethyne",
+  "benzene",
+  "methanol",
+  "ethanoic-acid",
+];
 const warnings = validateMoleculeLibrary(ncertMoleculeLibrary);
 const errors = warnings.filter((warning) => warning.severity === "error");
 const missing = required.filter((id) => !ncertMoleculeLibrary.some((molecule) => molecule.id === id));

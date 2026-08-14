@@ -62,7 +62,7 @@ export type MasterAlchemResponse = {
   conversationId?: string;
   provider: string;
   model: string;
-  source: "faq" | "cache" | "rag" | "gemini" | "openai" | "fallback" | "scripted" | "safety";
+  source: "faq" | "cache" | "rag" | "gemini" | "groq" | "openai" | "fallback" | "scripted" | "safety";
   providerUsed?: string;
   modelUsed?: string;
   mode: MasterAlchemMode;

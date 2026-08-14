@@ -3,9 +3,11 @@ import { checkBudget, recordAiSpend, recordBudgetBlocked } from "./budgetGuard";
 import { AiBudgetExceededError } from "./errors";
 import { estimateMessagesTokens } from "./tokenEstimator";
 import { GeminiProvider } from "./providers/geminiProvider";
+import { GroqProvider } from "./providers/groqProvider";
 import { MockProvider } from "./providers/mockProvider";
 import { OpenAIProvider } from "./providers/openaiProvider";
 import type { AiChatMessage, AiChatResponse, AiProvider, AiProviderName, EmbeddingResponse } from "./providers/types";
+import { chemShastriModelFor, chemShastriProviderOrder } from "@/lib/chem-shastri/providers/providerRouter";
 
 export type AiRouteMode =
   | "faq_answer"
@@ -27,6 +29,7 @@ export type RoutedAiResponse = AiChatResponse & {
 const providers: Record<AiProviderName, AiProvider> = {
   openai: new OpenAIProvider(),
   gemini: new GeminiProvider(),
+  groq: new GroqProvider(),
   mock: new MockProvider(),
 };
 
@@ -35,27 +38,20 @@ function env(name: string, fallback = "") {
 }
 
 function providerOrder(mode: AiRouteMode): AiProviderName[] {
-  if (env("CHEM_SHASTRI_MOCK_MODE", env("MASTER_ALCHEM_MOCK_MODE")) === "true") return ["mock"];
-  const fast = env("CHEM_SHASTRI_FAST_PROVIDER", env("AI_FAST_PROVIDER", "gemini")) as AiProviderName;
-  const reasoning = env("CHEM_SHASTRI_REASONING_PROVIDER", env("AI_REASONING_PROVIDER", "openai")) as AiProviderName;
-  const fallback = fast === "gemini" ? "openai" : "gemini";
-  if (mode === "hard_reasoning") return [reasoning, fallback, "mock"];
-  const openAiFallbackEnabled =
-    process.env.CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED === "true" || process.env.OPENAI_FALLBACK_ENABLED === "true";
-  if (fallback === "openai" && !openAiFallbackEnabled) return [fast, "mock"];
-  return [fast, fallback, "mock"];
+  void mode;
+  return chemShastriProviderOrder();
 }
 
 function modelFor(provider: AiProviderName, mode: AiRouteMode) {
-  if (provider === "mock") return "mock-master-alchem";
+  if (provider === "gemini" || provider === "groq" || provider === "mock") {
+    return chemShastriModelFor(provider);
+  }
   if (provider === "openai") {
     return mode === "hard_reasoning"
       ? env("CHEM_SHASTRI_OPENAI_REASONING_MODEL", env("OPENAI_REASONING_MODEL", "gpt-4o"))
       : env("CHEM_SHASTRI_OPENAI_FAST_MODEL", env("OPENAI_FAST_MODEL", "gpt-4o-mini"));
   }
-  return mode === "hard_reasoning"
-    ? env("CHEM_SHASTRI_GEMINI_REASONING_MODEL", env("GEMINI_REASONING_MODEL", env("GEMINI_FAST_MODEL", "gemini-1.5-flash")))
-    : env("CHEM_SHASTRI_GEMINI_FAST_MODEL", env("GEMINI_FAST_MODEL", "gemini-1.5-flash"));
+  return chemShastriModelFor("gemini");
 }
 
 export function activeEmbeddingConfig() {

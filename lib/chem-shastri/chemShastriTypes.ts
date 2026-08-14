@@ -106,6 +106,7 @@ export type ChemShastriAdminSummary = {
   provider: {
     defaultProvider: string;
     geminiConfigured: boolean;
+    groqConfigured: boolean;
     openaiConfigured: boolean;
     fallbackEnabled: boolean;
   };

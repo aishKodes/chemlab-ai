@@ -1,12 +1,13 @@
 "use client";
 
 import { learningApi } from "@/lib/api/learningApi";
+import { createBrowserId } from "@/lib/client/browserId";
 
 function anonymousId() {
   const key = "chemlab_anonymous_id";
   const existing = window.localStorage.getItem(key);
   if (existing) return existing;
-  const next = crypto.randomUUID();
+  const next = createBrowserId("anon");
   window.localStorage.setItem(key, next);
   return next;
 }

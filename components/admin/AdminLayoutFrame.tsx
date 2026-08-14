@@ -54,7 +54,7 @@ export function AdminLayoutFrame({ children }: { children: ReactNode }) {
             <Link href="/admin" className="flex items-center gap-3 rounded-3xl bg-blue-600 p-3 text-white">
               <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white/20 font-black">C</span>
               <span>
-                <span className="block text-sm font-black">Chemlab Admin</span>
+                <span className="block text-sm font-black">chemlearning Admin</span>
                 <span className="block text-xs font-bold text-blue-100">Resource control room</span>
               </span>
             </Link>

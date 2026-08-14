@@ -67,8 +67,8 @@ function ProfileEditor() {
     <>
       <PageHeader
         eyebrow="Profile"
-        title="Tune your Chemlab account."
-        description="Keep the details simple. Chemlab uses them to recommend the right classes, resources, and hints."
+        title="Tune your chemlearning account."
+        description="Keep the details simple. chemlearning uses them to recommend the right classes, resources, and hints."
       />
       <Container className="pb-16">
         <Card className="mx-auto max-w-3xl">

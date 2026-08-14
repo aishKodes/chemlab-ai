@@ -61,7 +61,7 @@ export default function ClassDetailPage() {
       <PageHeader
         eyebrow={`Class ${classLevel}`}
         title={`${classInfo.display_name ?? `Class ${classLevel}`} resources`}
-        description={`Explore ${subject} through simulations, practice, and guided Chemlab resources.`}
+        description={`Explore ${subject} through simulations, practice, and guided chemlearning resources.`}
       />
       <Container className="space-y-6 pb-16">
         {error ? <ErrorState title="Using local class fallback" description={error} /> : null}
@@ -71,7 +71,7 @@ export default function ClassDetailPage() {
               <Badge tone="blue">{subject}</Badge>
               <h2 className="mt-3 text-2xl font-black text-slate-950">Class {classLevel} learning map</h2>
               <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-                More chapters, topic maps, and practice sets will appear here as Chemlab grows.
+                More chapters, topic maps, and practice sets will appear here as chemlearning grows.
               </p>
             </div>
             <GraduationCap className="h-12 w-12 text-blue-600" aria-hidden="true" />

@@ -53,7 +53,7 @@ export const redoxStoryFrames: RedoxStoryFrame[] = [
   {
     id: "start_game",
     assetRole: "redox_game_board_background",
-    speaker: "Chemlab",
+    speaker: "chemlearning",
     text: "Start the Electron Exchange Table and make the transfer visible.",
     voiceText: "Start the Electron Exchange Table and make the transfer visible.",
     cameraMotion: "none",

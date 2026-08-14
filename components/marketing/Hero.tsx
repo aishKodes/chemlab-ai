@@ -18,7 +18,7 @@ export function Hero() {
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border-2 border-white bg-white/80 px-4 py-2 text-sm font-black text-blue-700 shadow-lg">
                 <Rocket className="h-4 w-4" aria-hidden="true" />
-                Chemlab
+                chemlearning
               </div>
               <h1 className="chem-gradient-text mt-7 text-6xl font-black leading-[0.95] sm:text-7xl lg:text-8xl">
                 Chemistry, brought to life.

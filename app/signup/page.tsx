@@ -4,13 +4,13 @@ import { SignupForm } from "@/components/auth/SignupForm";
 
 export const metadata: Metadata = {
   title: "Sign up",
-  description: "Create a Chemlab student or teacher account.",
+  description: "Create a chemlearning student or teacher account.",
 };
 
 export default function SignupPage() {
   return (
     <AuthShell
-      eyebrow="Join Chemlab"
+      eyebrow="Join chemlearning"
       title="Start learning chemistry by doing."
       description="Students get a quest dashboard. Teachers get a resource space for classroom use."
     >

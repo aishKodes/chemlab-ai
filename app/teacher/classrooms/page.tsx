@@ -47,7 +47,7 @@ function TeacherClassrooms() {
 
   return (
     <>
-      <PageHeader eyebrow="Teacher Classrooms" title="Create spaces for your students." description="Classroom codes let students join your Chemlab assignments." />
+      <PageHeader eyebrow="Teacher Classrooms" title="Create spaces for your students." description="Classroom codes let students join your chemlearning assignments." />
       <Container className="space-y-6 pb-16">
         {error ? <ErrorState description={error} /> : null}
         <Card className="bg-gradient-to-br from-white via-emerald-50 to-cyan-50">

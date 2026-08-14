@@ -19,7 +19,7 @@ final class SimpleSmtpMailer
         $username = (string) ($config['username'] ?? '');
         $password = (string) ($config['password'] ?? '');
         $fromEmail = (string) ($config['from_email'] ?? '');
-        $fromName = (string) ($config['from_name'] ?? 'Chemlab');
+        $fromName = (string) ($config['from_name'] ?? 'chemlearning');
 
         if ($host === '' || $username === '' || $password === '' || $fromEmail === '') {
             throw new RuntimeException('SMTP is not configured.');
@@ -115,7 +115,7 @@ final class SimpleSmtpMailer
     private function formatMailbox(string $name, string $email): string
     {
         $safeName = trim(str_replace(['"', "\r", "\n"], '', $name));
-        return '"' . addcslashes($safeName === '' ? 'Chemlab' : $safeName, '"\\') . '" <' . $this->cleanAddress($email) . '>';
+        return '"' . addcslashes($safeName === '' ? 'chemlearning' : $safeName, '"\\') . '" <' . $this->cleanAddress($email) . '>';
     }
 
     private function encodeHeader(string $value): string

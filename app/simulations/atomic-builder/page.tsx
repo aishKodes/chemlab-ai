@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "Atomic Builder",
-  description: "Build atoms with protons, neutrons, and electrons in Chemlab.",
+  description: "Build atoms with protons, neutrons, and electrons in chemlearning.",
 };
 
 export default function AtomicBuilderPage() {
