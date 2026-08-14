@@ -72,6 +72,14 @@ Fill:
 - frontend URL
 - API URL
 
+During beta testing, keep this inside the `security` section:
+
+```php
+'beta_unlimited_auth' => true,
+```
+
+This disables throttling only for login and signup. Set it to `false` before the normal production launch; verification and password-reset endpoints remain rate limited either way.
+
 Generate a JWT secret locally:
 
 ```bash

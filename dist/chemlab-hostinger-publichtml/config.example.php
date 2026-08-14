@@ -17,6 +17,9 @@ return [
   'security' => [
     'jwt_secret' => 'CHANGE_THIS_TO_LONG_RANDOM_SECRET',
     'jwt_expires_days' => 30,
+    'beta_unlimited_auth' => true,
+    'auth_rate_limit_per_minute' => 10,
+    'rate_limit_per_minute' => 60,
   ],
   'mail' => [
     'host' => '',

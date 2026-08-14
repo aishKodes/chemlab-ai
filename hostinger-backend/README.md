@@ -88,7 +88,12 @@ ADMIN_EMAIL=
 ADMIN_PASSWORD=
 
 CORS_ALLOWED_ORIGINS=https://www.chemlearning.in,https://chemlearning.in,http://localhost:3000
+BETA_UNLIMITED_AUTH=true
+AUTH_RATE_LIMIT_PER_MINUTE=10
+RATE_LIMIT_PER_MINUTE=60
 ```
+
+`BETA_UNLIMITED_AUTH=true` bypasses throttling only for `/api/auth/login` and `/api/auth/signup`. Set it to `false` after beta testing to restore the configured authentication limit.
 
 Generate `JWT_SECRET`:
 
