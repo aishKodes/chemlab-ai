@@ -11,6 +11,7 @@ import { MoleculeBoard } from "@/components/labs/hydrocarbon-quest/MoleculeBoard
 import { NamingBlockInventory } from "@/components/labs/hydrocarbon-quest/NamingBlockInventory";
 import { NamingSlots } from "@/components/labs/hydrocarbon-quest/NamingSlots";
 import { QuestMap } from "@/components/labs/hydrocarbon-quest/QuestMap";
+import { QuestActionGuide, type QuestActionStep } from "@/components/labs/hydrocarbon-quest/QuestActionGuide";
 import { SuccessCutaway } from "@/components/labs/hydrocarbon-quest/SuccessCutaway";
 import { useHydrocarbonSound } from "@/components/labs/hydrocarbon-quest/soundHooks";
 import { hydrocarbonQuestOpening, hydrocarbonQuestLevels } from "@/components/labs/hydrocarbon-quest/hydrocarbonQuestData";
@@ -41,7 +42,7 @@ export function HydrocarbonNamingQuest() {
   const [slots, setSlots] = useState<SlotMap>(() => getInitialSlots(hydrocarbonQuestLevels[0]));
   const [failedSlotIds, setFailedSlotIds] = useState<string[]>([]);
   const [numberingOption, setNumberingOption] = useState<NumberingOption | undefined>();
-  const [feedback, setFeedback] = useState("Click the carbon atoms in order. We are finding the main family line first.");
+  const [feedback, setFeedback] = useState("Tap either end of the carbon chain, then follow each connected carbon.");
   const [warning, setWarning] = useState(false);
   const [xp, setXp] = useState(0);
   const [completedLevelIds, setCompletedLevelIds] = useState<string[]>([]);
@@ -55,6 +56,15 @@ export function HydrocarbonNamingQuest() {
   const canAssemble = chainComplete && numberingComplete;
   const usedBlockIds = Object.values(slots).filter(Boolean) as string[];
   const correctSlotCount = level.slots.filter((slot) => slots[slot.id] === level.correctSlotSolution[slot.id]).length;
+  const allSlotsFilled = level.slots.every((slot) => Boolean(slots[slot.id]));
+  const readyToCheck = canAssemble && allSlotsFilled;
+  const currentQuestStep: QuestActionStep = !chainComplete
+    ? "trace"
+    : !numberingComplete
+      ? "number"
+      : !allSlotsFilled
+        ? "build"
+        : "check";
   const progress = getLevelProgress({
     chainComplete,
     numberingComplete: chainComplete && numberingComplete,
@@ -91,7 +101,7 @@ export function HydrocarbonNamingQuest() {
     setSlots(getInitialSlots(nextLevel));
     setFailedSlotIds([]);
     setNumberingOption(undefined);
-    setFeedback(nextLevel.dialogue[0]?.text ?? "Trace the carbon family line.");
+    setFeedback(getLevelStartMessage(nextLevel));
     setWarning(false);
   }
 
@@ -125,9 +135,13 @@ export function HydrocarbonNamingQuest() {
       sound.play("click_atom");
       if (nextAtoms.length === level.correctChainSequence.length) {
         sound.play("correct_chain_completed");
-        setFeedback(level.chainCompleteMessage);
+        setFeedback(
+          level.numberingOptions
+            ? `${level.chainCompleteMessage} Choose one of the two numbering directions below the molecule.`
+            : `${level.chainCompleteMessage} The name blocks are now unlocked.`,
+        );
       } else {
-        setFeedback("Good. Keep following the main carbon family line.");
+        setFeedback(`Good. ${level.correctChainSequence.length - nextAtoms.length} carbon${level.correctChainSequence.length - nextAtoms.length === 1 ? "" : "s"} left in the parent chain.`);
       }
       return;
     }
@@ -168,17 +182,39 @@ export function HydrocarbonNamingQuest() {
 
   function handleSelectBlock(blockId: string) {
     if (!canAssemble || usedBlockIds.includes(blockId)) return;
-    sound.play("block_pick");
     trackSimulationEventClient(questSlug, "name_block_selected", { levelId: level.id, blockId });
+    const block = level.availableBlocks.find((item) => item.id === blockId);
+    const compatibleSlot = block ? getSingleCompatibleSlot(level, block.kind, block.label, slots) : undefined;
+    if (compatibleSlot) {
+      handlePlaceBlock(compatibleSlot, blockId);
+      return;
+    }
+    sound.play("block_pick");
     setSelectedBlockId(blockId);
+    setFeedback("Block selected. Tap the matching empty slot to place it.");
   }
 
   function handlePlaceBlock(slotId: string, blockId: string) {
     if (!canAssemble || usedBlockIds.includes(blockId)) return;
-    setSlots((current) => ({ ...current, [slotId]: blockId }));
+    const block = level.availableBlocks.find((item) => item.id === blockId);
+    if (level.correctSlotSolution[slotId] !== blockId) {
+      setFailedSlotIds([slotId]);
+      setSelectedBlockId(undefined);
+      setWarning(true);
+      sound.play("snap_wrong");
+      trackSimulationEventClient(questSlug, "wrong_name_block", { levelId: level.id, slotId, blockId });
+      setFeedback(getWrongBlockMessage(slotId, block?.label ?? "That block"));
+      return;
+    }
+
+    const nextSlots = { ...slots, [slotId]: blockId };
+    const remaining = level.slots.filter((slot) => !nextSlots[slot.id]).length;
+    setSlots(nextSlots);
     setFailedSlotIds((current) => current.filter((id) => id !== slotId));
     setSelectedBlockId(undefined);
+    setWarning(false);
     sound.play("block_snap_correct");
+    setFeedback(remaining === 0 ? "The full name is assembled. Press Check IUPAC name." : `Correct block. ${remaining} name part${remaining === 1 ? "" : "s"} left.`);
   }
 
   function handleRemoveBlock(slotId: string) {
@@ -197,7 +233,6 @@ export function HydrocarbonNamingQuest() {
       return;
     }
 
-    sound.play("name_forged");
     sound.play(level.successKind === "flame" ? "flame_whoosh" : "level_complete");
     setWarning(false);
     setFailedSlotIds([]);
@@ -264,12 +299,12 @@ export function HydrocarbonNamingQuest() {
   }
 
   return (
-    <section className="relative min-h-[calc(100svh-5rem)] overflow-hidden bg-slate-950 py-4 text-slate-950">
+    <section className="relative min-h-[calc(100svh-5rem)] overflow-hidden bg-slate-950 py-4 text-slate-950 xl:h-[calc(100svh-5rem)] xl:min-h-[46rem]">
       <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${puzzleScene.backgroundSrc})` }} />
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950/88 via-blue-950/50 to-amber-900/45" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(34,211,238,0.26),transparent_32%),radial-gradient(circle_at_82%_16%,rgba(250,204,21,0.20),transparent_28%)]" />
 
-      <div className="relative mx-auto flex min-h-[calc(100svh-6rem)] max-w-7xl flex-col gap-4 px-4">
+      <div className="relative mx-auto flex min-h-[calc(100svh-6rem)] max-w-7xl flex-col gap-4 px-4 xl:h-full xl:min-h-0">
         <div className="shrink-0">
           <LevelHUD
             level={level}
@@ -281,7 +316,7 @@ export function HydrocarbonNamingQuest() {
         </div>
 
         <div className="grid flex-1 min-h-0 gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(24rem,0.75fr)]">
-          <div className="min-h-[31rem] overflow-hidden rounded-[2rem] border-2 border-white/70 bg-white/22 p-2 shadow-2xl backdrop-blur-xl xl:min-h-0">
+          <div className="min-h-[31rem] overflow-hidden rounded-[2rem] border-2 border-white/70 bg-white/22 p-2 shadow-2xl backdrop-blur-xl xl:h-full xl:min-h-0">
             <MoleculeBoard
               level={level}
               selectedAtoms={selectedAtoms}
@@ -304,18 +339,14 @@ export function HydrocarbonNamingQuest() {
             />
 
             <div className="min-h-0 space-y-3 overflow-y-auto rounded-[1.6rem] border-2 border-white bg-white/90 p-3 shadow-2xl backdrop-blur-md">
-              <div className="rounded-[1.2rem] border border-cyan-100 bg-cyan-50 p-3">
-                <p className="text-xs font-black uppercase tracking-[0.14em] text-cyan-700">Current mission</p>
-                <p className="mt-1 text-sm font-bold leading-5 text-slate-700">
-                  1. Trace the parent carbon chain. 2. Pick numbering if it appears. 3. Build the IUPAC family name.
-                </p>
-              </div>
+              <QuestActionGuide level={level} currentStep={currentQuestStep} />
               <NamingBlockInventory
                 blocks={level.availableBlocks}
                 selectedBlockId={selectedBlockId}
                 usedBlockIds={usedBlockIds}
                 enabled={canAssemble}
                 onSelect={handleSelectBlock}
+                compact
               />
               <NamingSlots
                 level={level}
@@ -325,16 +356,17 @@ export function HydrocarbonNamingQuest() {
                 enabled={canAssemble}
                 onPlace={handlePlaceBlock}
                 onRemove={handleRemoveBlock}
+                compact
               />
             </div>
 
             <div className="grid gap-2 rounded-[1.4rem] border-2 border-white bg-white/90 p-3 shadow-xl backdrop-blur-md sm:grid-cols-2">
               <Button
                 onClick={handleSubmit}
-                disabled={!canAssemble}
+                disabled={!readyToCheck}
                 icon={<Send className="h-4 w-4" aria-hidden="true" />}
               >
-                Submit name
+                Check IUPAC name
               </Button>
               <Button
                 variant="secondary"
@@ -349,6 +381,44 @@ export function HydrocarbonNamingQuest() {
       </div>
     </section>
   );
+}
+
+function getLevelStartMessage(level: (typeof hydrocarbonQuestLevels)[number]) {
+  if (level.moduleId === "vip_double_bonds") {
+    return "Start at either end. Tap each connected carbon in the chain that contains the glowing double bond.";
+  }
+  if (level.moduleId === "cousin_branches") {
+    return "Tap the longest connected carbon chain from either end. Leave the hanging cousin out for now.";
+  }
+  return "Tap either end of the molecule, then follow each connected carbon in the parent chain.";
+}
+
+function getSingleCompatibleSlot(
+  level: (typeof hydrocarbonQuestLevels)[number],
+  kind: (typeof level.availableBlocks)[number]["kind"],
+  label: string,
+  slots: SlotMap,
+) {
+  let slotType = kind;
+  if (kind === "distractor") {
+    if (/^[\d,]+-?$/.test(label)) slotType = "rank";
+    else if (/methyl|ethyl/i.test(label)) slotType = "prefix";
+  }
+  const candidates = level.slots.filter((slot) => {
+    if (slots[slot.id]) return false;
+    if (slotType === "rank") return slot.id.toLowerCase().includes("rank") || slot.id === "rank";
+    if (slotType === "prefix") return slot.id.toLowerCase().includes("prefix") || slot.id === "prefix";
+    return slot.id === slotType;
+  });
+  return candidates.length === 1 ? candidates[0].id : undefined;
+}
+
+function getWrongBlockMessage(slotId: string, label: string) {
+  if (slotId === "root") return `${label} does not match the number of carbons in the parent chain. Count the blue chain again.`;
+  if (slotId === "suffix") return `${label} does not match the highlighted bond. A double bond needs ene; a single bond needs ane.`;
+  if (slotId.toLowerCase().includes("rank") || slotId === "rank") return `${label} is not the lowest locant shown by your numbering choice.`;
+  if (slotId.toLowerCase().includes("prefix") || slotId === "prefix") return `${label} does not name the highlighted side branch.`;
+  return `${label} does not fit this name slot. Use the molecule clue and try another block.`;
 }
 
 function FinalQuestScene({ totalXp, onRestart }: { totalXp: number; onRestart: () => void }) {

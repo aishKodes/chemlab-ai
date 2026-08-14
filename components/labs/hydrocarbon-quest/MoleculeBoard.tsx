@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, BadgeCheck, MousePointer2 } from "lucide-react";
+import { AlkeneTraceRail } from "@/components/labs/hydrocarbon-quest/AlkeneTraceRail";
 import { Molecule3DStage } from "@/components/labs/hydrocarbon-quest/3d/Molecule3DStage";
 import { GameBoardShell } from "@/components/labs/hydrocarbon-quest/GameBoardShell";
 import type { HydrocarbonLevel, NumberingOption } from "@/components/labs/hydrocarbon-quest/hydrocarbonQuestTypes";
@@ -45,7 +46,7 @@ export function MoleculeBoard({
         </div>
       </div>
 
-      <div className="relative min-h-[28rem] flex-1">
+      <div className="relative min-h-[20rem] flex-1 sm:min-h-[23rem]">
         <Molecule3DStage
           level={level}
           selectedAtoms={selectedAtoms}
@@ -56,24 +57,33 @@ export function MoleculeBoard({
         />
       </div>
 
-      <div className="relative flex flex-wrap items-center justify-end gap-3">
+      {level.moduleId === "vip_double_bonds" && !chainComplete ? (
+        <div className="relative -mt-16 mb-2 px-2 sm:-mt-14">
+          <AlkeneTraceRail level={level} selectedAtoms={selectedAtoms} wrongAtoms={wrongAtoms} onAtomClick={onAtomClick} />
+        </div>
+      ) : null}
+
+      <div className="relative flex min-h-14 flex-wrap items-center justify-end gap-3">
         {canChooseNumbering ? (
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-wrap gap-2 rounded-[1.2rem] border border-white bg-white/90 p-2 shadow-lg"
+            className="w-full rounded-[1.2rem] border-2 border-amber-200 bg-amber-50/95 p-3 shadow-lg"
           >
-            {level.numberingOptions?.map((option) => (
-              <Button
-                key={option.id}
-                size="sm"
-                variant={numberingOption?.id === option.id ? (option.correct ? "primary" : "danger") : "secondary"}
-                onClick={() => onNumberingSelect(option)}
-                icon={<ArrowRight className={cn("h-4 w-4", option.id === "right" && "rotate-180")} aria-hidden="true" />}
-              >
-                {option.label}
-              </Button>
-            ))}
+            <p className="mb-2 text-xs font-black uppercase tracking-[0.12em] text-amber-800">Choose the lower locant</p>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {level.numberingOptions?.map((option) => (
+                <Button
+                  key={option.id}
+                  size="sm"
+                  variant={numberingOption?.id === option.id ? (option.correct ? "primary" : "danger") : "secondary"}
+                  onClick={() => onNumberingSelect(option)}
+                  icon={<ArrowRight className={cn("h-4 w-4", option.id === "right" && "rotate-180")} aria-hidden="true" />}
+                >
+                  {option.label}
+                </Button>
+              ))}
+            </div>
           </motion.div>
         ) : chainComplete && !level.numberingOptions ? (
           <motion.div
@@ -94,7 +104,8 @@ function getStageInstruction(level: HydrocarbonLevel, chainComplete: boolean, nu
   if (!chainComplete) {
     if (level.moduleId === "senior_secondary_boss") return "Trace the parent chain. Ignore branches for a moment, but keep multiple bonds in view.";
     if (level.moduleId === "cousin_branches") return "Click the parent family line. The hanging carbon is a side cousin, not the main chain.";
-    return "Click each carbon in order so the family line lights up.";
+    if (level.moduleId === "vip_double_bonds") return "Tap connected carbons from either end. Keep the glowing C=C bond in the chain.";
+    return "Tap connected carbons from either end so the family line lights up.";
   }
   if ((level.moduleId === "senior_secondary_boss" || level.moduleId === "vip_double_bonds") && level.numberingOptions && !numberingOption?.correct) {
     return "This is the boss rule: the double bond must receive the lowest possible number before branches are named.";

@@ -16,6 +16,7 @@ const basePath = "/sounds/hydrocarbon-quest";
 export function SoundProvider({ children }: { children: ReactNode }) {
   const audioContextRef = useRef<AudioContext | null>(null);
   const availabilityRef = useRef(new Map<string, boolean>());
+  const lastPlayedAtRef = useRef(new Map<string, number>());
   const [muted, setMutedState] = useState(() => {
     if (typeof window === "undefined") return false;
     try {
@@ -51,11 +52,33 @@ export function SoundProvider({ children }: { children: ReactNode }) {
     (event: HydrocarbonSoundEvent) => {
       if (muted) return;
       const normalized = normalizeSoundEvent(event);
+      const now = typeof performance === "undefined" ? Date.now() : performance.now();
+      const minimumGap = normalized === "atom_hover" ? 140 : normalized === "atom_click" ? 45 : 80;
+      const lastPlayed = lastPlayedAtRef.current.get(normalized) ?? 0;
+      if (now - lastPlayed < minimumGap) return;
+      lastPlayedAtRef.current.set(normalized, now);
+
       const context = ensureContext();
       if (!context) return;
       const fileName = soundEventToFile[normalized];
-      void playLocalFileIfAvailable(fileName, availabilityRef.current);
+      const cachedAvailability = availabilityRef.current.get(fileName);
+
+      if (cachedAvailability === true) {
+        void playLocalFile(fileName).then((played) => {
+          if (!played) {
+            availabilityRef.current.set(fileName, false);
+            playProceduralSound(context, normalized);
+          }
+        });
+        return;
+      }
+
+      // Give immediate feedback on the first interaction. The background check
+      // decides whether later plays use a real file or the procedural fallback.
       playProceduralSound(context, normalized);
+      if (cachedAvailability === undefined) {
+        void checkSoundFile(fileName).then((exists) => availabilityRef.current.set(fileName, exists));
+      }
     },
     [ensureContext, muted],
   );
@@ -76,18 +99,15 @@ export function SoundProvider({ children }: { children: ReactNode }) {
   return <HydrocarbonSoundContext.Provider value={value}>{children}</HydrocarbonSoundContext.Provider>;
 }
 
-async function playLocalFileIfAvailable(fileName: string, availability: Map<string, boolean>) {
-  const cached = availability.get(fileName);
-  if (cached === false) return;
-  if (cached === undefined) {
-    const exists = await checkSoundFile(fileName);
-    availability.set(fileName, exists);
-    if (!exists) return;
-  }
-
+async function playLocalFile(fileName: string) {
   const audio = new Audio(`${basePath}/${fileName}`);
   audio.volume = getFileVolume(fileName);
-  await audio.play().catch(() => availability.set(fileName, false));
+  try {
+    await audio.play();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 async function checkSoundFile(fileName: string) {

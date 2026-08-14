@@ -14,7 +14,7 @@ export function ChemicalFormulaLabel({
       <p className="text-xs font-black uppercase tracking-[0.14em] text-cyan-700">3D molecule quest</p>
       <h3 className="text-lg font-black">{name}</h3>
       <p className="text-xs font-bold text-slate-600">
-        <span className="font-black text-blue-700">{formatChemicalFormula(formula)}</span> · rotate, trace, and name
+        <span className="font-black text-blue-700">{formatChemicalFormula(formula)}</span> · inspect, trace, and name
       </p>
     </div>
   );

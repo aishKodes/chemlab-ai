@@ -28,6 +28,8 @@ export function AparnaHintBox({
       initial={{ opacity: 0, x: 18 }}
       animate={warning ? { opacity: 1, x: [0, -8, 8, -4, 0] } : { opacity: 1, x: 0 }}
       transition={{ duration: warning ? 0.42 : 0.3 }}
+      role="status"
+      aria-live="polite"
       className={cn(
         "relative overflow-hidden rounded-[1.6rem] border-2 border-white bg-white/88 p-3 shadow-xl backdrop-blur-md",
         warning && "border-rose-200 bg-rose-50/92",

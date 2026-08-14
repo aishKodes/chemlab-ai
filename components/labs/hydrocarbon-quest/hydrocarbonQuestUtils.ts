@@ -1,11 +1,24 @@
 import type { HydrocarbonLevel, NamingBlock, SlotMap } from "@/components/labs/hydrocarbon-quest/hydrocarbonQuestTypes";
 
 export function isNextAtomCorrect(sequence: string[], clickedAtoms: string[], atomId: string) {
-  return sequence[clickedAtoms.length] === atomId;
+  if (clickedAtoms.length === 0) {
+    return atomId === sequence[0] || atomId === sequence.at(-1);
+  }
+
+  const tracingForward = clickedAtoms[0] === sequence[0];
+  const expectedIndex = tracingForward ? clickedAtoms.length : sequence.length - 1 - clickedAtoms.length;
+  return sequence[expectedIndex] === atomId;
 }
 
 export function isChainComplete(level: HydrocarbonLevel, clickedAtoms: string[]) {
-  return level.correctChainSequence.every((atomId, index) => clickedAtoms[index] === atomId);
+  return isSamePath(level.correctChainSequence, clickedAtoms);
+}
+
+export function isSamePath(sequence: string[], clickedAtoms: string[]) {
+  if (sequence.length !== clickedAtoms.length) return false;
+  const forward = sequence.every((atomId, index) => clickedAtoms[index] === atomId);
+  const reverse = sequence.every((atomId, index) => clickedAtoms[sequence.length - 1 - index] === atomId);
+  return forward || reverse;
 }
 
 export function checkSlotSolution(level: HydrocarbonLevel, slots: SlotMap) {

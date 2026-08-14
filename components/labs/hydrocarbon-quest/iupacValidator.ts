@@ -1,4 +1,5 @@
 import type { HydrocarbonLevel, NumberingOption, SlotMap } from "@/components/labs/hydrocarbon-quest/hydrocarbonQuestTypes";
+import { isSamePath } from "@/components/labs/hydrocarbon-quest/hydrocarbonQuestUtils";
 
 export type IupacValidationResult =
   | {
@@ -33,7 +34,7 @@ export function validateIupacAttempt({
     };
   }
 
-  const chainCorrect = level.correctChainSequence.every((atomId, index) => selectedAtoms[index] === atomId);
+  const chainCorrect = isSamePath(level.correctChainSequence, selectedAtoms);
   if (!chainCorrect) {
     const traceTask = level.tasks.find((task) => task.type === "trace_main_chain");
     return {

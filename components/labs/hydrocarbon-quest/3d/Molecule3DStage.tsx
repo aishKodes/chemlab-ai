@@ -2,7 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Environment, Html, Stars } from "@react-three/drei";
-import { Crosshair, Eye, FlaskConical, RotateCcw, Ruler, Tag, Wind } from "lucide-react";
+import { Crosshair, Eye, FlaskConical, RotateCcw, Ruler, ScanSearch, Tag, Wind } from "lucide-react";
 import type { ReactNode } from "react";
 import { Suspense, useMemo, useState } from "react";
 import { BallAndStickMolecule } from "@/components/labs/hydrocarbon-quest/3d/BallAndStickMolecule";
@@ -28,6 +28,7 @@ export function Molecule3DStage({
   const [showLabels, setShowLabels] = useState(true);
   const [showMeasurements, setShowMeasurements] = useState(false);
   const [autoRotate, setAutoRotate] = useState(false);
+  const [exploreMode, setExploreMode] = useState(false);
   const [cameraResetKey, setCameraResetKey] = useState(0);
   const built = useMemo(() => buildMolecule3D(level), [level]);
   const sound = useHydrocarbonSound();
@@ -50,7 +51,7 @@ export function Molecule3DStage({
   }
 
   return (
-    <section className={cn("relative h-full min-h-[26rem] overflow-hidden rounded-[1.6rem] border border-white/70 bg-slate-950 shadow-2xl", className)}>
+    <section className={cn("relative h-full min-h-[20rem] overflow-hidden rounded-[1.6rem] border border-white/70 bg-slate-950 shadow-2xl sm:min-h-[23rem]", className)}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_16%,rgba(56,189,248,0.24),transparent_32%),radial-gradient(circle_at_76%_20%,rgba(251,191,36,0.18),transparent_28%),linear-gradient(135deg,#020617,#0f172a_48%,#172554)]" />
       <Canvas
         shadows
@@ -82,7 +83,7 @@ export function Molecule3DStage({
             <meshStandardMaterial color="#0f172a" transparent opacity={0.55} roughness={0.9} />
           </mesh>
           <Environment preset="city" />
-          <MoleculeCameraControls autoRotate={autoRotate} resetKey={cameraResetKey} />
+          <MoleculeCameraControls autoRotate={autoRotate} resetKey={cameraResetKey} exploreMode={exploreMode} />
         </Suspense>
       </Canvas>
 
@@ -94,18 +95,36 @@ export function Molecule3DStage({
         <MoleculeLegend compact />
       </div>
 
-      <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-wrap items-center justify-between gap-2">
-        <div className="rounded-full border border-white/20 bg-slate-950/78 px-3 py-2 text-xs font-bold text-cyan-50 shadow-lg backdrop-blur-md">
-          Model view: particles are enlarged so you can see the shape.
+      <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-wrap items-end justify-between gap-2">
+        <div className="rounded-full border border-white/20 bg-slate-950/78 px-3 py-2 text-[11px] font-bold text-cyan-50 shadow-lg backdrop-blur-md">
+          {exploreMode ? "Explore view: drag to rotate and scroll to zoom." : "Game view: camera locked so every carbon is easy to tap."}
         </div>
         <div className="flex max-w-full flex-wrap gap-2 rounded-2xl border border-white/30 bg-slate-950/70 p-1.5 shadow-xl backdrop-blur-md">
-          <ToggleButton active={labelMode === "clean"} onClick={() => applyLabelMode("clean")} label="Clean View" icon={<Eye className="h-3.5 w-3.5" aria-hidden="true" />} />
-          <ToggleButton active={labelMode === "learning"} onClick={() => applyLabelMode("learning")} label="Learning View" icon={<Tag className="h-3.5 w-3.5" aria-hidden="true" />} />
-          <ToggleButton active={labelMode === "measurement"} onClick={() => applyLabelMode("measurement")} label="Measurement View" icon={<Ruler className="h-3.5 w-3.5" aria-hidden="true" />} />
           <ToggleButton active={showHydrogens} onClick={() => setShowHydrogens((value) => !value)} label="H atoms" icon={<FlaskConical className="h-3.5 w-3.5" aria-hidden="true" />} />
-          <ToggleButton active={autoRotate} onClick={() => setAutoRotate((value) => !value)} label="Auto rotate" icon={<Wind className="h-3.5 w-3.5" aria-hidden="true" />} />
-          <ToggleButton active={false} onClick={resetCamera} label="Reset Camera" icon={<RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />} />
-          <ToggleButton active={false} onClick={resetCamera} label="Focus main chain" icon={<Crosshair className="h-3.5 w-3.5" aria-hidden="true" />} />
+          <ToggleButton
+            active={exploreMode}
+            onClick={() => {
+              setExploreMode((value) => {
+                if (value) {
+                  setAutoRotate(false);
+                  setCameraResetKey((key) => key + 1);
+                }
+                return !value;
+              });
+            }}
+            label={exploreMode ? "Back to game" : "Explore 3D"}
+            icon={<ScanSearch className="h-3.5 w-3.5" aria-hidden="true" />}
+          />
+          {exploreMode ? (
+            <>
+              <ToggleButton active={labelMode === "clean"} onClick={() => applyLabelMode("clean")} label="Clean" icon={<Eye className="h-3.5 w-3.5" aria-hidden="true" />} />
+              <ToggleButton active={labelMode === "learning"} onClick={() => applyLabelMode("learning")} label="Labels" icon={<Tag className="h-3.5 w-3.5" aria-hidden="true" />} />
+              <ToggleButton active={labelMode === "measurement"} onClick={() => applyLabelMode("measurement")} label="Measure" icon={<Ruler className="h-3.5 w-3.5" aria-hidden="true" />} />
+              <ToggleButton active={autoRotate} onClick={() => setAutoRotate((value) => !value)} label="Auto rotate" icon={<Wind className="h-3.5 w-3.5" aria-hidden="true" />} />
+              <ToggleButton active={false} onClick={resetCamera} label="Reset" icon={<RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />} />
+              <ToggleButton active={false} onClick={resetCamera} label="Focus" icon={<Crosshair className="h-3.5 w-3.5" aria-hidden="true" />} />
+            </>
+          ) : null}
         </div>
       </div>
 

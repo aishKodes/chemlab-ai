@@ -28,7 +28,7 @@ export function NamingBlockInventory({
         <h2 id="naming-blocks" className="text-sm font-black text-slate-950">
           Name blocks
         </h2>
-        {compact ? null : <p className="text-xs font-bold text-slate-600">Drag or tap, then choose a slot.</p>}
+        {compact ? null : <p className="text-xs font-bold text-slate-600">Tap once to place. Dragging also works.</p>}
       </div>
       <div className={cn("flex flex-wrap gap-2", compact ? "mt-2" : "mt-3")}>
         {blocks.map((block) => {

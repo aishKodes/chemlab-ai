@@ -99,6 +99,13 @@ const rootBlocks: NamingBlock[] = [
   "Dec",
 ].map((label) => ({ id: label.toLowerCase(), label, kind: "root" as const }));
 
+function rootChoiceBlocks(root: string) {
+  const index = rootBlocks.findIndex((block) => block.label === root);
+  if (index <= 0) return rootBlocks.slice(0, 3);
+  if (index >= rootBlocks.length - 1) return rootBlocks.slice(-3);
+  return rootBlocks.slice(index - 1, index + 2);
+}
+
 const suffixBlocks: NamingBlock[] = [
   { id: "ane", label: "ane", kind: "suffix" },
   { id: "ene", label: "ene", kind: "suffix" },
@@ -184,7 +191,7 @@ function alkaneLevel(
     ],
     correctChainSequence: sequence,
     chainCompleteMessage: `${carbonCount} carbon${carbonCount === 1 ? "" : "s"} locked. The middle name is ${root}.`,
-    availableBlocks: [...rootBlocks, ...suffixBlocks],
+    availableBlocks: [...rootChoiceBlocks(root), ...suffixBlocks],
     slots: [rootSlot, suffixSlot],
     correctSlotSolution: { root: root.toLowerCase(), suffix: "ane" },
     dialogue: [{ speaker: "Aparna", pose: "pointing", text: "Trace the parent chain first. The root word comes from the carbon count." }],
@@ -241,7 +248,7 @@ function methylLevel(
       { id: "wronglocant", label: methylPositions[0] === 2 ? "4-" : "2-", kind: "distractor" },
       { id: "methyl", label: "Methyl", kind: "prefix" },
       { id: "ethyl", label: "Ethyl", kind: "distractor" },
-      ...rootBlocks,
+      ...rootChoiceBlocks(root),
       ...suffixBlocks,
     ],
     slots: [
@@ -276,7 +283,7 @@ function dimethylLevel(
       { id: locant.replaceAll(/[,-]/g, ""), label: locant, kind: "rank" },
       { id: "dimethyl", label: "Dimethyl", kind: "prefix" },
       { id: "methyl", label: "Methyl", kind: "distractor" },
-      ...rootBlocks,
+      ...rootChoiceBlocks(root),
       ...suffixBlocks,
     ],
     correctSlotSolution: { rank: locant.replaceAll(/[,-]/g, ""), prefix: "dimethyl", root: root.toLowerCase(), suffix: "ane" },
@@ -287,6 +294,10 @@ function dimethylLevel(
 function alkeneLevel(number: number, targetName: string, formula: string, root: string, carbonCount: number, doubleBondStart: number, learningGoal: string): HydrocarbonLevel {
   const id = `level_${String(number).padStart(3, "0")}_${targetName.toLowerCase().replaceAll(/[^a-z0-9]+/g, "_")}`;
   const sequence = Array.from({ length: carbonCount }, (_, index) => `c${index + 1}`);
+  // Ethene and propene have only one distinct double-bond position, so a
+  // locant adds no information. The numbering puzzle begins with butene.
+  const needsDoubleBondLocant = carbonCount >= 4;
+  const namingBlocks = needsDoubleBondLocant ? [root, String(doubleBondStart), "ene"] : [root, "ene"];
   return {
     id,
     moduleId: "vip_double_bonds",
@@ -301,31 +312,45 @@ function alkeneLevel(number: number, targetName: string, formula: string, root: 
     molecule: alkeneMolecule(id, carbonCount, doubleBondStart),
     tasks: [
       { type: "trace_main_chain", correctSequence: sequence, wrongHint: "Stay on the carbon chain that contains the double bond." },
-      { type: "choose_numbering_direction", correctDirection: "left_to_right", wrongHint: "The double bond must get the lowest possible number." },
-      { type: "assemble_name", availableBlocks: [root, String(doubleBondStart), "ene"], correctBlocks: [root, String(doubleBondStart), "ene"] },
+      ...(needsDoubleBondLocant
+        ? [{ type: "choose_numbering_direction" as const, correctDirection: "left_to_right" as const, wrongHint: "The double bond must get the lowest possible number." }]
+        : []),
+      { type: "assemble_name", availableBlocks: namingBlocks, correctBlocks: namingBlocks },
     ],
     correctChainSequence: sequence,
-    chainCompleteMessage: `${carbonCount} carbons give ${root}. Now serve the double bond first.`,
-    numberingOptions: [
-      { id: "left", label: "Count from double-bond side", doubleBondPosition: doubleBondStart, correct: true },
-      { id: "right", label: "Count from far end", doubleBondPosition: carbonCount - doubleBondStart, correct: false },
-    ],
-    availableBlocks: [
-      { id: "one", label: "1", kind: "rank" },
-      { id: "two", label: "2", kind: "rank" },
-      ...rootBlocks,
-      ...suffixBlocks,
-    ],
-    slots: [
-      rootSlot,
-      { id: "rank", label: "Double Bond Seat", helper: "Where does the double bond begin?" },
-      suffixSlot,
-    ],
-    correctSlotSolution: { root: root.toLowerCase(), rank: String(doubleBondStart) === "1" ? "one" : "two", suffix: "ene" },
-    dialogue: [{ speaker: "Aparna", pose: "pointing", text: "The double bond is our VIP guest. It must get the lowest seat number." }],
+    chainCompleteMessage: needsDoubleBondLocant
+      ? `${carbonCount} carbons give ${root}. Now number from the end nearest the double bond.`
+      : `${carbonCount} carbons give ${root}. There is only one possible double-bond position, so no number is needed.`,
+    numberingOptions: needsDoubleBondLocant
+      ? [
+          { id: "left", label: `Left to right: double bond at ${doubleBondStart}`, doubleBondPosition: doubleBondStart, correct: true },
+          { id: "right", label: `Right to left: double bond at ${carbonCount - doubleBondStart}`, doubleBondPosition: carbonCount - doubleBondStart, correct: false },
+        ]
+      : undefined,
+    availableBlocks: needsDoubleBondLocant
+      ? [
+          { id: "one", label: "1", kind: "rank" },
+          { id: "two", label: "2", kind: "rank" },
+          ...rootChoiceBlocks(root),
+          ...suffixBlocks,
+        ]
+      : [...rootChoiceBlocks(root), ...suffixBlocks],
+    slots: needsDoubleBondLocant
+      ? [
+          rootSlot,
+          { id: "rank", label: "Double Bond Seat", helper: "Where does the double bond begin?" },
+          suffixSlot,
+        ]
+      : [rootSlot, suffixSlot],
+    correctSlotSolution: needsDoubleBondLocant
+      ? { root: root.toLowerCase(), rank: String(doubleBondStart) === "1" ? "one" : "two", suffix: "ene" }
+      : { root: root.toLowerCase(), suffix: "ene" },
+    dialogue: [{ speaker: "Aparna", pose: "pointing", text: needsDoubleBondLocant ? "The double bond is our VIP guest. It must get the lowest seat number." : "A double bond gives the surname ene. Trace the carbon chain, then build the name." }],
     successMessage: `${targetName} is correct. The VIP double bond got the right seat.`,
     successKind: "badge",
-    explanation: `${targetName} has ${carbonCount} carbons and a double bond starting at carbon ${doubleBondStart}, so the suffix is ene.`,
+    explanation: needsDoubleBondLocant
+      ? `${targetName} has ${carbonCount} carbons. Numbering from the nearer end puts the double bond at carbon ${doubleBondStart}, and ene marks the double bond.`
+      : `${targetName} has ${carbonCount} carbons and only one distinct place for its double bond, so the name needs the root ${root} and the suffix ene without a locant.`,
     previewAssetRole: "level_3_visual_reference",
   };
 }
@@ -355,7 +380,7 @@ function alkyneLevel(number: number, targetName: string, formula: string, root: 
     ],
     correctChainSequence: sequence,
     chainCompleteMessage: `${carbonCount} carbons give ${root}. A triple bond gives the surname yne.`,
-    availableBlocks: [...rootBlocks, ...suffixBlocks],
+    availableBlocks: [...rootChoiceBlocks(root), ...suffixBlocks],
     slots: [rootSlot, suffixSlot],
     correctSlotSolution: { root: root.toLowerCase(), suffix: "yne" },
     dialogue: [{ speaker: "Aparna", pose: "pointing", text: "The triple bond makes this molecule linear, like a straight glowing trail." }],

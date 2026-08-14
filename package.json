@@ -26,6 +26,7 @@
     "test:electrochemistry-calculations": "tsx scripts/test-electrochemistry-calculations.ts",
     "test:molecule-library": "tsx scripts/test-molecule-library.ts",
     "test:si-units-battle": "tsx scripts/test-si-units-battle.ts",
+    "test:hydrocarbon-quest": "tsx scripts/test-hydrocarbon-quest.ts",
     "test:auth-endpoints": "tsx scripts/test-auth-endpoints.ts"
   },
   "dependencies": {
