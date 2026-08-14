@@ -3,7 +3,7 @@
 return [
   'app' => [
     'env' => 'production',
-    'name' => 'Chemlab',
+    'name' => 'chemlearning',
     'frontend_url' => 'https://www.chemlearning.in',
     'api_url' => 'https://api.chemlearning.in',
   ],
@@ -25,7 +25,7 @@ return [
     'username' => '',
     'password' => '',
     'from_email' => '',
-    'from_name' => 'Chemlab',
+    'from_name' => 'chemlearning',
   ],
   'admin' => [
     'name' => '',
