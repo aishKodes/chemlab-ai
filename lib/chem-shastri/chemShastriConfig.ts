@@ -1,5 +1,6 @@
 import type { ChemShastriAdminSummary } from "./chemShastriTypes";
 import { getBudgetSnapshot } from "@/lib/ai/budgetGuard";
+import { openaiFallbackEnabled } from "./providers/providerRouter";
 
 function boolEnv(name: string, fallback = false) {
   const value = process.env[name];
@@ -13,27 +14,74 @@ function numEnv(name: string, fallback: number) {
 }
 
 export const chemShastriConfig = {
-  enabled: () => process.env.CHEM_SHASTRI_ENABLED !== "false" && process.env.MASTER_ALCHEM_ENABLED !== "false",
-  mockMode: () => boolEnv("CHEM_SHASTRI_MOCK_MODE", boolEnv("MASTER_ALCHEM_MOCK_MODE", false)),
-  defaultProvider: () => (process.env.GEMINI_API_KEY ? "gemini" : process.env.GROQ_API_KEY ? "groq" : "curated"),
-  fastProvider: () => process.env.CHEM_SHASTRI_FAST_PROVIDER || process.env.AI_FAST_PROVIDER || "gemini",
-  reasoningProvider: () => process.env.CHEM_SHASTRI_REASONING_PROVIDER || process.env.AI_REASONING_PROVIDER || "openai",
+  enabled: () =>
+    process.env.CHEM_SHASTRI_ENABLED !== "false" &&
+    process.env.MASTER_ALCHEM_ENABLED !== "false",
+  mockMode: () =>
+    boolEnv(
+      "CHEM_SHASTRI_MOCK_MODE",
+      boolEnv("MASTER_ALCHEM_MOCK_MODE", false),
+    ),
+  defaultProvider: () =>
+    process.env.GEMINI_API_KEY
+      ? "gemini"
+      : process.env.GROQ_API_KEY
+        ? "groq"
+        : openaiFallbackEnabled()
+          ? "openai"
+          : "curated",
+  fastProvider: () =>
+    process.env.CHEM_SHASTRI_FAST_PROVIDER ||
+    process.env.AI_FAST_PROVIDER ||
+    "gemini",
+  reasoningProvider: () =>
+    process.env.CHEM_SHASTRI_REASONING_PROVIDER ||
+    process.env.AI_REASONING_PROVIDER ||
+    "openai",
   geminiConfigured: () => Boolean(process.env.GEMINI_API_KEY),
   groqConfigured: () => Boolean(process.env.GROQ_API_KEY),
   openaiConfigured: () => Boolean(process.env.OPENAI_API_KEY),
-  openaiFallbackEnabled: () => boolEnv("CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED", boolEnv("OPENAI_FALLBACK_ENABLED", false)),
-  dailyBudgetInr: () => numEnv("CHEM_SHASTRI_DAILY_BUDGET_INR", numEnv("DAILY_AI_BUDGET_INR", 50)),
-  retrievalEnabled: () => boolEnv("CHEM_SHASTRI_RETRIEVAL_ENABLED", boolEnv("RAG_ENABLED", true)),
+  openaiFallbackEnabled: () =>
+    boolEnv(
+      "CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED",
+      boolEnv("OPENAI_FALLBACK_ENABLED", false),
+    ),
+  dailyBudgetInr: () =>
+    numEnv("CHEM_SHASTRI_DAILY_BUDGET_INR", numEnv("DAILY_AI_BUDGET_INR", 50)),
+  retrievalEnabled: () =>
+    boolEnv("CHEM_SHASTRI_RETRIEVAL_ENABLED", boolEnv("RAG_ENABLED", true)),
   ncertOnly: () => boolEnv("CHEM_SHASTRI_NCERT_ONLY", true),
-  keywordSearchEnabled: () => boolEnv("CHEM_SHASTRI_KEYWORD_SEARCH", boolEnv("RAG_USE_KEYWORD_SEARCH", true)),
-  vectorSearchEnabled: () => boolEnv("CHEM_SHASTRI_VECTOR_SEARCH", boolEnv("RAG_USE_VECTOR_SEARCH", false)),
-  retrievalTopK: () => numEnv("CHEM_SHASTRI_RETRIEVAL_TOP_K", numEnv("RAG_TOP_K", 6)),
-  strictSafety: () => process.env.CHEM_SHASTRI_SAFETY_MODE === "strict" || process.env.CHEMISTRY_SAFETY_MODE === "strict",
+  keywordSearchEnabled: () =>
+    boolEnv(
+      "CHEM_SHASTRI_KEYWORD_SEARCH",
+      boolEnv("RAG_USE_KEYWORD_SEARCH", true),
+    ),
+  vectorSearchEnabled: () =>
+    boolEnv(
+      "CHEM_SHASTRI_VECTOR_SEARCH",
+      boolEnv("RAG_USE_VECTOR_SEARCH", false),
+    ),
+  retrievalTopK: () =>
+    numEnv("CHEM_SHASTRI_RETRIEVAL_TOP_K", numEnv("RAG_TOP_K", 6)),
+  strictSafety: () =>
+    process.env.CHEM_SHASTRI_SAFETY_MODE === "strict" ||
+    process.env.CHEMISTRY_SAFETY_MODE === "strict",
   unsafeChemistryAllowed: () =>
-    boolEnv("CHEM_SHASTRI_ALLOW_UNSAFE_CHEMISTRY_INSTRUCTIONS", boolEnv("ALLOW_UNSAFE_CHEMISTRY_INSTRUCTIONS", false)),
-  voiceAutoSpeakEnabled: () => boolEnv("CHEM_SHASTRI_VOICE_AUTO_SPEAK", boolEnv("VOICE_AUTO_SPEAK", false)),
+    boolEnv(
+      "CHEM_SHASTRI_ALLOW_UNSAFE_CHEMISTRY_INSTRUCTIONS",
+      boolEnv("ALLOW_UNSAFE_CHEMISTRY_INSTRUCTIONS", false),
+    ),
+  voiceAutoSpeakEnabled: () =>
+    boolEnv(
+      "CHEM_SHASTRI_VOICE_AUTO_SPEAK",
+      boolEnv("VOICE_AUTO_SPEAK", false),
+    ),
   hostingerBaseUrl: () =>
-    (process.env.BACKEND_INTERNAL_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "https://api.chemlearning.in").replace(/\/+$/, ""),
+    (
+      process.env.BACKEND_INTERNAL_API_URL ||
+      process.env.NEXT_PUBLIC_BACKEND_URL ||
+      "https://api.chemlearning.in"
+    ).replace(/\/+$/, ""),
 };
 
 export async function getChemShastriAdminSummary(): Promise<ChemShastriAdminSummary> {

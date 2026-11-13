@@ -37,6 +37,7 @@ import type {
 } from "./chemShastriTypes";
 import { answerMasterAlchem } from "@/lib/master-alchem/masterAlchemService";
 import type { MasterAlchemRequest } from "@/lib/master-alchem/types";
+import { openaiFallbackEnabled } from "./providers/providerRouter";
 
 function makeConversationId() {
   return (
@@ -97,7 +98,8 @@ function localResponse({
     adminSignals: {
       providerConfigured:
         chemShastriConfig.geminiConfigured() ||
-        chemShastriConfig.groqConfigured(),
+        chemShastriConfig.groqConfigured() ||
+        openaiFallbackEnabled(),
       budgetBlocked: false,
       cacheHit: source === "cache",
       retrievalCount: suggestedResources.length,
@@ -248,7 +250,9 @@ export async function answerChemShastri(
     () => ({ suggestions, notes: "" }),
   );
   const providerConfigured =
-    chemShastriConfig.geminiConfigured() || chemShastriConfig.groqConfigured();
+    chemShastriConfig.geminiConfigured() ||
+    chemShastriConfig.groqConfigured() ||
+    openaiFallbackEnabled();
   if (
     chemShastriConfig.ncertOnly() &&
     !providerConfigured &&
@@ -360,7 +364,8 @@ export async function answerChemShastri(
     adminSignals: {
       providerConfigured:
         chemShastriConfig.geminiConfigured() ||
-        chemShastriConfig.groqConfigured(),
+        chemShastriConfig.groqConfigured() ||
+        openaiFallbackEnabled(),
       budgetBlocked: masterResponse.provider === "budget_guard",
       cacheHit: masterResponse.cacheHit,
       retrievalCount: retrieval.suggestions.length,

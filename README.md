@@ -558,7 +558,7 @@ The third-party simulation is **CC BY-NC 4.0**, not unrestricted commercial-use 
 
 ### Assistant Reliability
 
-Chem-Shastri separates the student's question from system context, carries bounded conversation history, and isolates caches by language and context. API keys belong only in server environment variables (`GEMINI_API_KEY` or `GROQ_API_KEY`). A key must also have generation quota/credits; listing models alone does not validate generation. Missing quota falls back to local study notes. See [the polish QA record](docs/panel-demo-polish-qa.md) for current verification limits.
+Chem-Shastri separates the student's question from system context, carries bounded conversation history, and isolates caches by language and context. API keys belong only in server environment variables (`GEMINI_API_KEY`, `GROQ_API_KEY`, or `OPENAI_API_KEY`). OpenAI is opt-in: set `CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED=true` (or the legacy `OPENAI_FALLBACK_ENABLED=true`) to place it after configured Gemini/Groq providers, within the existing budget guard. An explicit false remains disabled. A key must also have generation quota/credits; listing models alone does not validate generation. Missing quota falls back to local study notes. See [the polish QA record](docs/panel-demo-polish-qa.md) for current verification limits.
 
 Additional regression: `npx tsx scripts/test-chem-shastri-cache.ts`.
 

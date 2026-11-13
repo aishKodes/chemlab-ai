@@ -13,7 +13,9 @@
 
 On 2026-11-13, the configured Gemini key successfully listed models but generation returned HTTP 402, RESOURCE_EXHAUSTED, with prepayment credits depleted. No billing changes were made. A recognised key is not proof that generation is available. Restore provider credits or supply a funded Gemini/Groq key in Vercel's server environment, then redeploy and run a generation smoke test. Do not put keys in NEXT_PUBLIC variables.
 
-Local curated answers, safety guidance, simulations, and the chat workspace remain usable. Arbitrary cloud questions and arbitrary translations cannot be described as verified until the provider account is funded. The panel deck must not claim otherwise.
+The project also contains an OpenAI key. A bounded gpt-4o-mini generation smoke test succeeded, but OPENAI_FALLBACK_ENABLED is explicitly false. The optional OpenAI path is now wired into the existing provider router and budget guard. Enable CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED=true in Vercel, keep OPENAI_API_KEY server-only, and redeploy to activate it. An explicit false continues to be respected. No billing changes or automatic opt-in were made. Never expose keys in NEXT_PUBLIC variables.
+
+Local curated answers, safety guidance, simulations, and the chat workspace remain usable. Arbitrary cloud questions/translations in the deployed UI require the provider flag and key to be configured. The panel deck must distinguish the successful bounded provider test from live deployment configuration.
 
 ## Third-party resource
 

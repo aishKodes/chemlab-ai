@@ -10,9 +10,15 @@ const original = {
   geminiModel: process.env.GEMINI_MODEL,
   groqModel: process.env.GROQ_MODEL,
   mockMode: process.env.CHEM_SHASTRI_MOCK_MODE,
+  openaiKey: process.env.OPENAI_API_KEY,
+  openaiFlag: process.env.CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED,
+  legacyOpenaiFlag: process.env.OPENAI_FALLBACK_ENABLED,
 };
 
 function setKeys(gemini?: string, groq?: string) {
+  delete process.env.OPENAI_API_KEY;
+  delete process.env.CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED;
+  delete process.env.OPENAI_FALLBACK_ENABLED;
   if (gemini) process.env.GEMINI_API_KEY = gemini;
   else delete process.env.GEMINI_API_KEY;
   if (groq) process.env.GROQ_API_KEY = groq;
@@ -23,7 +29,12 @@ function setKeys(gemini?: string, groq?: string) {
 const cases = [
   { name: "Gemini only", gemini: "test", expected: ["gemini", "mock"] },
   { name: "Groq only", groq: "test", expected: ["groq", "mock"] },
-  { name: "Both", gemini: "test", groq: "test", expected: ["gemini", "groq", "mock"] },
+  {
+    name: "Both",
+    gemini: "test",
+    groq: "test",
+    expected: ["gemini", "groq", "mock"],
+  },
   { name: "Neither", expected: ["mock"] },
 ];
 
@@ -36,6 +47,23 @@ for (const item of cases) {
   if (!pass) failed = true;
 }
 
+setKeys("test");
+process.env.OPENAI_API_KEY = "test";
+process.env.CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED = "false";
+const disabledPass =
+  JSON.stringify(chemShastriProviderOrder()) ===
+  JSON.stringify(["gemini", "mock"]);
+process.env.CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED = "true";
+const enabledPass =
+  JSON.stringify(chemShastriProviderOrder()) ===
+  JSON.stringify(["gemini", "openai", "mock"]);
+delete process.env.GEMINI_API_KEY;
+const openaiOnlyPass =
+  JSON.stringify(chemShastriProviderOrder()) ===
+  JSON.stringify(["openai", "mock"]);
+console.log(JSON.stringify({ disabledPass, enabledPass, openaiOnlyPass }));
+if (!disabledPass || !enabledPass || !openaiOnlyPass) failed = true;
+
 process.env.GEMINI_MODEL = "gemini-test-model";
 process.env.GROQ_MODEL = "groq-test-model";
 const modelOverridesPass =
@@ -43,7 +71,8 @@ const modelOverridesPass =
   chemShastriModelFor("groq") === "groq-test-model";
 const hindi = directChemistryAnswer("What is oxidation?", "hi") ?? "";
 const bengali = directChemistryAnswer("What is oxidation?", "bn") ?? "";
-const languagePass = /LEO/.test(hindi) && /LEO/.test(bengali) && hindi !== bengali;
+const languagePass =
+  /LEO/.test(hindi) && /LEO/.test(bengali) && hindi !== bengali;
 console.log(JSON.stringify({ modelOverridesPass, languagePass }));
 if (!modelOverridesPass || !languagePass) failed = true;
 
@@ -56,5 +85,8 @@ restore("GROQ_API_KEY", original.groqKey);
 restore("GEMINI_MODEL", original.geminiModel);
 restore("GROQ_MODEL", original.groqModel);
 restore("CHEM_SHASTRI_MOCK_MODE", original.mockMode);
+restore("OPENAI_API_KEY", original.openaiKey);
+restore("CHEM_SHASTRI_OPENAI_FALLBACK_ENABLED", original.openaiFlag);
+restore("OPENAI_FALLBACK_ENABLED", original.legacyOpenaiFlag);
 
 if (failed) process.exitCode = 1;

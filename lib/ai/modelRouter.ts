@@ -6,8 +6,17 @@ import { GeminiProvider } from "./providers/geminiProvider";
 import { GroqProvider } from "./providers/groqProvider";
 import { MockProvider } from "./providers/mockProvider";
 import { OpenAIProvider } from "./providers/openaiProvider";
-import type { AiChatMessage, AiChatResponse, AiProvider, AiProviderName, EmbeddingResponse } from "./providers/types";
-import { chemShastriModelFor, chemShastriProviderOrder } from "@/lib/chem-shastri/providers/providerRouter";
+import type {
+  AiChatMessage,
+  AiChatResponse,
+  AiProvider,
+  AiProviderName,
+  EmbeddingResponse,
+} from "./providers/types";
+import {
+  chemShastriModelFor,
+  chemShastriProviderOrder,
+} from "@/lib/chem-shastri/providers/providerRouter";
 
 export type AiRouteMode =
   | "faq_answer"
@@ -48,8 +57,17 @@ function modelFor(provider: AiProviderName, mode: AiRouteMode) {
   }
   if (provider === "openai") {
     return mode === "hard_reasoning"
-      ? env("CHEM_SHASTRI_OPENAI_REASONING_MODEL", env("OPENAI_REASONING_MODEL", "gpt-4o"))
-      : env("CHEM_SHASTRI_OPENAI_FAST_MODEL", env("OPENAI_FAST_MODEL", "gpt-4o-mini"));
+      ? env(
+          "CHEM_SHASTRI_OPENAI_REASONING_MODEL",
+          env(
+            "OPENAI_REASONING_MODEL",
+            env("OPENAI_FAST_MODEL", "gpt-4o-mini"),
+          ),
+        )
+      : env(
+          "CHEM_SHASTRI_OPENAI_FAST_MODEL",
+          env("OPENAI_FAST_MODEL", "gpt-4o-mini"),
+        );
   }
   return chemShastriModelFor("gemini");
 }
@@ -86,11 +104,22 @@ export async function routeChatCompletion({
       const model = modelFor(providerName, mode);
       const estimatedInputTokens = estimateMessagesTokens(messages);
       const estimatedOutputTokens = maxOutputTokens ?? 900;
-      const estimatedCostUsd = providerName === "mock" ? 0 : estimateAiCostUsd(model, estimatedInputTokens, estimatedOutputTokens);
+      const estimatedCostUsd =
+        providerName === "mock"
+          ? 0
+          : estimateAiCostUsd(
+              model,
+              estimatedInputTokens,
+              estimatedOutputTokens,
+            );
       const budget = await checkBudget(estimatedCostUsd);
       if (!budget.allowed) {
         await recordBudgetBlocked();
-        throw new AiBudgetExceededError("daily_ai_budget_exceeded", budget.remainingInr, budget.estimatedCostInr);
+        throw new AiBudgetExceededError(
+          "daily_ai_budget_exceeded",
+          budget.remainingInr,
+          budget.estimatedCostInr,
+        );
       }
       const response = await provider.generateChat({
         messages,
@@ -99,15 +128,21 @@ export async function routeChatCompletion({
         responseFormat,
         temperature: mode === "hard_reasoning" ? 0.18 : 0.28,
       });
-      const inputTokens = response.inputTokens ?? estimateMessagesTokens(messages);
-      const outputTokens = response.outputTokens ?? Math.ceil(response.content.length / 4);
-      const actualCostUsd = response.provider === "mock" ? 0 : estimateAiCostUsd(response.model, inputTokens, outputTokens);
+      const inputTokens =
+        response.inputTokens ?? estimateMessagesTokens(messages);
+      const outputTokens =
+        response.outputTokens ?? Math.ceil(response.content.length / 4);
+      const actualCostUsd =
+        response.provider === "mock"
+          ? 0
+          : estimateAiCostUsd(response.model, inputTokens, outputTokens);
       if (actualCostUsd > 0) await recordAiSpend(actualCostUsd);
       return {
         ...response,
         fallbackUsed: index > 0 || errors.length > 0,
         estimatedCostUsd: actualCostUsd,
-        estimatedCostInr: actualCostUsd * Number(process.env.AI_USD_TO_INR || 90),
+        estimatedCostInr:
+          actualCostUsd * Number(process.env.AI_USD_TO_INR || 90),
         budgetWarning: budget.warning,
         budgetRemainingInr: budget.remainingInr,
         inputTokens,
@@ -115,11 +150,23 @@ export async function routeChatCompletion({
       };
     } catch (error) {
       if (error instanceof AiBudgetExceededError) throw error;
-      errors.push(`${providerName}: ${error instanceof Error ? error.message : "unknown error"}`);
+      errors.push(
+        `${providerName}: ${error instanceof Error ? error.message : "unknown error"}`,
+      );
     }
   }
-  const mock = await providers.mock.generateChat({ messages, model: "mock-master-alchem" });
-  return { ...mock, fallbackUsed: true, estimatedCostUsd: 0, estimatedCostInr: 0, budgetWarning: false, budgetRemainingInr: 0 };
+  const mock = await providers.mock.generateChat({
+    messages,
+    model: "mock-master-alchem",
+  });
+  return {
+    ...mock,
+    fallbackUsed: true,
+    estimatedCostUsd: 0,
+    estimatedCostInr: 0,
+    budgetWarning: false,
+    budgetRemainingInr: 0,
+  };
 }
 
 export async function routeEmbedding(text: string): Promise<EmbeddingResponse> {
@@ -128,14 +175,24 @@ export async function routeEmbedding(text: string): Promise<EmbeddingResponse> {
   if (!provider.isConfigured() && providerName !== "mock") {
     return providers.mock.embedText({ text, model: "mock-embedding" });
   }
-  const budget = await checkBudget(providerName === "mock" ? 0 : estimateAiCostUsd(model, Math.ceil(text.length / 4), 0));
+  const budget = await checkBudget(
+    providerName === "mock"
+      ? 0
+      : estimateAiCostUsd(model, Math.ceil(text.length / 4), 0),
+  );
   if (!budget.allowed) {
     await recordBudgetBlocked();
-    throw new AiBudgetExceededError("daily_ai_budget_exceeded", budget.remainingInr, budget.estimatedCostInr);
+    throw new AiBudgetExceededError(
+      "daily_ai_budget_exceeded",
+      budget.remainingInr,
+      budget.estimatedCostInr,
+    );
   }
   const result = await provider.embedText({ text, model });
   if (result.provider !== "mock") {
-    await recordAiSpend(estimateAiCostUsd(result.model, Math.ceil(text.length / 4), 0));
+    await recordAiSpend(
+      estimateAiCostUsd(result.model, Math.ceil(text.length / 4), 0),
+    );
   }
   return result;
 }

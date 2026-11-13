@@ -1,5 +1,11 @@
 import OpenAI from "openai";
-import type { AiChatRequest, AiChatResponse, AiProvider, EmbeddingRequest, EmbeddingResponse } from "./types";
+import type {
+  AiChatRequest,
+  AiChatResponse,
+  AiProvider,
+  EmbeddingRequest,
+  EmbeddingResponse,
+} from "./types";
 
 export class OpenAIProvider implements AiProvider {
   name = "openai" as const;
@@ -14,7 +20,11 @@ export class OpenAIProvider implements AiProvider {
       if (!process.env.OPENAI_API_KEY) {
         throw new Error("OPENAI_API_KEY is not configured.");
       }
-      this.client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      this.client = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY,
+        timeout: 20000,
+        maxRetries: 0,
+      });
     }
     return this.client;
   }
@@ -26,20 +36,26 @@ export class OpenAIProvider implements AiProvider {
       messages: request.messages
         .filter((message) => message.role !== "tool")
         .map((message) => ({
-          role: message.role === "system" ? "system" : message.role === "assistant" ? "assistant" : "user",
+          role:
+            message.role === "system"
+              ? "system"
+              : message.role === "assistant"
+                ? "assistant"
+                : "user",
           content: message.content,
         })),
       temperature: request.temperature ?? 0.25,
       max_tokens: request.maxOutputTokens ?? 900,
-      response_format: request.responseFormat === "json" ? { type: "json_object" } : undefined,
+      response_format:
+        request.responseFormat === "json" ? { type: "json_object" } : undefined,
     });
+    const content = response.choices[0]?.message?.content?.trim();
+    if (!content) throw new Error("The chemistry mentor returned no answer.");
     return {
       provider: "openai",
       model: request.model,
       latencyMs: Date.now() - started,
-      content:
-        response.choices[0]?.message?.content?.trim() ||
-        "I can answer the chemistry idea directly, but the model returned an empty response. Try the question once more with the key concept or equation included.",
+      content,
       inputTokens: response.usage?.prompt_tokens,
       outputTokens: response.usage?.completion_tokens,
       raw: response,
