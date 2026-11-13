@@ -550,6 +550,20 @@ content/chemistry/   Future markdown/content source
 
 ## Roadmap
 
+### Guided Acid-Base Discovery
+
+`/labs/acid-base-discovery` combines three original observation/checkpoint missions with an unmodified, locally hosted PhET Acid-Base Solutions simulation. It needs no AI key and makes no requests to a chemistry backend for its core interactions. Progress and the completion badge are saved locally.
+
+The third-party simulation is **CC BY-NC 4.0**, not unrestricted commercial-use software. Keep attribution beside the experiment and preserve the original notices. Review [the vendor notice](public/vendor/phet/NOTICE.md) before changing the site's business model or using PhET imagery in marketing. No PhET endorsement or AI authorship is claimed.
+
+### Assistant Reliability
+
+Chem-Shastri separates the student's question from system context, carries bounded conversation history, and isolates caches by language and context. API keys belong only in server environment variables (`GEMINI_API_KEY` or `GROQ_API_KEY`). A key must also have generation quota/credits; listing models alone does not validate generation. Missing quota falls back to local study notes. See [the polish QA record](docs/panel-demo-polish-qa.md) for current verification limits.
+
+Additional regression: `npx tsx scripts/test-chem-shastri-cache.ts`.
+
+### Longer-Term Work
+
 - Matrix-based automatic chemical equation balancing
 - Authenticated student profiles and saved quiz attempts
 - Teacher dashboard and classroom cohorts

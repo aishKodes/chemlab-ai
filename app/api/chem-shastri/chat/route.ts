@@ -6,6 +6,15 @@ export const dynamic = "force-dynamic";
 const requestSchema = z.object({
   message: z.string().min(1).max(9000),
   conversationId: z.string().optional(),
+  history: z
+    .array(
+      z.object({
+        role: z.enum(["user", "assistant"]),
+        content: z.string().max(6000),
+      }),
+    )
+    .max(6)
+    .optional(),
   userId: z.string().optional(),
   anonymousId: z.string().max(160).optional(),
   classLevel: z.enum(["8", "9", "10", "11", "12"]).optional(),
@@ -35,10 +44,15 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const parsed = requestSchema.safeParse(await request.json().catch(() => null));
+  const parsed = requestSchema.safeParse(
+    await request.json().catch(() => null),
+  );
   if (!parsed.success) {
     return Response.json(
-      { error: "Invalid Chem-Shastri request.", details: parsed.error.flatten().fieldErrors },
+      {
+        error: "Invalid Chem-Shastri request.",
+        details: parsed.error.flatten().fieldErrors,
+      },
       { status: 400 },
     );
   }
@@ -46,10 +60,16 @@ export async function POST(request: Request) {
     const response = await answerChemShastri(parsed.data, request);
     return Response.json(response);
   } catch (error) {
-    const status = typeof (error as { status?: unknown }).status === "number" ? Number((error as { status: number }).status) : 502;
+    const status =
+      typeof (error as { status?: unknown }).status === "number"
+        ? Number((error as { status: number }).status)
+        : 502;
     return Response.json(
       {
-        error: error instanceof Error ? error.message : "Chem-Shastri request failed.",
+        error:
+          error instanceof Error
+            ? error.message
+            : "Chem-Shastri request failed.",
         limit: (error as { limit?: unknown }).limit,
       },
       { status },

@@ -9,7 +9,7 @@ const molecules = [
 export function FloatingMoleculeBackground() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-      {molecules.map((molecule, index) => (
+      {molecules.map((molecule) => (
         <div
           key={`${molecule.left}-${molecule.top}`}
           className="animate-floaty absolute"
@@ -20,9 +20,6 @@ export function FloatingMoleculeBackground() {
           <span className={`absolute left-4 top-10 h-4 w-4 rounded-full ${molecule.color} opacity-80`} />
           <span className="absolute left-4 top-3 h-0.5 w-9 rotate-[35deg] bg-slate-300/70" />
           <span className="absolute left-3 top-8 h-0.5 w-8 -rotate-45 bg-slate-300/70" />
-          <span className="absolute left-12 top-1 rounded-full bg-white/80 px-2 py-0.5 text-[10px] font-black text-slate-500">
-            {index + 1}XP
-          </span>
         </div>
       ))}
     </div>

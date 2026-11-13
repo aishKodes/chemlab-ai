@@ -1,5 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
-import type { AiChatRequest, AiChatResponse, AiProvider, EmbeddingRequest, EmbeddingResponse } from "./types";
+import type {
+  AiChatRequest,
+  AiChatResponse,
+  AiProvider,
+  EmbeddingRequest,
+  EmbeddingResponse,
+} from "./types";
 
 export class GeminiProvider implements AiProvider {
   name = "gemini" as const;
@@ -17,8 +23,13 @@ export class GeminiProvider implements AiProvider {
 
   async generateChat(request: AiChatRequest): Promise<AiChatResponse> {
     const started = Date.now();
-    const client = new GoogleGenAI({ apiKey: this.apiKey() });
-    const system = request.messages.find((message) => message.role === "system")?.content;
+    const client = new GoogleGenAI({
+      apiKey: this.apiKey(),
+      httpOptions: { timeout: 20000 },
+    });
+    const system = request.messages.find(
+      (message) => message.role === "system",
+    )?.content;
     const contents = request.messages
       .filter((message) => message.role !== "system" && message.role !== "tool")
       .map((message) => ({
@@ -32,16 +43,17 @@ export class GeminiProvider implements AiProvider {
         systemInstruction: system,
         temperature: request.temperature ?? 0.25,
         maxOutputTokens: request.maxOutputTokens ?? 900,
-        responseMimeType: request.responseFormat === "json" ? "application/json" : undefined,
+        responseMimeType:
+          request.responseFormat === "json" ? "application/json" : undefined,
       },
     });
+    if (!response.text?.trim())
+      throw new Error("The chemistry mentor returned no answer.");
     return {
       provider: "gemini",
       model: request.model,
       latencyMs: Date.now() - started,
-      content:
-        response.text?.trim() ||
-        "I can answer the chemistry idea directly, but the model returned an empty response. Try the question once more with the key concept or equation included.",
+      content: response.text.trim(),
       inputTokens: response.usageMetadata?.promptTokenCount,
       outputTokens: response.usageMetadata?.candidatesTokenCount,
       raw: response,

@@ -1,4 +1,7 @@
-import type { MasterAlchemResponse, RagCitation } from "@/lib/master-alchem/types";
+import type {
+  MasterAlchemResponse,
+  RagCitation,
+} from "@/lib/master-alchem/types";
 
 export type ChemShastriLanguage = "en" | "hi" | "bn" | "or";
 
@@ -29,6 +32,7 @@ export type ChemShastriIntent =
 export type ChemShastriRequest = {
   message: string;
   conversationId?: string;
+  history?: Array<{ role: "user" | "assistant"; content: string }>;
   userId?: string;
   anonymousId?: string;
   classLevel?: "8" | "9" | "10" | "11" | "12";
@@ -50,7 +54,15 @@ export type ChemShastriContext = {
   classLevel?: string;
   preferredLanguage: ChemShastriLanguage;
   currentPage?: string;
-  pageType?: "home" | "learn" | "lab" | "simulation" | "dashboard" | "resource" | "admin" | "other";
+  pageType?:
+    | "home"
+    | "learn"
+    | "lab"
+    | "simulation"
+    | "dashboard"
+    | "resource"
+    | "admin"
+    | "other";
   resourceSlug?: string;
   simulationSlug?: string;
   chapterSlug?: string;
@@ -68,7 +80,12 @@ export type ChemShastriResourceSuggestion = {
   routeUrl?: string | null;
   description?: string | null;
   reason: string;
-  source: "backend" | "fallback" | "memory_deck" | "quick_drill" | "concept_map";
+  source:
+    | "backend"
+    | "fallback"
+    | "memory_deck"
+    | "quick_drill"
+    | "concept_map";
 };
 
 export type ChemShastriResponse = Omit<MasterAlchemResponse, "intent"> & {

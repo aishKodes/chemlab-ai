@@ -3,13 +3,17 @@
 import { learningApi } from "@/lib/api/learningApi";
 import { createBrowserId } from "@/lib/client/browserId";
 
-function anonymousId() {
-  const key = "chemlab_anonymous_id";
-  const existing = window.localStorage.getItem(key);
-  if (existing) return existing;
-  const next = createBrowserId("anon");
-  window.localStorage.setItem(key, next);
-  return next;
+function anonymousId(): string | undefined {
+  try {
+    const key = "chemlab_anonymous_id";
+    const existing = window.localStorage.getItem(key);
+    if (existing) return existing;
+    const next = createBrowserId("anon");
+    window.localStorage.setItem(key, next);
+    return next;
+  } catch {
+    return undefined;
+  }
 }
 
 export function trackSimulationEventClient(
@@ -31,23 +35,32 @@ export function trackSimulationEventClient(
       keepalive: true,
     })
     .catch(() => undefined);
-  void learningApi.simulationEvent({
-    simulation_slug: simulationSlug,
-    event_name: eventName,
-    step_key: String(metadata.stepKey ?? metadata.step ?? "general"),
-    success: metadata.success,
-    mistake_key: metadata.mistakeKey ?? metadata.mistake_key,
-    anonymous_id: anonymousId(),
-    metadata,
-  });
+  void learningApi
+    .simulationEvent({
+      simulation_slug: simulationSlug,
+      event_name: eventName,
+      step_key: String(metadata.stepKey ?? metadata.step ?? "general"),
+      success: metadata.success,
+      mistake_key: metadata.mistakeKey ?? metadata.mistake_key,
+      anonymous_id: anonymousId(),
+      metadata,
+    })
+    .catch(() => undefined);
 }
 
-export const trackSimulationStart = (simulationSlug: string, metadata: Record<string, unknown> = {}) =>
-  trackSimulationEventClient(simulationSlug, "simulation_start", metadata);
+export const trackSimulationStart = (
+  simulationSlug: string,
+  metadata: Record<string, unknown> = {},
+) => trackSimulationEventClient(simulationSlug, "simulation_start", metadata);
 
 export const trackSimulationComplete = (
   simulationSlug: string,
   score: number,
   mistakes: unknown[] = [],
   metadata: Record<string, unknown> = {},
-) => trackSimulationEventClient(simulationSlug, "simulation_complete", { score, mistakes, ...metadata });
+) =>
+  trackSimulationEventClient(simulationSlug, "simulation_complete", {
+    score,
+    mistakes,
+    ...metadata,
+  });

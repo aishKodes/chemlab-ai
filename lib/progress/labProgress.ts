@@ -35,7 +35,10 @@ export function markLabStarted(labSlug: string) {
 export function markLabCompleted(labSlug: string, xp: number) {
   if (typeof window === "undefined") return;
   const progress = getLocalLabProgress();
-  progress.completedLabs[labSlug] = { completedAt: new Date().toISOString(), xp };
+  progress.completedLabs[labSlug] = {
+    completedAt: new Date().toISOString(),
+    xp,
+  };
   saveProgress(progress);
 }
 
@@ -47,5 +50,9 @@ export function awardLocalBadge(badgeId: string) {
 }
 
 function saveProgress(progress: LocalLabProgress) {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  } catch {
+    // Learning remains usable when browser storage is unavailable.
+  }
 }

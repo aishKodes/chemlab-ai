@@ -1,6 +1,14 @@
 "use client";
 
-import { Atom, FlaskConical, LayoutDashboard, LogIn, Menu, MessageSquareText, UserPlus, X } from "lucide-react";
+import {
+  Atom,
+  LayoutDashboard,
+  LogIn,
+  Menu,
+  MessageSquareText,
+  UserPlus,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { LogoutButton } from "@/components/auth/LogoutButton";
@@ -22,6 +30,9 @@ const navigation = [
   { href: "/labs", label: "Labs" },
   { href: "/quiz", label: "Quiz" },
 ];
+const primaryNavigation = navigation.filter((item) =>
+  ["/classes", "/resources", "/labs", "/quick-drills"].includes(item.href),
+);
 
 export function SiteHeader() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -31,65 +42,87 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-blue-100/70 bg-white/78 backdrop-blur-xl">
       <Container className="flex h-16 items-center justify-between gap-4">
-        <Link href="/" className="focus-ring flex items-center gap-3 rounded-lg" onClick={() => setMobileOpen(false)}>
-          <span className="grid h-10 w-10 place-items-center rounded-2xl border-2 border-white bg-gradient-to-br from-blue-500 to-cyan-400 text-white shadow-md">
-            <Atom className="h-5 w-5" aria-hidden="true" />
+        <Link
+          href="/"
+          className="focus-ring flex items-center gap-3 rounded-lg"
+          onClick={() => setMobileOpen(false)}
+        >
+          <span className="grid h-10 w-10 place-items-center rounded-lg bg-blue-700 text-white">
+            <Atom className="h-6 w-6" strokeWidth={1.7} aria-hidden="true" />
           </span>
           <span>
-            <span className="block text-base font-black text-slate-950">chemlearning</span>
-            <span className="hidden text-xs font-bold text-blue-600 sm:block">Colourful chemistry universe</span>
+            <span className="block text-base font-black text-slate-950">
+              chemlearning
+            </span>
+            <span className="hidden text-xs font-medium text-slate-500 sm:block">
+              See chemistry differently
+            </span>
           </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 2xl:flex">
-          {navigation.map((item) => (
+        <nav aria-label="Primary" className="hidden items-center gap-1 xl:flex">
+          {primaryNavigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="focus-ring rounded-2xl px-3 py-2 text-sm font-extrabold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700"
+              className="focus-ring rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 2xl:flex">
+        <div className="hidden items-center gap-2 xl:flex">
           <Button
             href="/ai-tutor"
             variant="secondary"
             size="sm"
+            className="rounded-lg shadow-none"
             icon={<MessageSquareText className="h-4 w-4" aria-hidden="true" />}
           >
             Chem-Shastri
           </Button>
-          <Button
-            href="/labs"
-            size="sm"
-            icon={<FlaskConical className="h-4 w-4" aria-hidden="true" />}
-          >
-            Enter Lab
-          </Button>
           {!isLoading && isAuthenticated && user ? (
             <>
               <NotificationBell />
-              <Button href={dashboardHref} variant="secondary" size="sm" icon={<LayoutDashboard className="h-4 w-4" aria-hidden="true" />}>
-                {user.role === "admin" ? "Admin" : user.role === "teacher" ? "Teacher" : "Dashboard"}
+              <Button
+                href={dashboardHref}
+                variant="secondary"
+                size="sm"
+                icon={
+                  <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
+                }
+              >
+                {user.role === "admin"
+                  ? "Admin"
+                  : user.role === "teacher"
+                    ? "Teacher"
+                    : "Dashboard"}
               </Button>
               <LogoutButton compact />
             </>
           ) : !isLoading ? (
             <>
-              <Button href="/login" variant="ghost" size="sm" icon={<LogIn className="h-4 w-4" aria-hidden="true" />}>
+              <Button
+                href="/login"
+                variant="ghost"
+                size="sm"
+                icon={<LogIn className="h-4 w-4" aria-hidden="true" />}
+              >
                 Login
               </Button>
-              <Button href="/signup" size="sm" icon={<UserPlus className="h-4 w-4" aria-hidden="true" />}>
+              <Button
+                href="/signup"
+                size="sm"
+                icon={<UserPlus className="h-4 w-4" aria-hidden="true" />}
+              >
                 Sign up
               </Button>
             </>
           ) : null}
         </div>
 
-        <div className="flex items-center gap-2 2xl:hidden">
+        <div className="flex items-center gap-2 xl:hidden">
           {isAuthenticated ? <NotificationBell /> : null}
           <Link
             href={isAuthenticated ? dashboardHref : "/login"}
@@ -97,7 +130,11 @@ export function SiteHeader() {
             aria-label={isAuthenticated ? "Open dashboard" : "Open login"}
             onClick={() => setMobileOpen(false)}
           >
-            {isAuthenticated ? <LayoutDashboard className="h-5 w-5" aria-hidden="true" /> : <LogIn className="h-5 w-5" aria-hidden="true" />}
+            {isAuthenticated ? (
+              <LayoutDashboard className="h-5 w-5" aria-hidden="true" />
+            ) : (
+              <LogIn className="h-5 w-5" aria-hidden="true" />
+            )}
           </Link>
           {!isLoading && !isAuthenticated ? (
             <Link
@@ -113,15 +150,20 @@ export function SiteHeader() {
             type="button"
             className="focus-ring grid h-10 w-10 place-items-center rounded-2xl border border-blue-100 bg-white/80 text-slate-700 shadow-sm"
             aria-label="Toggle navigation"
+            aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((current) => !current)}
           >
-            {mobileOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+            {mobileOpen ? (
+              <X className="h-5 w-5" aria-hidden="true" />
+            ) : (
+              <Menu className="h-5 w-5" aria-hidden="true" />
+            )}
           </button>
         </div>
       </Container>
 
       {mobileOpen ? (
-        <div className="border-t border-blue-100 bg-white/95 px-4 py-4 shadow-xl 2xl:hidden">
+        <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-blue-100 bg-white/95 px-4 py-4 shadow-xl xl:hidden">
           <nav aria-label="Mobile primary" className="grid gap-2">
             {navigation.map((item) => (
               <Link
@@ -147,7 +189,11 @@ export function SiteHeader() {
                   className="focus-ring rounded-2xl px-4 py-3 text-sm font-black text-blue-700 hover:bg-blue-50"
                   onClick={() => setMobileOpen(false)}
                 >
-                  {user.role === "admin" ? "Admin" : user.role === "teacher" ? "Teacher Dashboard" : "Student Dashboard"}
+                  {user.role === "admin"
+                    ? "Admin"
+                    : user.role === "teacher"
+                      ? "Teacher Dashboard"
+                      : "Student Dashboard"}
                 </Link>
                 <div className="px-1">
                   <LogoutButton compact />

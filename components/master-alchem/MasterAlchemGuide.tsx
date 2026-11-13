@@ -1,7 +1,13 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Compass, EyeOff, MessageCircle, Sparkles } from "lucide-react";
+import {
+  ChevronDown,
+  Compass,
+  EyeOff,
+  MessageCircle,
+  Sparkles,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,7 +20,8 @@ export function MasterAlchemGuide() {
   const [expanded, setExpanded] = useState(false);
   const script = getMasterAlchemScript(pathname);
   const explainHref = `/ai-tutor?prompt=${encodeURIComponent(script.explainPrompt)}`;
-  const isLabRoute = pathname.startsWith("/labs") || pathname.startsWith("/simulations");
+  const isLabRoute =
+    pathname.startsWith("/labs") || pathname.startsWith("/simulations");
   const simulationCompactMode = pathname.startsWith("/labs/");
   const placement = isLabRoute ? "lab-safe" : "bottom-right";
 
@@ -29,11 +36,18 @@ export function MasterAlchemGuide() {
   function setGuideExpanded(nextExpanded: boolean) {
     setExpanded(nextExpanded);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem("chemlab_mentor_guide_expanded", String(nextExpanded));
+      window.localStorage.setItem(
+        "chemlab_mentor_guide_expanded",
+        String(nextExpanded),
+      );
     }
   }
 
-  if (pathname.startsWith("/admin") || pathname.startsWith("/dev")) {
+  if (
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/dev") ||
+    pathname === "/ai-tutor"
+  ) {
     return null;
   }
 
@@ -50,7 +64,12 @@ export function MasterAlchemGuide() {
           aria-label="Ask Chem-Shastri"
           className="group pointer-events-auto grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-white/92 shadow-xl shadow-blue-950/18 backdrop-blur transition hover:-translate-y-0.5 hover:bg-cyan-50 sm:h-[42px] sm:w-[42px]"
         >
-          <MasterAlchem mood={script.mood} size="xs" showGlow={false} className="scale-[0.66]" />
+          <MasterAlchem
+            mood={script.mood}
+            size="xs"
+            showGlow={false}
+            className="scale-[0.66]"
+          />
           <span className="pointer-events-none absolute right-11 top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-full bg-slate-950 px-3 py-1 text-xs font-black text-white shadow-lg group-hover:block">
             Ask Chem-Shastri
           </span>
@@ -81,11 +100,19 @@ export function MasterAlchemGuide() {
           >
             <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-cyan-300/35 blur-2xl" />
             <div className="relative flex gap-3 p-3 sm:p-4">
-              <MasterAlchem mood={script.mood} size="xs" showGlow={false} className="shrink-0" />
+              <MasterAlchem
+                mood={script.mood}
+                size="xs"
+                showGlow={false}
+                className="shrink-0"
+              />
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-2">
                   <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-black text-blue-700">
-                    <Sparkles className="h-3.5 w-3.5 text-amber-500" aria-hidden="true" />
+                    <Sparkles
+                      className="h-3.5 w-3.5 text-amber-500"
+                      aria-hidden="true"
+                    />
                     {script.label}
                   </div>
                   <button
@@ -97,7 +124,9 @@ export function MasterAlchemGuide() {
                     <EyeOff className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </div>
-                <p className="mt-3 text-sm font-bold leading-5 text-slate-700">{script.message}</p>
+                <p className="mt-3 text-sm font-bold leading-5 text-slate-700">
+                  {script.message}
+                </p>
                 <div className="mt-4 grid gap-2">
                   <Link
                     href={script.nextHref}
@@ -131,11 +160,19 @@ export function MasterAlchemGuide() {
             onClick={() => setGuideExpanded(true)}
             aria-label="Open Chem-Shastri guide"
           >
-            <MasterAlchem mood={script.mood} size="xs" showGlow={false} className="scale-90" />
+            <MasterAlchem
+              mood={script.mood}
+              size="xs"
+              showGlow={false}
+              className="scale-90"
+            />
             <span className="pointer-events-none absolute right-full top-1/2 mr-2 hidden -translate-y-1/2 whitespace-nowrap rounded-full bg-slate-950 px-3 py-1 text-xs font-black text-white shadow-lg group-hover:block group-focus-visible:block">
               Ask Chem-Shastri
             </span>
-            <ChevronDown className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rotate-180 rounded-full bg-blue-600 p-0.5 text-white" aria-hidden="true" />
+            <ChevronDown
+              className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rotate-180 rounded-full bg-blue-600 p-0.5 text-white"
+              aria-hidden="true"
+            />
           </motion.button>
         )}
       </AnimatePresence>

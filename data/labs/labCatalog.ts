@@ -12,14 +12,43 @@ export type LabCatalogEntry = {
   difficulty: "Beginner" | "Intermediate" | "Advanced";
   estimatedMinutes: number;
   concepts: string[];
-  thumbnailType: "electrochem" | "molecule" | "acid-base" | "organic" | "practice" | "basic-concepts" | "future";
+  thumbnailType:
+    | "electrochem"
+    | "molecule"
+    | "acid-base"
+    | "organic"
+    | "practice"
+    | "basic-concepts"
+    | "future";
 };
 
 export const labCatalog: LabCatalogEntry[] = [
   {
+    slug: "acid-base-discovery",
+    title: "Acid-Base Discovery",
+    description:
+      "Look inside solutions, compare acid strength and concentration, and investigate pH with a guided PhET experiment.",
+    classLevel: "Class 10-12",
+    topic: "Acids, bases, and equilibrium",
+    status: "featured",
+    route: "/labs/acid-base-discovery",
+    xp: 120,
+    difficulty: "Intermediate",
+    estimatedMinutes: 8,
+    concepts: [
+      "pH",
+      "ionisation",
+      "acid strength",
+      "concentration",
+      "conductivity",
+    ],
+    thumbnailType: "acid-base",
+  },
+  {
     slug: "si-units-battle",
     title: "SI Units Battle",
-    description: "Power the seven SI base units, cross conversion bridges, and defeat the significant-figures boss.",
+    description:
+      "Power the seven SI base units, cross conversion bridges, and defeat the significant-figures boss.",
     classLevel: "Class 11",
     topic: "SI Units and Measurement",
     status: "featured",
@@ -27,13 +56,21 @@ export const labCatalog: LabCatalogEntry[] = [
     xp: 380,
     difficulty: "Intermediate",
     estimatedMinutes: 4,
-    concepts: ["SI base units", "symbols", "unit conversion", "precision", "accuracy", "significant figures"],
+    concepts: [
+      "SI base units",
+      "symbols",
+      "unit conversion",
+      "precision",
+      "accuracy",
+      "significant figures",
+    ],
     thumbnailType: "basic-concepts",
   },
   {
     slug: "electrochemistry-power-grid",
     title: "Electrochemistry Power Grid Studio",
-    description: "Build a Daniell cell, watch electrons flow, and control voltage with the Nernst equation.",
+    description:
+      "Build a Daniell cell, watch electrons flow, and control voltage with the Nernst equation.",
     classLevel: "Class 12",
     topic: "Electrochemistry",
     status: "featured",
@@ -41,13 +78,21 @@ export const labCatalog: LabCatalogEntry[] = [
     xp: 490,
     difficulty: "Advanced",
     estimatedMinutes: 18,
-    concepts: ["galvanic cell", "Daniell cell", "anode", "cathode", "salt bridge", "Nernst equation"],
+    concepts: [
+      "galvanic cell",
+      "Daniell cell",
+      "anode",
+      "cathode",
+      "salt bridge",
+      "Nernst equation",
+    ],
     thumbnailType: "electrochem",
   },
   {
     slug: "basic-concepts-chemistry-universe",
     title: "Chemistry Scale Universe",
-    description: "Explore matter, measurement, mole concept, and stoichiometry as a multi-zone Class 11 universe.",
+    description:
+      "Explore matter, measurement, mole concept, and stoichiometry as a multi-zone Class 11 universe.",
     classLevel: "Class 11",
     topic: "Some Basic Concepts of Chemistry",
     status: "featured",
@@ -55,7 +100,14 @@ export const labCatalog: LabCatalogEntry[] = [
     xp: 630,
     difficulty: "Intermediate",
     estimatedMinutes: 22,
-    concepts: ["matter", "SI units", "significant figures", "mole concept", "stoichiometry", "limiting reagent"],
+    concepts: [
+      "matter",
+      "SI units",
+      "significant figures",
+      "mole concept",
+      "stoichiometry",
+      "limiting reagent",
+    ],
     thumbnailType: "basic-concepts",
   },
   {
@@ -69,13 +121,21 @@ export const labCatalog: LabCatalogEntry[] = [
     xp: 240,
     difficulty: "Advanced",
     estimatedMinutes: 12,
-    concepts: ["anode", "cathode", "oxidation", "reduction", "salt bridge", "voltage"],
+    concepts: [
+      "anode",
+      "cathode",
+      "oxidation",
+      "reduction",
+      "salt bridge",
+      "voltage",
+    ],
     thumbnailType: "electrochem",
   },
   {
     slug: "redox-transfer-kitchen",
     title: "Redox Transfer Kitchen",
-    description: "Learn oxidation and reduction through Paati’s murukku story and a 3D electron-transfer game.",
+    description:
+      "Learn oxidation and reduction through Paati’s murukku story and a 3D electron-transfer game.",
     classLevel: "Class 10-12",
     topic: "Redox reactions",
     status: "featured",
@@ -83,13 +143,21 @@ export const labCatalog: LabCatalogEntry[] = [
     xp: 550,
     difficulty: "Intermediate",
     estimatedMinutes: 14,
-    concepts: ["oxidation", "reduction", "electron transfer", "spectator ion", "reducing agent", "oxidizing agent"],
+    concepts: [
+      "oxidation",
+      "reduction",
+      "electron transfer",
+      "spectator ion",
+      "reducing agent",
+      "oxidizing agent",
+    ],
     thumbnailType: "electrochem",
   },
   {
     slug: "molecule-shapes-3d",
     title: "Molecule Shapes 3D",
-    description: "Rotate school-level molecules and compare geometry, bond angles, and lone-pair effects.",
+    description:
+      "Rotate school-level molecules and compare geometry, bond angles, and lone-pair effects.",
     classLevel: "Class 11",
     topic: "Chemical Bonding",
     status: "featured",
@@ -97,13 +165,21 @@ export const labCatalog: LabCatalogEntry[] = [
     xp: 180,
     difficulty: "Intermediate",
     estimatedMinutes: 9,
-    concepts: ["VSEPR", "bond angle", "lone pair", "linear", "bent", "tetrahedral"],
+    concepts: [
+      "VSEPR",
+      "bond angle",
+      "lone pair",
+      "linear",
+      "bent",
+      "tetrahedral",
+    ],
     thumbnailType: "molecule",
   },
   {
     slug: "hydrocarbon-naming-quest",
     title: "Hydrocarbon Naming Quest",
-    description: "Learn IUPAC naming by tracing carbon families, ranking branches, and serving the double-bond VIP.",
+    description:
+      "Learn IUPAC naming by tracing carbon families, ranking branches, and serving the double-bond VIP.",
     classLevel: "Class 11",
     topic: "Organic chemistry",
     status: "featured",
@@ -111,13 +187,21 @@ export const labCatalog: LabCatalogEntry[] = [
     xp: 450,
     difficulty: "Intermediate",
     estimatedMinutes: 16,
-    concepts: ["IUPAC naming", "root word", "prefix", "suffix", "branch numbering", "alkene position"],
+    concepts: [
+      "IUPAC naming",
+      "root word",
+      "prefix",
+      "suffix",
+      "branch numbering",
+      "alkene position",
+    ],
     thumbnailType: "organic",
   },
   {
     slug: "neutralization-studio",
     title: "Neutralization Studio",
-    description: "Mix acid and base, find neutral pH, and reveal salt crystals.",
+    description:
+      "Mix acid and base, find neutral pH, and reveal salt crystals.",
     classLevel: "Class 10-12",
     topic: "Acids, bases, and salts",
     status: "prototype",

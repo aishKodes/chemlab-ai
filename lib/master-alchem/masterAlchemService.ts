@@ -1,14 +1,28 @@
-import { checkRateLimit, isDevelopmentAiUnlimited } from "@/lib/rate-limit/basic";
+import {
+  checkRateLimit,
+  isDevelopmentAiUnlimited,
+} from "@/lib/rate-limit/basic";
 import { checkChemistrySafety } from "@/lib/ai/safety";
 import { buildMasterAlchemPrompt } from "@/lib/ai/promptBuilder";
 import { estimateMessagesTokens } from "@/lib/ai/tokenEstimator";
 import { routeChatCompletion } from "@/lib/ai/modelRouter";
 import { AiBudgetExceededError } from "@/lib/ai/errors";
-import { getBudgetSnapshot, recordCacheHit, recordRagOnlyAnswer } from "@/lib/ai/budgetGuard";
+import {
+  getBudgetSnapshot,
+  recordCacheHit,
+  recordRagOnlyAnswer,
+} from "@/lib/ai/budgetGuard";
 import { citationsFromChunks } from "@/lib/rag/citations";
 import { rerankChunks } from "@/lib/rag/reranker";
-import { buildAnswerCacheKey, getCachedAnswer, saveCachedAnswer } from "./answerCache";
-import { createOrLoadConversation, saveConversationMessages } from "./conversationLogger";
+import {
+  buildAnswerCacheKey,
+  getCachedAnswer,
+  saveCachedAnswer,
+} from "./answerCache";
+import {
+  createOrLoadConversation,
+  saveConversationMessages,
+} from "./conversationLogger";
 import { detectIntent } from "./intentDetector";
 import { detectAndLogMisconceptions } from "./misconceptionDetector";
 import { normalizeQuestion, hashText, matchFaq } from "./faqMatcher";
@@ -16,10 +30,16 @@ import { resolveMode } from "./modeResolver";
 import { retrieveRagContext } from "./ragRetriever";
 import { formatAnswerWithCitations } from "./responseFormatter";
 import { logAiRequest, logRetrieval } from "./analyticsLogger";
-import type { MasterAlchemRequest, MasterAlchemResponse, RagChunk, RagCitation } from "./types";
+import type {
+  MasterAlchemRequest,
+  MasterAlchemResponse,
+  RagChunk,
+  RagCitation,
+} from "./types";
 
 function limitForRequest(request: MasterAlchemRequest) {
-  if (request.userId === "admin") return Number(process.env.ADMIN_DAILY_AI_LIMIT || 100);
+  if (request.userId === "admin")
+    return Number(process.env.ADMIN_DAILY_AI_LIMIT || 100);
   return request.userId
     ? Number(process.env.FREE_USER_DAILY_AI_LIMIT || 10)
     : Number(process.env.ANONYMOUS_DAILY_AI_LIMIT || 3);
@@ -65,7 +85,9 @@ function buildRagOnlyAnswer({
   const topChunks = chunks.slice(0, 2);
   const notes = topChunks
     .map((chunk) => {
-      const text = (chunk.cleanText || chunk.chunkText || "").replace(/\s+/g, " ").trim();
+      const text = (chunk.cleanText || chunk.chunkText || "")
+        .replace(/\s+/g, " ")
+        .trim();
       return text.length > 520 ? `${text.slice(0, 520).trim()}...` : text;
     })
     .filter(Boolean);
@@ -107,7 +129,9 @@ async function buildBaseResponse({
   mock?: boolean;
   estimatedCostInr?: number;
   limit?: ReturnType<typeof checkRateLimit>;
-}): Promise<MasterAlchemResponse & { limit?: ReturnType<typeof checkRateLimit> }> {
+}): Promise<
+  MasterAlchemResponse & { limit?: ReturnType<typeof checkRateLimit> }
+> {
   const budget = await getBudgetSnapshot();
   return {
     message: answer,
@@ -136,7 +160,9 @@ async function buildBaseResponse({
 export async function answerMasterAlchem(
   rawRequest: MasterAlchemRequest,
   httpRequest?: Request,
-): Promise<MasterAlchemResponse & { limit?: ReturnType<typeof checkRateLimit> }> {
+): Promise<
+  MasterAlchemResponse & { limit?: ReturnType<typeof checkRateLimit> }
+> {
   const started = Date.now();
   const mode = resolveMode(rawRequest.mode);
   const request: MasterAlchemRequest = {
@@ -146,16 +172,25 @@ export async function answerMasterAlchem(
   };
 
   if (process.env.MASTER_ALCHEM_ENABLED === "false") {
-    throw Object.assign(new Error("Chem-Shastri is currently disabled."), { status: 503 });
+    throw Object.assign(new Error("Chem-Shastri is currently disabled."), {
+      status: 503,
+    });
   }
 
   const rateKey = `master-alchem:${request.userId || request.anonymousId || "anonymous"}`;
   const devUnlimited = isDevelopmentAiUnlimited(httpRequest);
-  const legacyLimit = checkRateLimit(rateKey, Boolean(request.userId), { unlimited: devUnlimited });
+  const legacyLimit = checkRateLimit(rateKey, Boolean(request.userId), {
+    unlimited: devUnlimited,
+  });
   const configuredLimit = limitForRequest(request);
-  const limit = devUnlimited ? legacyLimit : { ...legacyLimit, limit: configuredLimit };
+  const limit = devUnlimited
+    ? legacyLimit
+    : { ...legacyLimit, limit: configuredLimit };
   if (!limit.allowed) {
-    throw Object.assign(new Error("Daily Chem-Shastri limit reached."), { status: 429, limit });
+    throw Object.assign(new Error("Daily Chem-Shastri limit reached."), {
+      status: 429,
+      limit,
+    });
   }
 
   const conversationId = await createOrLoadConversation(request);
@@ -209,7 +244,10 @@ export async function answerMasterAlchem(
     });
   }
 
-  const scripted = scriptedSimulationGuidance(request.simulationSlug, request.message);
+  const scripted = scriptedSimulationGuidance(
+    request.simulationSlug,
+    request.message,
+  );
   if (scripted && mode === "lab_guide") {
     await saveConversationMessages({
       conversationId,
@@ -240,7 +278,13 @@ export async function answerMasterAlchem(
     classLevel: request.classLevel,
     chapterSlug: request.chapterSlug,
   }).catch(() => null);
-  if (faq && faq.confidence >= 0.9 && mode !== "step_by_step" && mode !== "check_my_answer") {
+  if (
+    !request.promptContext &&
+    faq &&
+    faq.confidence >= 0.9 &&
+    mode !== "step_by_step" &&
+    mode !== "check_my_answer"
+  ) {
     const answer =
       faq.faq.master_alchem_style_answer ||
       faq.faq.full_answer ||
@@ -283,7 +327,13 @@ export async function answerMasterAlchem(
       source: "faq",
       mode,
       intent,
-      citations: [{ label: "chemlearning verified FAQ", sourceType: "faq", classLevel: request.classLevel }],
+      citations: [
+        {
+          label: "chemlearning verified FAQ",
+          sourceType: "faq",
+          classLevel: request.classLevel,
+        },
+      ],
       cacheHit: true,
       ragUsed: false,
       safetyStatus: safety.status,
@@ -293,7 +343,9 @@ export async function answerMasterAlchem(
   }
 
   const simpleCacheKey = buildAnswerCacheKey({
-    question: request.message,
+    question: request.promptContext
+      ? `${request.message}\n${hashText(request.promptContext)}`
+      : request.message,
     classLevel: request.classLevel,
     subject: request.subject,
     chapterSlug: request.chapterSlug,
@@ -302,7 +354,10 @@ export async function answerMasterAlchem(
     chunkIds: [],
     model: "router-v1",
   });
-  const simpleCached = safety.status === "safe" ? await getCachedAnswer(simpleCacheKey).catch(() => null) : null;
+  const simpleCached =
+    safety.status === "safe"
+      ? await getCachedAnswer(simpleCacheKey).catch(() => null)
+      : null;
   if (simpleCached?.answer) {
     await recordCacheHit();
     const answer = String(simpleCached.answer);
@@ -356,12 +411,17 @@ export async function answerMasterAlchem(
   const citations = citationsFromChunks(selectedChunks);
   const maxContextChars = Number(process.env.RAG_MAX_CONTEXT_CHARS || 8000);
   const context = selectedChunks
-    .map((chunk, index) => `[${index + 1}] ${chunk.sourceCitation}\n${chunk.cleanText || chunk.chunkText}`)
+    .map(
+      (chunk, index) =>
+        `[${index + 1}] ${chunk.sourceCitation}\n${chunk.cleanText || chunk.chunkText}`,
+    )
     .join("\n\n")
     .slice(0, maxContextChars);
 
   const cacheKey = buildAnswerCacheKey({
-    question: request.message,
+    question: request.promptContext
+      ? `${request.message}\n${hashText(request.promptContext)}`
+      : request.message,
     classLevel: request.classLevel,
     subject: request.subject,
     chapterSlug: request.chapterSlug,
@@ -370,7 +430,10 @@ export async function answerMasterAlchem(
     chunkIds: selectedChunks.map((chunk) => chunk.id),
     model: "router-v1",
   });
-  const cached = safety.status === "safe" && cacheKey !== simpleCacheKey ? await getCachedAnswer(cacheKey).catch(() => null) : null;
+  const cached =
+    safety.status === "safe" && cacheKey !== simpleCacheKey
+      ? await getCachedAnswer(cacheKey).catch(() => null)
+      : null;
   if (cached?.answer) {
     await recordCacheHit();
     const answer = String(cached.answer);
@@ -428,13 +491,17 @@ export async function answerMasterAlchem(
   }
 
   const canUseRagOnly =
+    !request.promptContext &&
     selectedChunks.length > 0 &&
     selectedChunks[0].score >= 0.9 &&
     mode !== "step_by_step" &&
     mode !== "check_my_answer" &&
     intent !== "hard_reasoning";
   if (canUseRagOnly) {
-    const answer = formatAnswerWithCitations(buildRagOnlyAnswer({ chunks: selectedChunks }), citations);
+    const answer = formatAnswerWithCitations(
+      buildRagOnlyAnswer({ chunks: selectedChunks }),
+      citations,
+    );
     await recordRagOnlyAnswer();
     const aiRequestId = await logAiRequest({
       conversationId,
@@ -496,12 +563,15 @@ export async function answerMasterAlchem(
   }
 
   await detectAndLogMisconceptions(request).catch(() => []);
-  const systemPrompt = buildMasterAlchemPrompt({
+  const baseSystemPrompt = buildMasterAlchemPrompt({
     classLevel: request.classLevel,
     mode,
     context,
     citations,
   });
+  const systemPrompt = [baseSystemPrompt, request.promptContext]
+    .filter(Boolean)
+    .join("\n\n");
   const userPrompt = `Student question:\n${request.message}`;
   const messages = [
     { role: "system" as const, content: systemPrompt },
@@ -509,12 +579,16 @@ export async function answerMasterAlchem(
   ];
 
   try {
-    const routeMode = mode === "step_by_step" && intent !== "unsafe_chemistry" ? "hard_reasoning" : intent;
+    const routeMode =
+      mode === "step_by_step" && intent !== "unsafe_chemistry"
+        ? "hard_reasoning"
+        : intent;
     const response = await routeChatCompletion({
       mode: routeMode,
       messages,
       responseFormat: intent === "check_my_answer" ? "json" : "text",
-      maxOutputTokens: mode === "exam_mode" || mode === "step_by_step" ? 1200 : 850,
+      maxOutputTokens:
+        mode === "exam_mode" || mode === "step_by_step" ? 1200 : 850,
     });
     const answer = formatAnswerWithCitations(response.content, citations);
     const aiRequestId = await logAiRequest({
@@ -529,8 +603,10 @@ export async function answerMasterAlchem(
       promptHash: hashText(`${systemPrompt}\n${userPrompt}`),
       inputChars: systemPrompt.length + userPrompt.length,
       outputChars: answer.length,
-      estimatedInputTokens: response.inputTokens ?? estimateMessagesTokens(messages),
-      estimatedOutputTokens: response.outputTokens ?? Math.ceil(answer.length / 4),
+      estimatedInputTokens:
+        response.inputTokens ?? estimateMessagesTokens(messages),
+      estimatedOutputTokens:
+        response.outputTokens ?? Math.ceil(answer.length / 4),
       estimatedCostUsd: response.estimatedCostUsd,
       estimatedCostInr: response.estimatedCostInr,
       latencyMs: response.latencyMs,
@@ -558,7 +634,12 @@ export async function answerMasterAlchem(
       conversationId,
       userMessage: request.message,
       assistantMessage: answer,
-      metadata: { aiRequestId, provider: response.provider, model: response.model, ragUsed: selectedChunks.length > 0 },
+      metadata: {
+        aiRequestId,
+        provider: response.provider,
+        model: response.model,
+        ragUsed: selectedChunks.length > 0,
+      },
     });
     if (mode !== "check_my_answer" && safety.status === "safe") {
       await saveCachedAnswer({
@@ -611,7 +692,10 @@ export async function answerMasterAlchem(
     });
   } catch (error) {
     if (!(error instanceof AiBudgetExceededError)) throw error;
-    const fallbackAnswer = formatAnswerWithCitations(buildRagOnlyAnswer({ chunks: selectedChunks, budgetBlocked: true }), citations);
+    const fallbackAnswer = formatAnswerWithCitations(
+      buildRagOnlyAnswer({ chunks: selectedChunks, budgetBlocked: true }),
+      citations,
+    );
     const aiRequestId = await logAiRequest({
       conversationId,
       userId: request.userId,

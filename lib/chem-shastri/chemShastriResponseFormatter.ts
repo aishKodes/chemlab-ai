@@ -3,17 +3,20 @@ import { findCuratedFallbackAnswer } from "./curatedFallbackAnswers";
 
 const DIRECT_ANSWERS: Array<{ pattern: RegExp; answer: string }> = [
   {
-    pattern: /\bwhat is oxidation\b|\boxidation meaning\b|\bdefine oxidation\b/i,
+    pattern:
+      /\bwhat is oxidation\b|\boxidation meaning\b|\bdefine oxidation\b/i,
     answer:
       "Oxidation means loss of electrons. In school chemistry, remember LEO: Loss of Electrons is Oxidation. Example: Zn -> Zn²⁺ + 2e⁻, so zinc is oxidized.",
   },
   {
-    pattern: /\bwhat is reduction\b|\breduction meaning\b|\bdefine reduction\b/i,
+    pattern:
+      /\bwhat is reduction\b|\breduction meaning\b|\bdefine reduction\b/i,
     answer:
       "Reduction means gain of electrons. Remember GER: Gain of Electrons is Reduction. Example: Cu²⁺ + 2e⁻ -> Cu, so copper ion is reduced.",
   },
   {
-    pattern: /\bredox\b.*\btogether\b|\boxidation and reduction\b.*\binseparable\b|\bwhy.*redox\b/i,
+    pattern:
+      /\bredox\b.*\btogether\b|\boxidation and reduction\b.*\binseparable\b|\bwhy.*redox\b/i,
     answer:
       "Redox is one electron-transfer transaction. One substance gives electrons, so it is oxidized. Another receives those same electrons, so it is reduced. They happen together because electrons cannot be lost into nowhere.",
   },
@@ -34,43 +37,63 @@ const DIRECT_ANSWERS: Array<{ pattern: RegExp; answer: string }> = [
   },
 ];
 
-const LANGUAGE_DIRECT_ANSWERS: Record<"hi" | "bn", Array<{ pattern: RegExp; answer: string }>> = {
+const LANGUAGE_DIRECT_ANSWERS: Record<
+  "hi" | "bn",
+  Array<{ pattern: RegExp; answer: string }>
+> = {
   hi: [
     {
       pattern: /oxidation|ऑक्सीकरण/i,
-      answer: "Oxidation का मतलब electrons का निकलना है। याद रखें: LEO — Loss of Electrons is Oxidation. उदाहरण: Zn → Zn²⁺ + 2e⁻।",
+      answer:
+        "Oxidation का मतलब electrons का निकलना है। याद रखें: LEO — Loss of Electrons is Oxidation. उदाहरण: Zn → Zn²⁺ + 2e⁻।",
     },
     {
       pattern: /\bmole\b|मोल/i,
-      answer: "Mole पदार्थ की मात्रा की SI unit है। एक mole में 6.02214076 × 10²³ कण होते हैं। ये कण atoms, molecules या ions हो सकते हैं।",
+      answer:
+        "Mole पदार्थ की मात्रा की SI unit है। एक mole में 6.02214076 × 10²³ कण होते हैं। ये कण atoms, molecules या ions हो सकते हैं।",
     },
     {
       pattern: /significant figures|सार्थक अंक/i,
-      answer: "Significant figures किसी measurement में भरोसेमंद digits बताते हैं। सभी non-zero digits significant होते हैं; शुरू के zeros नहीं, लेकिन decimal के बाद के अंतिम zeros significant हो सकते हैं।",
+      answer:
+        "Significant figures किसी measurement में भरोसेमंद digits बताते हैं। सभी non-zero digits significant होते हैं; शुरू के zeros नहीं, लेकिन decimal के बाद के अंतिम zeros significant हो सकते हैं।",
     },
   ],
   bn: [
     {
       pattern: /oxidation|জারণ/i,
-      answer: "Oxidation মানে electron হারানো। মনে রাখো: LEO — Loss of Electrons is Oxidation। উদাহরণ: Zn → Zn²⁺ + 2e⁻।",
+      answer:
+        "Oxidation মানে electron হারানো। মনে রাখো: LEO — Loss of Electrons is Oxidation। উদাহরণ: Zn → Zn²⁺ + 2e⁻।",
     },
     {
       pattern: /\bmole\b|মোল/i,
-      answer: "Mole হলো পদার্থের পরিমাণের SI unit। এক mole-এ 6.02214076 × 10²³ টি কণা থাকে। কণাগুলি atom, molecule বা ion হতে পারে।",
+      answer:
+        "Mole হলো পদার্থের পরিমাণের SI unit। এক mole-এ 6.02214076 × 10²³ টি কণা থাকে। কণাগুলি atom, molecule বা ion হতে পারে।",
     },
     {
       pattern: /significant figures|সার্থক অঙ্ক/i,
-      answer: "Significant figures একটি measurement-এর নির্ভরযোগ্য digits দেখায়। সব non-zero digit significant; শুরুর zero নয়, তবে decimal-এর পরে শেষের zero significant হতে পারে।",
+      answer:
+        "Significant figures একটি measurement-এর নির্ভরযোগ্য digits দেখায়। সব non-zero digit significant; শুরুর zero নয়, তবে decimal-এর পরে শেষের zero significant হতে পারে।",
     },
   ],
 };
 
-export function directChemistryAnswer(message: string, language: ChemShastriLanguage = "en") {
+export function directChemistryAnswer(
+  message: string,
+  language: ChemShastriLanguage = "en",
+) {
   if (language === "hi" || language === "bn") {
-    const localized = LANGUAGE_DIRECT_ANSWERS[language].find((entry) => entry.pattern.test(message));
+    const localized = LANGUAGE_DIRECT_ANSWERS[language].find((entry) =>
+      entry.pattern.test(message),
+    );
     if (localized) return localized.answer;
+    return null;
   }
-  return findCuratedFallbackAnswer(message)?.answer ?? DIRECT_ANSWERS.find((entry) => entry.pattern.test(message))?.answer ?? null;
+  if (language !== "en") return null;
+  return (
+    findCuratedFallbackAnswer(message)?.answer ??
+    DIRECT_ANSWERS.find((entry) => entry.pattern.test(message))?.answer ??
+    null
+  );
 }
 
 export function languageNotice(language: ChemShastriLanguage) {
